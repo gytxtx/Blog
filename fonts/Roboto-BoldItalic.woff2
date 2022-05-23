@@ -1,0 +1,4 @@
+<pre><code><h1>Path &#039;/materiality-typecho-theme/assets/fonts/roboto/Roboto-BoldItalic.woff2&#039; not found</h1>Typecho_Router_Exception: Path &#039;/materiality-typecho-theme/assets/fonts/roboto/Roboto-BoldItalic.woff2&#039; not found in /srv/blog/framework/Typecho/Router.php:155
+Stack trace:
+#0 /srv/blog/index.php(23): Typecho_Router::dispatch()
+#1 {main}</code></pre>

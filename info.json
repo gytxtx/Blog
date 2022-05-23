@@ -1,0 +1,368 @@
+{
+    "header": [
+        " *   ",
+        " *   如非需要调试，本文件可删除",
+        " *   非专业人员可将本文件删除",
+        " *   详细介绍请参考: https://bazhan.wang/faq#INFO-JSON",
+        " *   "
+    ],
+    "resources": [
+        {
+            "url": "https://www.eaimty.com/",
+            "path": "index.html",
+            "saved": true,
+            "size": 23185,
+            "children": [
+                {
+                    "url": "https://www.eaimty.com/logo.png",
+                    "path": "img/logo.png",
+                    "saved": true,
+                    "size": 0,
+                    "children": []
+                },
+                {
+                    "url": "https://www.eaimty.com/materiality-typecho-theme/assets/js/mdui.min.js",
+                    "path": "js/mdui.min.js",
+                    "saved": true,
+                    "size": 74021,
+                    "children": []
+                },
+                {
+                    "url": "https://www.eaimty.com/materiality-typecho-theme/assets/js/smoothscroll.min.js",
+                    "path": "js/smoothscroll.min.js",
+                    "saved": true,
+                    "size": 7495,
+                    "children": []
+                },
+                {
+                    "url": "https://www.eaimty.com/materiality-typecho-theme/assets/js/highlight.min.js",
+                    "path": "js/highlight.min.js",
+                    "saved": true,
+                    "size": 19899,
+                    "children": []
+                },
+                {
+                    "url": "https://www.eaimty.com/materiality-typecho-theme/assets/js/materiality.min.js",
+                    "path": "js/materiality.min.js",
+                    "saved": true,
+                    "size": 3069,
+                    "children": []
+                },
+                {
+                    "url": "https://www.eaimty.com/materiality-typecho-theme/assets/js/darkmode.min.js",
+                    "path": "js/darkmode.min.js",
+                    "saved": true,
+                    "size": 2456,
+                    "children": []
+                },
+                {
+                    "url": "https://www.eaimty.com/materiality-typecho-theme/assets/css/mdui.min.css",
+                    "path": "css/mdui.min.css",
+                    "saved": true,
+                    "size": 325140,
+                    "children": [
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/icons/material-icons/MaterialIcons-Regular.woff2",
+                            "path": "fonts/MaterialIcons-Regular.woff2",
+                            "saved": true,
+                            "size": 401,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/icons/material-icons/MaterialIcons-Regular.woff",
+                            "path": "fonts/MaterialIcons-Regular.woff",
+                            "saved": true,
+                            "size": 399,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Thin.woff2",
+                            "path": "fonts/Roboto-Thin.woff2",
+                            "saved": true,
+                            "size": 365,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Thin.woff",
+                            "path": "fonts/Roboto-Thin.woff",
+                            "saved": true,
+                            "size": 363,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-ThinItalic.woff2",
+                            "path": "fonts/Roboto-ThinItalic.woff2",
+                            "saved": true,
+                            "size": 377,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-ThinItalic.woff",
+                            "path": "fonts/Roboto-ThinItalic.woff",
+                            "saved": true,
+                            "size": 375,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Light.woff2",
+                            "path": "fonts/Roboto-Light.woff2",
+                            "saved": true,
+                            "size": 367,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Light.woff",
+                            "path": "fonts/Roboto-Light.woff",
+                            "saved": true,
+                            "size": 365,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-LightItalic.woff2",
+                            "path": "fonts/Roboto-LightItalic.woff2",
+                            "saved": true,
+                            "size": 379,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-LightItalic.woff",
+                            "path": "fonts/Roboto-LightItalic.woff",
+                            "saved": true,
+                            "size": 377,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Regular.woff2",
+                            "path": "fonts/Roboto-Regular.woff2",
+                            "saved": true,
+                            "size": 371,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Regular.woff",
+                            "path": "fonts/Roboto-Regular.woff",
+                            "saved": true,
+                            "size": 369,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-RegularItalic.woff2",
+                            "path": "fonts/Roboto-RegularItalic.woff2",
+                            "saved": true,
+                            "size": 383,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-RegularItalic.woff",
+                            "path": "fonts/Roboto-RegularItalic.woff",
+                            "saved": true,
+                            "size": 381,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Medium.woff2",
+                            "path": "fonts/Roboto-Medium.woff2",
+                            "saved": true,
+                            "size": 369,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Medium.woff",
+                            "path": "fonts/Roboto-Medium.woff",
+                            "saved": true,
+                            "size": 367,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-MediumItalic.woff2",
+                            "path": "fonts/Roboto-MediumItalic.woff2",
+                            "saved": true,
+                            "size": 381,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-MediumItalic.woff",
+                            "path": "fonts/Roboto-MediumItalic.woff",
+                            "saved": true,
+                            "size": 379,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Bold.woff2",
+                            "path": "fonts/Roboto-Bold.woff2",
+                            "saved": true,
+                            "size": 365,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Bold.woff",
+                            "path": "fonts/Roboto-Bold.woff",
+                            "saved": true,
+                            "size": 363,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-BoldItalic.woff2",
+                            "path": "fonts/Roboto-BoldItalic.woff2",
+                            "saved": true,
+                            "size": 377,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-BoldItalic.woff",
+                            "path": "fonts/Roboto-BoldItalic.woff",
+                            "saved": true,
+                            "size": 375,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Black.woff2",
+                            "path": "fonts/Roboto-Black.woff2",
+                            "saved": true,
+                            "size": 367,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-Black.woff",
+                            "path": "fonts/Roboto-Black.woff",
+                            "saved": true,
+                            "size": 365,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-BlackItalic.woff2",
+                            "path": "fonts/Roboto-BlackItalic.woff2",
+                            "saved": true,
+                            "size": 379,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/fonts/roboto/Roboto-BlackItalic.woff",
+                            "path": "fonts/Roboto-BlackItalic.woff",
+                            "saved": true,
+                            "size": 377,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "url": "https://www.eaimty.com/materiality-typecho-theme/assets/css/materiality.min.css",
+                    "path": "css/materiality.min.css",
+                    "saved": true,
+                    "size": 4395,
+                    "children": [
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/billboard.png",
+                            "path": "img/billboard.png",
+                            "saved": true,
+                            "size": 0,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/icons/materiality-icons.eot",
+                            "path": "fonts/materiality-icons.eot",
+                            "saved": true,
+                            "size": 0,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/icons/materiality-icons.woff2",
+                            "path": "fonts/materiality-icons.woff2",
+                            "saved": true,
+                            "size": 0,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/icons/materiality-icons.woff",
+                            "path": "fonts/materiality-icons.woff",
+                            "saved": true,
+                            "size": 0,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/icons/materiality-icons.otf",
+                            "path": "fonts/materiality-icons.otf",
+                            "saved": true,
+                            "size": 0,
+                            "children": []
+                        },
+                        {
+                            "url": "https://www.eaimty.com/materiality-typecho-theme/assets/icons/materiality-icons.ttf",
+                            "path": "fonts/materiality-icons.ttf",
+                            "saved": true,
+                            "size": 0,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "url": "https://www.eaimty.com/materiality-typecho-theme/assets/css/highlight.min.css",
+                    "path": "css/highlight.min.css",
+                    "saved": true,
+                    "size": 908,
+                    "children": []
+                }
+            ]
+        }
+    ],
+    "alias": "www-eaimty-com-t0lgqja",
+    "info": {
+        "remark": [],
+        "title": "EAimTY 的博客",
+        "domain": "www.eaimty.com",
+        "origin": "https://www.eaimty.com",
+        "ip": "172.67.182.208",
+        "main": "index.html",
+        "url": "https://www.eaimty.com/",
+        "totalSize": "470 kB",
+        "request": {
+            "headers": {
+                "accept": "text/html,*/*",
+                "accept-language": "zh-CN,zh;q=0.9",
+                "cache-control": "no-cache",
+                "cookie": "",
+                "referer": "https://www.eaimty.com/",
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36",
+                "x-scraper-website": "https://bazhan.wang/"
+            }
+        },
+        "response": {
+            "responseUrl": "https://www.eaimty.com/",
+            "redirects": [],
+            "statusCode": 200,
+            "headers": {
+                "date": "Sat, 21 May 2022 04:31:43 GMT",
+                "content-type": "text/html; charset=UTF-8",
+                "transfer-encoding": "chunked",
+                "connection": "close",
+                "x-powered-by": "PHP/8.1.4",
+                "set-cookie": [
+                    "THEME_COLOR=3F51B5; expires=Sat, 28-May-2022 04:31:06 GMT; Max-Age=604800; path=/",
+                    "AUTO_DARK=1; expires=Sat, 28-May-2022 04:31:06 GMT; Max-Age=604800; path=/",
+                    "DARK_EXPIRE=0; expires=Sat, 28-May-2022 04:31:06 GMT; Max-Age=604800; path=/"
+                ],
+                "cf-cache-status": "DYNAMIC",
+                "expect-ct": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
+                "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=5twnDw%2FtJQhXy2qVKLjgaSEnoDjkcRDUXyMA6ikxe46NfT1Vb%2F9d4ASmxMeLgRthkGYr1cdNMGh%2F4J6DtXOQred2Di1HZE3dCEyMibBDZ3FfCENJxcJXQ2jFKSPXyhOUpA%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+                "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+                "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+                "x-content-type-options": "nosniff",
+                "server": "cloudflare",
+                "cf-ray": "70ea9589e8d28a63-NRT",
+                "alt-svc": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+            }
+        },
+        "time": {
+            "start": "2022-05-21T04:31:43.613Z",
+            "end": "2022-05-21T04:31:45.041Z"
+        }
+    },
+    "options": {
+        "url": "https://www.eaimty.com/",
+        "referer": "",
+        "cookies": "",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36",
+        "formatter": [],
+        "filenameGenerator": "byType"
+    }
+}
