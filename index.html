@@ -57,6 +57,14 @@
 <i class="mdui-list-item-icon mdui-icon materiality-icons"></i>
 <div class="mdui-list-item-content mdui-m-r-4">首页</div>
 </a>
+<a href="https://gytxtx.github.io/Blog" class="mdui-list-item mdui-ripple">
+<i class="mdui-list-item-icon mdui-icon materiality-icons"></i>
+<div class="mdui-list-item-content mdui-m-r-4">博客</div>
+</a>
+<a href="https://gytxtx.github.io/imgs" class="mdui-list-item mdui-ripple">
+<i class="mdui-list-item-icon mdui-icon materiality-icons"></i>
+<div class="mdui-list-item-content mdui-m-r-4">图片</div>
+</a>
 <a href="https://gytxtx.github.io/About" class="mdui-list-item mdui-ripple">
 <i class="mdui-list-item-icon mdui-icon materiality-icons"></i>
 <div class="mdui-list-item-content mdui-m-r-4">关于</div>
@@ -129,11 +137,12 @@ May 07, 2022 </div>
 </div>
 <div class="mdui-card mdui-hoverable mdui-m-y-3">
 <div class="mdui-card-primary">
-<div class="mdui-card-primary-title"><a class="mdui-text-color-theme-accent" href="https://www.eaimty.com/2022/03/tuic.html">基于 QUIC 的代理软件：TUIC</a></div>
+<div class="mdui-card-primary-title"><a class="mdui-text-color-theme-accent" href="https://www.eaimty.com/2022/03/tuic.html">我好想做嘉然小姐的狗啊(转载)</a></div>
 <div class="mdui-card-primary-subtitle mdui-text-color-theme-text">
-Mar 10, 2022 </div>
+Dec 25, 2020 </div>
 </div>
-<div class="mdui-card-content mdui-typo"><p>QUIC 协议汲取了大量人们给 TCP 糊墙的经验教训，把连接结构优化到（目前来看）极致。但是现在市面上的代理工具还没有能完全利用 QUIC 特性的存在，所以我自己动手写了一个基于 QUIC 协议的新代理工具：TUIC</p><p><a href="https://github.com/EAimTY/tuic">https://github.com/EAimTY/tuic</a></p><ul><li>1-RTT TCP 中继 </li><li>0-RTT UDP 中继，且 NAT 类型为 FullCone</li><li> 在用户空间的拥塞控制，也就是说可以在任何系统平台实现双向的 BBR</li><li>两种 UDP 中继模式: native （原生 UDP 特性，数据仍被 TLS 加密）和 quic (100% 送达率，每个包单独单独作为一个 QUIC “流”，一个包的确认重传不会阻塞其它包)</li><li>完全多路复用，服务器和客户端之间始终只需要一条 QUIC 连接，所有任务作为这个连接中的 “流” 进行传输（一个流的暂时阻塞不会影响其它流），所以除连接第一个中继任务外的其它任务都不需要经过 QUIC 握手和 TUIC 的鉴权 </li><li> 网络切换时的会话平滑转移，例如在从 Wi-Fi 切换到移动数据时连接不会像 TCP 一样直接断开 </li><li>0-RTT 、与中继任务并行的鉴权</li><li> 支持 QUIC 的 0-RTT 握手（开启之后能达到 真・ 1 -RTT TCP 和 0-RTT UDP ，但是就算不开启，多路复用的特性也能保证在绝大多数情况下 1-RTT 和 0-RTT ）</li></ul><p>TUIC 的设计介绍在仓库中 <a href="https://github.com/EAimTY/tuic#design">Design</a> 一节有说明。TUIC 协议的详细内容在 <a href="https://github.com/EAimTY/tuic/tree/master/protocol"> 这里 </a>。简单来说，TUIC 的设计核心就是减少握手造成的网络往返时延（ rtt ），毕竟对于网络程序这是最大的瓶颈。</p><p> 对比其它使用 TCP 的代理工具（ ss 、v2ray 、trojan ），TCP 握手慢，且不支持自定义拥塞控制，各工具对 UDP 的支持也各有问题。对比 <a href="https://github.com/HyNetwork/hysteria">Hysteria</a> ，Hysteria 的 UDP 中继需要 1 rtt 的握手，且只支持一种 UDP 模式。</p><p>最后说说安全性和协议特征。TUIC 现在基于原生 QUIC ，不支持 obfs ，但 QUIC 连接本身就是 TLS 加密的，每个 QUIC 连接从外面看都是一样的。国内的各大厂也慢慢开始使用 QUIC 了，所以我觉得 QUIC 特征应该不是什么大问题。</p></div>
+<div class="mdui-card-content mdui-typo"><p>我好想做嘉然小姐的狗啊。</p><p>可是嘉然小姐说她喜欢的是猫，我哭了。</p><p>我知道既不是狗也不是猫的我为什么要哭的。因为我其实是一只老鼠。</p><p>我从没奢望嘉然小姐能喜欢自己。我明白的，所有人都喜欢理解余裕上手天才打钱的萌萌的狗狗或者猫猫，没有人会喜欢阴湿带病的老鼠。</p><p>但我还是问了嘉然小姐:“我能不能做你的狗？”</p><p>我知道我是注定做不了狗的。但如果她喜欢狗，我就可以一直在身边看着她了，哪怕她怀里抱着的永远都是狗。</p><p>可是她说喜欢的是猫。</p><p>她现在还在看着我，还在逗我开心，是因为猫还没有出现，只有我这老鼠每天蹑手蹑脚地从洞里爬出来，远远地和她对视。</p><p>等她喜欢的猫来了的时候，我就该重新滚回我的洞了吧。</p><p>但我还是好喜欢她，她能在我还在她身边的时候多看我几眼吗？</p><p>嘉然小姐说接下来的每个圣诞夜都要和大家一起过。我不知道大家指哪些人。好希望这个集合能够对我做一次胞吞。</p><br/><p>猫猫还在害怕嘉然小姐。</p><p>我会去把她爱的猫猫引来的。</p><p>我知道稍有不慎，我就会葬身猫口。</p><p>那时候嘉然小姐大概会把我的身体好好地装起来扔到门外吧。</p><p>那我就成了一包鼠条，嘻嘻。</p><p>我希望她能把我扔得近一点，因为我还是好喜欢她。会一直喜欢下去的。</p><br/><p>我的灵魂透过窗户向里面看去，挂着的铃铛在轻轻鸣响，嘉然小姐慵懒地靠在沙发上，表演得非常温顺的橘猫坐在她的肩膀。壁炉的火光照在她的脸庞，我冻僵的心脏在风里微微发烫。</p></div>
+<div class="mdui-card-content mdui-typo"><a href="https://www.bilibili.com/video/BV19Y4y1r7RK">枝江地狱是什么梗【梗指南】</a></div>
 <div class="mdui-card-actions">
 <a class="mdui-btn mdui-ripple mdui-text-color-theme-accent" href="https://www.eaimty.com/2022/03/tuic.html">继续阅读</a>
 </div>
@@ -145,13 +154,15 @@ Mar 10, 2022 </div>
 <div class="mdui-card-primary-subtitle mdui-text-color-theme-text">
 May 23, 2022 </div>
 </div>
-<div class="mdui-card-content mdui-typo"><p>以下是一些网页bgm</p></div>
-<div class="mdui-card-content mdui-typo"><p>BGM：</p><a href="https://music.163.com/#/song?id=426881500">[网易云音乐]なんでもないや (movie ver.)</a></div>
+<div class="mdui-card-content mdui-typo"><p>以下是一些网页BGM</p></div>
+<div class="mdui-card-content mdui-typo"><a href="https://music.163.com/#/song?id=426881500">[网易云音乐]なんでもないや (movie ver.)</a></div>
 <audio src="./music/なんでもないや (movie ver.).mp3" controls autoplay loop></audio>
 <!-- ↑网页音频播放实现[分割条] -->
 <div class="mdui-card-content mdui-typo"><a href="https://music.163.com/#/song?id=426881506">[网易云音乐]三葉のテーマ</a></div>
 <audio src="./music/三葉のテーマ.mp3" controls autoplay loop></audio>
 <!-- 结束 -->
+<div class="mdui-card-content mdui-typo"><a href="https://y.qq.com/n/ryqq/songDetail/001pc70U2SSIHI">[QQ音乐]フリージア (小苍兰)</a></div>
+<audio src="./music/フリージア_希望之花（TV动画《机动战士高达 铁血的奥尔芬斯 第二季》ED2）（翻自 Uru）.mp3" controls autoplay loop></audio>
 <div class="mdui-card-actions">
 <a class="mdui-btn mdui-ripple mdui-text-color-theme-accent" href="https://www.eaimty.com/2022/03/how-hashmap-work-without-hash.html">继续阅读</a>
 </div>
