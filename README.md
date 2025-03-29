@@ -6,6 +6,8 @@ KFACBT's Blog - Based on MkDocs.
 
 此为 KFACBT 的 Blog 存储库。
 
+[![Built with Material for MkDocs](https://img.shields.io/badge/Material_for_MkDocs-526CFE?style=for-the-badge&logo=MaterialForMkDocs&logoColor=white)](https://squidfunk.github.io/mkdocs-material/)
+
 [View on GitHub](https://github.com/gytxtx/Blog/)
 
 基于 [MkDocs-Material](https://github.com/squidfunk/mkdocs-material/) 构建。
