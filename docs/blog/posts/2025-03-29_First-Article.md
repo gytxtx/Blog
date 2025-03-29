@@ -22,7 +22,7 @@ comments: true
 
 # 本站的第一篇文章
 
-最近萌生了搭建个人博客的想法，但手头没有服务器资源，也不想投入过多运维成本——这让我突然想起之前部署过的 **[Material for MkDocs](https://github.com/squidfunk/mkdocs-material)** 文档框架。这个原本用于技术文档的工具，或许正是我需要的极简博客解决方案。
+最近萌生了搭建个人博客的想法，但手头没有服务器资源，也不想投入过多运维成本——这让我突然想起之前部署过的 **[Material for MkDocs](https://github.com/squidfunk/mkdocs-material/)** 文档框架。这个原本用于技术文档的工具，或许正是我需要的极简博客解决方案。
 
 <!-- more -->
 
@@ -76,8 +76,16 @@ comments: true
 
 ---
 
+## 感谢 :simple-materialformkdocs: Material for MkDocs
+
+[![Built with Material for MkDocs](https://img.shields.io/badge/Material_for_MkDocs-526CFE?style=for-the-badge&logo=MaterialForMkDocs&logoColor=white)](https://squidfunk.github.io/mkdocs-material/)
+
+最后，感谢 **[Material for MkDocs](https://github.com/squidfunk/mkdocs-material/)** 的开发团队提供了简单易用且出色的 **项目文档** / **博客** 工具，其开箱即用的配置极大简化了我的部署流程，使我可以专心忙于别的事情中。
+
+---
+
 > **后记**
 >
 > 本文全程使用 VS Code 编辑，通过 GitHub Actions 自动构建部署，使用 GitHub Pages 托管————这或许就是静态博客的魅力所在。
 >
-> 使用 `DeepSeek R1` 长思考模型辅助撰写。（他把我想说的都说了，太 NB 了）
+> 使用 [`DeepSeek R1`](https://www.deepseek.com/) 长思考模型辅助撰写，其对技术细节的精准捕捉与逻辑梳理能力令人印象深刻，太 NB 了。
