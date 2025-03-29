@@ -11,8 +11,8 @@ theme:
   name: material
 
   # 设置站点图标
-  # logo: assets/logo.jpg
-  # favicon: assets/favicon.ico
+  logo: assets/logo.jpg
+  favicon: assets/favicon.ico
   # favicon: attachment/portrait.png
 
   language: zh # 中文，解决中文搜索问题
@@ -37,6 +37,12 @@ theme:
 
 markdown_extensions: 
   - attr_list # https://squidfunk.github.io/mkdocs-material/reference/images/
+
+  # 文档内嵌图标支持
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
   - pymdownx.tabbed  # https://squidfunk.github.io/mkdocs-material/reference/content-tabs/
   - nl2br # newline-to-break 
   - toc:
