@@ -15,6 +15,9 @@ links:
   - 关于我: blog/About.md
   - 外部链接:
     - MkDocs-Material 文档: https://squidfunk.github.io/mkdocs-material/
+
+comments: true
+
 ---
 
 # 本站的第一篇文章

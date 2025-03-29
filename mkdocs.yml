@@ -20,6 +20,9 @@ theme:
     - navigation.expand 
     - tabs 
 
+  # 自定义覆盖默认行为文件夹
+  custom_dir: overrides
+
   # 提供切换 日间 / 夜间 模式的选项
   palette: 
 
