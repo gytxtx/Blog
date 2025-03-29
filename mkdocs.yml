@@ -38,6 +38,12 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
 
+nav:
+  - Blog:
+      - blog/index.md
+      - Tags: blog/tags.md
+  
+
 markdown_extensions: 
   - attr_list # https://squidfunk.github.io/mkdocs-material/reference/images/
 
@@ -77,7 +83,8 @@ plugins:
   - search
   - roamlinks 
   - blog # 博客插件
-  - tags # 与博客集成的标签插件
+  - tags: # 与博客集成的标签插件
+      tags_file: blog/tags.md # 标签索引文件
     #- autolinks 
   - exclude:
       glob:
