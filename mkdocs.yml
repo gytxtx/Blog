@@ -1,19 +1,40 @@
-# official tutorial 
-# mkdocs-material: https://squidfunk.github.io/mkdocs-material/
-# mkdocs: https://www.mkdocs.org/user-guide/configuration/
+# Official tutorial 
+# MkDocs: https://www.mkdocs.org/user-guide/configuration/
+# MkDocs-Material: https://squidfunk.github.io/mkdocs-material/
 
 site_name: 'KFACBT 的博客'
 
-#  GitHub 存储库链接
+#  GitHub Repo link
 repo_url: https://github.com/gytxtx/Blog/
 
 theme:
   name: material
-  #  favicon: attachment/portrait.png
+
+  # 设置站点图标
+  # logo: assets/logo.jpg
+  # favicon: assets/favicon.ico
+  # favicon: attachment/portrait.png
+
   language: zh # 中文，解决中文搜索问题
   features:
     - navigation.expand 
     - tabs 
+
+  # 提供切换 日间 / 夜间 模式的选项
+  palette: 
+
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
 markdown_extensions: 
   - attr_list # https://squidfunk.github.io/mkdocs-material/reference/images/
   - pymdownx.tabbed  # https://squidfunk.github.io/mkdocs-material/reference/content-tabs/
@@ -46,6 +67,7 @@ markdown_extensions:
 plugins:
   - search
   - roamlinks 
+  - blog # 博客插件
     #- autolinks 
   - exclude:
       glob:

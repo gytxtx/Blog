@@ -1,4 +1,5 @@
-mkdocs-material==5.1.1
-mkdocs==1.1
+# 将 == 替换为 >=，以使用新版本。
+mkdocs-material>=5.1.1
+mkdocs>=1.1
 mkdocs-roamlinks-plugin
 mkdocs-exclude
