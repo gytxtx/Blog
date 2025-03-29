@@ -6,7 +6,7 @@ authors:
 - gytxtx
 
 categories:
-- 杂谈
+- 建站日志
 
 slug: First-Article
 
