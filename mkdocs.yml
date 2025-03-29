@@ -38,12 +38,6 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
 
-nav:
-  - Blog:
-      - blog/index.md
-      - Tags: blog/tags.md
-  
-
 markdown_extensions: 
   - attr_list # https://squidfunk.github.io/mkdocs-material/reference/images/
 
