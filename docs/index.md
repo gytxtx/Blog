@@ -1,6 +1,4 @@
-# Blog
-
-KFACBT's Blog - Based on MkDocs.
+# 首页
 
 ## 简介
 
