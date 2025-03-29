@@ -7,6 +7,14 @@ authors:
 
 categories:
 - 建站日志
+- 技术实践
+
+tags:
+- MkDocs
+- 博客搭建
+- 静态站点
+- 站点生成器
+- 云原生
 
 slug: First-Article
 
