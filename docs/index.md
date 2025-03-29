@@ -8,6 +8,10 @@
 
 基于 [MkDocs-Material](https://github.com/squidfunk/mkdocs-material/) 构建。
 
+## 跳转
+
+[文章列表](blog/index.md "文章列表")
+
 ## 预览
 
 <https://gytxtx.github.io/Blog/>
