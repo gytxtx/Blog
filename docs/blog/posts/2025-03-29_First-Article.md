@@ -76,7 +76,7 @@ comments: true
 - :material-code-tags: 效率工具链实践
 - :material-pen: 偶尔跨界的人文思考
 
-我也同时在实践中学习，这也印证了 「Anyway, Keep learning.」 这句话。
+我也同时在实践中学习，这也印证了 「Anyway, keep learning.」 这句话。
 
 尽管这是首次尝试博客创作，但我更愿意将其视为 **「数字花园」** 的播种——不追求日更的节奏，只聚焦于持续的知识沉淀与重构。如果您在阅读中发现任何技术谬误，或是有想探讨的话题，欢迎跳转至 [:material-email-outline: 关于我](https://gytxtx.github.io/Blog/blog/About/) 页面获取联系方式与我交流。
 
@@ -94,6 +94,6 @@ comments: true
 
 > **后记**
 >
-> 本文全程使用 VS Code 编辑，通过 GitHub Actions 自动构建部署，使用 GitHub Pages 托管————这或许就是静态博客的魅力所在。
+> 本文全程使用 VS Code 编辑，通过 GitHub Actions 自动构建部署，使用 GitHub Pages 托管——这或许就是静态博客的魅力所在。
 >
 > 使用 [`DeepSeek R1`](https://www.deepseek.com/) 长思考模型辅助撰写，其对技术细节的精准捕捉与逻辑梳理能力令人印象深刻，太 NB 了。
