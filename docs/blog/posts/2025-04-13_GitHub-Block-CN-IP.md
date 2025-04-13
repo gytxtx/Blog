@@ -38,7 +38,7 @@ comments: true
 
 *由于众所周知的原因，不提供代理服务器提供商，请自行查找。*
 
-~~## 2. 利用 Bug 绕过限制（此方法已不可用）~~
+## ~~2. 利用 Bug 绕过限制（此方法已不可用）~~
 
 使用被封禁的节点（例如中国大陆网络）访问 <https://github.com/login/> 后， GitHub 会存储一个 Cookie ，这时只要这个 Cookie 不被删除，再用被 GitHub 封禁的节点访问 GitHub 就不会被 403 禁止访问，无需登录 GitHub 。如果这个 Cookie 被删除， GitHub 还会 403 禁止访问。
 
