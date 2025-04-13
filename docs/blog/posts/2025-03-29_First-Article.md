@@ -5,6 +5,8 @@ date:
 authors:
 - gytxtx
 
+readtime: 5
+
 categories:
 - 建站日志
 - 技术实践

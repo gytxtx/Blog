@@ -3,6 +3,8 @@
 # MkDocs-Material: https://squidfunk.github.io/mkdocs-material/
 
 site_name: 'KFACBT 的博客'
+site_description: 'Anyway, keep learning.'
+# site_url: http://www.example.com/
 
 #  GitHub Repo link
 repo_url: https://github.com/gytxtx/Blog/
