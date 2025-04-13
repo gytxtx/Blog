@@ -8,6 +8,7 @@ site_description: 'Anyway, keep learning.'
 
 #  GitHub Repo link
 repo_url: https://github.com/gytxtx/Blog/
+repo_name: gytxtx/Blog
 
 theme:
   name: material

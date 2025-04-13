@@ -2,20 +2,16 @@
 
 ## 简介
 
-此为 KFACBT 的 Blog 存储库。
+这里是 KFACBT 的个人博客。
 
-[View on GitHub](https://github.com/gytxtx/Blog/)
+主要记录分享一些技术文章，以后或许还有别的东西（？）
 
-基于 [MkDocs-Material](https://github.com/squidfunk/mkdocs-material/) 构建。
+## 相关链接
 
-## 跳转
+[:material-text-box: 文章](blog/index.md "文章列表"){ .md-button .md-button--primary } [:material-tag-outline: 标签](blog/tags.md "标签"){ .md-button } [:material-information: 关于](blog/About.md "标签"){ .md-button }
 
-[文章列表](blog/index.md "文章列表")
+---
 
-## 预览
+[:material-github: GitHub 存储库](https://github.com/gytxtx/Blog/ "GitHub Repository"){ .md-button .md-button--primary }
 
-<https://gytxtx.github.io/Blog/>
-
-## 其他
-
-模板来自于 <https://github.com/Jackiexiao/foam-mkdocs-template/>。
+[:simple-materialformkdocs: Material for MkDocs](https://github.com/squidfunk/mkdocs-material/ "View on GitHub"){ .md-button .md-button--primary }
