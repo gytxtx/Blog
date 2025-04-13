@@ -16,7 +16,7 @@ tags:
 slug: GitHub-Block-CN-IP
 
 links:
-  - GitHub: https://GitHub.com/
+  - GitHub: https://github.com/
 
 comments: true
 
@@ -46,7 +46,7 @@ comments: true
 
 ## 3. 使用镜像站
 
-使用类似于 [KKGitHub](https://kkgithub.com/) 的 GitHub 镜像服务来访问 GitHub 存储库来解除限制。
+使用类似于 [KKGitHub](https://kkgithub.com/) 的 GitHub 镜像服务来解除限制。
 
 ---
 
