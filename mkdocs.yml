@@ -51,7 +51,7 @@ nav:
 
 extra:
   social:
-    - icon: material-github
+    - icon: material/github
       link: https://github.com/gytxtx/
 
 markdown_extensions: 
