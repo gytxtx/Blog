@@ -22,6 +22,7 @@ theme:
   features:
     - navigation.expand 
     - tabs 
+    # - navigation.footer # 自定义页脚（显示上一页和下一页的链接）
 
   # 自定义覆盖默认行为文件夹
   custom_dir: overrides
@@ -47,6 +48,11 @@ nav:
       - blog/index.md
       - 关于: blog/About.md
       - 标签: blog/tags.md
+
+extra:
+  social:
+    - icon: material-github
+      link: https://github.com/gytxtx/
 
 markdown_extensions: 
   - attr_list # https://squidfunk.github.io/mkdocs-material/reference/images/
@@ -97,3 +103,5 @@ plugins:
         - "*.gz"
       regex:
         - '.*\.(tmp|bin|tar)$'
+
+copyright: Copyright &copy; 2025 KFACBT. All rights reserved.
