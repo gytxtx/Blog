@@ -12,6 +12,7 @@ categories:
 
 tags:
 - GitHub
+- 技术服务中断
 
 slug: GitHub-Unblock-CN
 
@@ -26,13 +27,13 @@ comments: true
 
 ## 摘要
 
-**2025 年 4 月 13 日 4:01（北京时间）** 左右，GitHub 因配置变更导致未登录用户从中国访问 <GitHub.com> 时出现访问限制。已登录用户仍可正常访问。该问题于  **2025 年 4 月 13 日 22:55（北京时间）** 得到解决。
+**2025 年 4 月 13 日 4:01(UTC+8)** 左右，GitHub 因配置变更导致未登录用户从中国访问 <GitHub.com> 时出现访问限制。已登录用户仍可正常访问。该问题于  **2025 年 4 月 13 日 22:55(UTC+8)** 得到解决。
 
 <!-- more -->
 
 ---
 
-## 中文翻译版
+## 官方事件报告（译文）
 
 ### [事后报告] 暂时取消 `禁止未登录的中国用户访问 GitHub` 的限制 [^Original-link]
 
@@ -44,11 +45,11 @@ comments: true
 
 > 发布于 1 天前 - 2025 年 4 月 12 日 20:00 UTC
 
-[^Original-link]: <https://www.githubstatus.com/incidents/jfvgcls9swln>
+[^Original-link]: 原始报告：<https://www.githubstatus.com/incidents/jfvgcls9swln>
 
 ---
 
-## 原版
+## 官方原始报告
 
 > 内容来源于 [GitHub Status 页面](https://www.githubstatus.com/incidents/jfvgcls9swln)。
 >
