@@ -22,9 +22,9 @@ comments: true
 
 ---
 
-# GitHub 暂时取消限制未登录用户从中国访问
+# GitHub 暂时取消未登录用户从中国访问的限制
 
-## 中文翻译版[^Link]
+## 中文翻译版
 
 ### 事件报告
 
@@ -34,9 +34,9 @@ comments: true
 
 由于配置变更引发的意外影响，未登录用户从中国访问 <GitHub.com> 时暂时无法访问。已登录用户不受影响。问题始于 **2025 年 4 月 13 日 4:01（北京时间）**，于 **2025 年 4 月 13 日 22:55（北京时间）** 缓解。相关配置已恢复，用户现可正常访问。
 
-更新于 1 天前，2025 年 4 月 13 日 - 4:00（北京时间）
+更新于 1 天前，2025 年 4 月 13 日 - 4:00（北京时间）[^Original-link]
 
-> [^foo]: <https://www.githubstatus.com/incidents/jfvgcls9swln>
+[^Original-link]: <https://www.githubstatus.com/incidents/jfvgcls9swln>
 
 <!-- more -->
 
