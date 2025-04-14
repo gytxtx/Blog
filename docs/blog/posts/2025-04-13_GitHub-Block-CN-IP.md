@@ -24,7 +24,7 @@ comments: true
 
 # GitHub 屏蔽中国地区访问的解决方案
 
-4 月 13 日 13:00 左右，GitHub 屏蔽了中国地区的访问，未登录用户访问时会触发 `HTTP 403 Forbidden` 错误，提示**“Access to this site has been restricted.”**。已登录用户也可能会受到限制。
+4 月 13 日 13:00 左右，GitHub 屏蔽了中国地区的访问，未登录用户访问时会触发 `HTTP 403 Forbidden` 错误，提示 **“Access to this site has been restricted.”**。已登录用户也可能会受到限制。
 
 以下是我验证的一些解决方案：
 
@@ -38,7 +38,7 @@ comments: true
 
 *由于众所周知的原因，不提供代理服务器提供商，请自行查找。*
 
-## 2. 利用 Bug 绕过限制
+## ~~2. 利用 Bug 绕过限制（此方法已不可用）~~
 
 使用被封禁的节点（例如中国大陆网络）访问 <https://github.com/login/> 后， GitHub 会存储一个 Cookie ，这时只要这个 Cookie 不被删除，再用被 GitHub 封禁的节点访问 GitHub 就不会被 403 禁止访问，无需登录 GitHub 。如果这个 Cookie 被删除， GitHub 还会 403 禁止访问。
 
@@ -50,8 +50,8 @@ comments: true
 
 ---
 
-**声明：本文仅提供技术讨论，不推荐任何特定服务商或工具。**
+**声明：本文仅提供技术讨论，不推荐具体工具或服务商。**
 
-目前我试过可用的就这三个，如果有其他方法欢迎在评论区补充。
+部分方法可能随政策调整失效，如果有其他方法欢迎在评论区补充。
 
 本文撰写匆忙，如有错误请及时指出。
