@@ -1,14 +1,17 @@
 # 关于
 
-> 最后更新：`2025-03-29`。
+> 最后更新：`2025-04-27`。
 
-## 关于我
+## 我的简介
 
-我是 KFACBT，也可以称呼为 KFA。一个普普通通的人。个人开发者。
+我是 KFACBT，也可以称呼为 KFA。
+一个普普通通的人。个人开发者。学生党。
 
 常用 ID：`gytxtx` 和 `KFACBT`。
 
 爱好：计算机、编程、二次元。
+
+<!-- 游戏《[**蔚蓝档案**](https://bluearchive-cn.com/)》[小绿](https://kivo.wiki/data/character/27)厨 -->
 
 ## 编程技能
 
@@ -29,7 +32,6 @@
 | ---- | ---- | ---- |
 | Website | <https://gytxtx.github.io/> | 静态网页 |
 | 博客 | <https://gytxtx.github.io/Blog/> | 静态博客 |
-| QQ | ~~`1018307946`~~ | 废弃的号 |
 | GitHub | [@gytxtx](https://github.com/gytxtx/) | - |
 | E-Mail | [`gytxtx@outlook.com`](mailto:gytxtx@outlook.com) | 不经常看邮箱 |
 | Bilibili | [`UID 1582448018`](https://space.bilibili.com/1582448018/) | 没错，这是我 B 站号... |
