@@ -1,6 +1,6 @@
 # 关于
 
-> 最后更新：`2025-04-27`。
+> 最后更新：`2025-05-03`。
 
 ## 我的简介
 
@@ -31,22 +31,13 @@
 | 名称 | 链接 | 备注 |
 | ---- | ---- | ---- |
 | Website | <https://gytxtx.github.io/> | 静态网页 |
-| 博客 | <https://gytxtx.github.io/Blog/> | 静态博客 |
+| Blog | <https://gytxtx.github.io/Blog/> | 静态博客 |
 | GitHub | [@gytxtx](https://github.com/gytxtx/) | - |
 | E-Mail | [`gytxtx@outlook.com`](mailto:gytxtx@outlook.com) | 不经常看邮箱 |
-| Bilibili | [`UID 1582448018`](https://space.bilibili.com/1582448018/) | 没错，这是我 B 站号... |
+| Bilibili | [`UID 1582448018`](https://space.bilibili.com/1582448018/) | 没错，这是我 B 站账号... |
 
 ---
 
-## 友情链接
+## 其他内容
 
-| 名称 | 链接 | 描述 |
-| ---- | ---- | ---- |
-| LAGSNES | <https://lagsn.es/> | - |
-| 是小改呀 | <https://www.haoyu233.com/> | 孩儿立志出乡关，学不成名誓不还。 |
-| makotowu | <https://makotowu.cnstlapy.cn/> | - |
-| 是路明呀 | <https://www.riseforever.cn/> | 爱你所爱，行你所行；只问初心，只问敢勇，无问西东。 |
-| GDWare | <https://gdware.cnstlapy.cn/> | GDWare 的博客 |
-| 天空社区Studio | <https://skyhome.tech/> | 海内存知己，天涯若比邻。 |
-
-以上排名不分先后。
+[友情链接](blog/Links.md "友情链接")
