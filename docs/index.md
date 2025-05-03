@@ -10,8 +10,7 @@
 
 [:material-text-box: 文章](blog/index.md "文章列表"){ .md-button .md-button--primary } [:material-tag-outline: 标签](blog/tags.md "标签"){ .md-button }
 
-[:material-information: 关于](blog/About.md "关于"){ .md-button }
-[:material-link: 友链](blog/Links.md "友情链接"){ .md-button }
+[:material-information: 关于](blog/About.md "关于"){ .md-button } [:material-link: 友链](blog/Links.md "友情链接"){ .md-button }
 
 ---
 
