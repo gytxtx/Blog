@@ -97,7 +97,7 @@ plugins:
       tags_file: blog/tags.md # 标签索引文件
   - social: # 社交卡片 插件
       cards_layout_options:
-        font_family: 'Roboto, Noto Sans, Noto Sans SC'
+        font_family: Noto Sans SC
     #- autolinks 
   - exclude:
       glob:
