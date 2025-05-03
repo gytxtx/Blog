@@ -10,7 +10,7 @@ KFACBT's Blog - Based on MkDocs.
 
 [View on GitHub](https://github.com/gytxtx/Blog/)
 
-基于 [MkDocs-Material](https://github.com/squidfunk/mkdocs-material/) 构建。
+本项目基于 [MkDocs-Material](https://github.com/squidfunk/mkdocs-material/) 构建。
 
 ## 预览
 

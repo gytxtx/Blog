@@ -8,7 +8,9 @@
 
 ## 相关链接
 
-[:material-text-box: 文章](blog/index.md "文章列表"){ .md-button .md-button--primary } [:material-tag-outline: 标签](blog/tags.md "标签"){ .md-button } [:material-information: 关于](blog/About.md "关于"){ .md-button }
+[:material-text-box: 文章](blog/index.md "文章列表"){ .md-button .md-button--primary } [:material-tag-outline: 标签](blog/tags.md "标签"){ .md-button }
+
+[:material-information: 关于](blog/About.md "关于"){ .md-button }
 [:material-link: 友链](blog/Links.md "友情链接"){ .md-button }
 
 ---
@@ -17,4 +19,4 @@
 
 ## 其他
 
-本站基于 [:simple-materialformkdocs: Material for MkDocs](https://github.com/squidfunk/mkdocs-material/ "View on GitHub") 构建。
+本站基于 [:simple-materialformkdocs: Material for MkDocs](https://github.com/squidfunk/mkdocs-material/ "View on GitHub") 构建，托管于 [:fontawesome-brands-github: GitHub Pages](https://pages.github.com/) 。
