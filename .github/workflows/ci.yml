@@ -24,4 +24,7 @@ jobs:
       # 安装 Blog 插件
       - run: pip install mkdocs-blog-plugin
 
+      # 安装 社交卡片 插件
+      - run: pip install mkdocs-social-plugin
+
       - run: mkdocs gh-deploy --force

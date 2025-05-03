@@ -95,6 +95,7 @@ plugins:
   - blog # 博客插件
   - tags: # 与博客集成的标签插件
       tags_file: blog/tags.md # 标签索引文件
+  - social # 社交卡片 插件
     #- autolinks 
   - exclude:
       glob:
