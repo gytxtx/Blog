@@ -4,6 +4,7 @@
 
 site_name: 'KFACBT 的博客'
 site_description: 'Anyway, keep learning.'
+site_url: https://blog.gytxtx.xyz/
 # site_url: http://www.example.com/
 
 #  GitHub Repo link
@@ -47,6 +48,7 @@ nav:
   - 博客:
       - blog/index.md
       - 关于: blog/About.md
+      - 友链: blog/Links.md
       - 标签: blog/tags.md
 
 extra:
