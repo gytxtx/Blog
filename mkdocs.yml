@@ -109,4 +109,4 @@ plugins:
       regex:
         - '.*\.(tmp|bin|tar)$'
 
-copyright: Copyright &copy; 2025 KFACBT. All rights reserved.
+copyright: Copyright &copy; 2025 KFACBT. All rights reserved. | 网站由 <a href="https://hydun.com/" target="_blank"><strong>火毅盾云安全</strong></a> 提供防护及 CDN 加速服务。
