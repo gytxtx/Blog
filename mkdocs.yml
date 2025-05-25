@@ -1,0 +1,156 @@
+# Official tutorial 
+# MkDocs: https://www.mkdocs.org/user-guide/configuration/
+# MkDocs-Material: https://squidfunk.github.io/mkdocs-material/
+
+site_name: KFACBT 的博客
+site_description: Anyway, keep learning.
+site_author: gytxtx
+site_url: https://gytxtx.github.io/Blog/
+# site_url: http://www.example.com/
+
+#  GitHub Repo link
+repo_url: https://github.com/gytxtx/Blog/
+repo_name: gytxtx/Blog
+
+# 自定义导航栏
+nav:
+  - 首页: index.md
+  - 文章: blog/index.md
+  - 标签: blog/tags.md
+  - 关于: blog/about.md
+  - 友链: blog/links.md
+
+theme:
+  name: material
+
+  # 扩展 MkDocs-Material 主题
+  custom_dir: overrides
+
+  # 设置站点徽标与标签页图标，支持 PNG 与 SVG
+  logo: img/logo.jpg
+  favicon: img/favicon.ico
+
+  language: zh # 中文，解决中文搜索问题
+  features:
+    - navigation.expand
+    - tabs
+
+    - navigation.footer # 自定义页脚（显示上一页和下一页的链接）
+    - navigation.tabs # 将菜单呈现在位于上述视口标题下方的菜单层中。
+
+  # 提供切换 日间 / 夜间 模式的选项
+  palette:
+
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        # name: Switch to light mode
+        name: 切换到明亮模式
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+      toggle:
+        icon: material/brightness-7
+        # name: Switch to dark mode
+        name: 切换到暗黑模式
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        # name: Switch to system preference
+        name: 切换到系统偏好
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/gytxtx/
+
+markdown_extensions: 
+  - attr_list # https://squidfunk.github.io/mkdocs-material/reference/images/
+
+  # 文档内嵌图标支持
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+  # - pymdownx.tabbed  # https://squidfunk.github.io/mkdocs-material/reference/content-tabs/
+  - nl2br # newline-to-break 
+  - toc:
+      permalink: '#' # heading anchor 
+      slugify: !!python/object/apply:pymdownx.slugs.slugify # 解决中文标题解析问题
+        kwds:
+          case: lower
+          max_length: 64
+  - admonition
+  - codehilite:
+      guess_lang: false
+      linenums: false
+  - footnotes
+  - meta
+  - def_list
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  # - pymdownx.emoji:
+      # emoji_generator: !!python/name:pymdownx.emoji.to_png
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist
+  - pymdownx.tilde
+
+  # Tab 选项卡支持
+  # - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+  # 网格卡片
+  # - attr_list
+  # - md_in_html
+
+plugins:
+  - search
+
+  # 灯箱，提供沉浸式的图片显示效果
+  - glightbox
+
+  - blog # 博客插件
+  - tags: # 与博客集成的标签插件
+      tags_file: blog/tags.md # 标签索引文件
+
+  # 在页面底部显示 Git 编辑日期信息
+  - git-revision-date-localized:
+      # enable_creation_date: true
+      type: iso_datetime
+      # 设置时区
+      timezone: Asia/Shanghai
+
+  - social: # 社交卡片 插件
+      cards_layout_options:
+        # 中文字体，解决默认字体无 CJK 字符的问题
+        font_family: Noto Sans SC
+
+  # - autolinks 
+
+  # MkDocs 排除插件，让 `docs` 文件夹中的指定文件不进入构建的站点目录中。
+  - exclude:
+      glob:
+        - "*.tmp"
+        - "*.pdf"
+        - "*.gz"
+      regex:
+        - '.*\.(tmp|bin|tar)$'
+
+copyright: Copyright &copy; 2025 KFACBT. All rights reserved.
+
+
+
