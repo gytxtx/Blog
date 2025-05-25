@@ -14,7 +14,9 @@ KFACBT's Blog - Based on MkDocs.
 
 ## 预览
 
-<https://gytxtx-blog.pages.dev/>
+主要链接：<https://gytxtx-blog.pages.dev/>
+
+仅为跳转：<https://gytxtx.github.io/Blog/>
 
 ## 其他
 
