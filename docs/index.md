@@ -28,4 +28,6 @@ hide:
 
 ## 其他
 
-本站基于 [:simple-materialformkdocs: Material for MkDocs](https://github.com/squidfunk/mkdocs-material/ "View on GitHub") 构建，托管于 [:fontawesome-brands-github: GitHub Pages](https://pages.github.com/) 。
+本站基于 [:simple-materialformkdocs: Material for MkDocs](https://github.com/squidfunk/mkdocs-material/ "View on GitHub") 构建，托管于 [:simple-cloudflarepages: Cloudflare Pages](https://pages.cloudflare.com/) 。
+
+<!-- [:fontawesome-brands-github: GitHub Pages](https://pages.github.com/)  -->
