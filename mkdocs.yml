@@ -125,7 +125,8 @@ plugins:
 
   - blog # 博客插件
   - tags: # 与博客集成的标签插件
-      tags_file: blog/tags.md # 标签索引文件
+      # 从 9.6.0 版本开始，此设置已弃用，因为此版本对标签插件进行了彻底重写，使其比上一版本功能强大得多。现在，标签列表可以在任何页面上使用。
+      # tags_file: blog/tags.md # 标签索引文件
 
   # 在页面底部显示 Git 编辑日期信息
   - git-revision-date-localized:
