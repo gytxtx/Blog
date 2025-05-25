@@ -39,7 +39,7 @@ hide:
 | 名称 | 链接 | 备注 |
 | ---- | ---- | ---- |
 | Website | <https://gytxtx.github.io/> | 静态网页 |
-| Blog | <https://gytxtx.github.io/Blog/> | 静态博客 |
+| Blog | <https://gytxtx-blog.pages.dev/> | 静态博客 |
 | GitHub | [@gytxtx](https://github.com/gytxtx/) | - |
 | E-Mail | [`gytxtx@outlook.com`](mailto:gytxtx@outlook.com) | 不经常看邮箱 |
 | Bilibili | [`UID 1582448018`](https://space.bilibili.com/1582448018/) | 没错，这是我 B 站账号... |

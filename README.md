@@ -14,7 +14,7 @@ KFACBT's Blog - Based on MkDocs.
 
 ## 预览
 
-<https://gytxtx.github.io/Blog/>
+<https://gytxtx-blog.pages.dev/>
 
 ## 其他
 
