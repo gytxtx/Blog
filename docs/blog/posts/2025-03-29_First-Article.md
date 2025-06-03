@@ -27,7 +27,6 @@ links:
     - MkDocs-Material 文档: https://squidfunk.github.io/mkdocs-material/
 
 comments: true
-
 ---
 
 # 本站的第一篇文章
@@ -41,11 +40,9 @@ comments: true
 ## 为什么选用 Material for MkDocs？
 
 ### 1. Material Design 的纯粹美感
-
 作为 Google 设计语言的忠实爱好者，**Material for MkDocs** 天生具备 **沉浸式的视觉层次**。恰到好处的阴影过渡、丝滑的组件交互，以及自适应暗色模式，让写作体验与内容呈现都充满现代感。
 
 ### 2. 低代码高定制的平衡术
-
 通过简单的 `mkdocs.yml` 配置文件即可实现：
 
 - [自定义导航栏与页脚](https://squidfunk.github.io/mkdocs-material/setup/)
@@ -57,13 +54,11 @@ comments: true
 无需前端知识，却能实现专业级定制，这对技术出身的写作者尤为友好。
 
 ### 3. 静态网站的优雅哲学
-
 所有内容通过 Markdown 书写，`mkdocs build` 命令一键生成纯静态页面，可直接部署至 `GitHub Pages` / `Vercel` 等免费平台。没有数据库维护压力，没有插件漏洞风险，只有 **「内容即资产」** 的极简主义。
 
 ---
 
 ## 为什么不用 WordPress？
-
 1. **成本敏感**：一台 24 小时在线的云服务器年费足够买三本技术书籍，而静态托管方案真正实现零成本运维 ~~（其实主要原因就是：我是学生党）~~
 2. **减法原则**：当 80% 的博客功能只是展示文章时，为何要承受插件更新、后台管理、性能调优的重负？
 3. **版本控制基因**：所有文章以 `.md` 文件存储于 Git 仓库，天然具备版本回溯、多端同步能力，写作过程本身就是代码提交史
@@ -71,7 +66,6 @@ comments: true
 ---
 
 ## 关于这个博客的实验性尝试
-
 作为技术爱好者，我始终相信 **「输出是最好的输入」**。这里将主要记录：
 
 - :material-book: 技术原理分享（WinAPI 实践 / 编程技巧 / 云原生构建 等）
@@ -87,7 +81,6 @@ comments: true
 ---
 
 ## 感谢 :simple-materialformkdocs: Material for MkDocs
-
 [![Built with Material for MkDocs](https://img.shields.io/badge/Material_for_MkDocs-526CFE?style=for-the-badge&logo=MaterialForMkDocs&logoColor=white)](https://squidfunk.github.io/mkdocs-material/)
 
 最后，感谢 **[Material for MkDocs](https://github.com/squidfunk/mkdocs-material/)** 的开发团队提供了简单易用且出色的 **项目文档** / **博客** 工具，其开箱即用的配置极大简化了我的部署流程，使我可以专心忙于别的事情中。

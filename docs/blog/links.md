@@ -5,13 +5,11 @@ hide:
   - navigation
   # 隐藏目录，不推荐。
   # - toc 
-
 ---
 
 # 链接列表
 
 ## 单向订阅
-
 > 博主喜欢去逛的网站。至于您是否添加我，这对我不重要。
 
 | 名称 | 链接 | 描述 |
@@ -22,8 +20,9 @@ hide:
 | PumpkinJui's 自留地 | <https://pumpkinjui.pages.dev/> | - |
 | Arisa's Blog | <https://blog.arisa.moe/> | - |
 
-## 友情链接
+---
 
+## 友情链接
 | 名称 | 链接 | 描述 |
 | ---- | ---- | ---- |
 | LAGSNES | <https://lagsn.es/> | - |
