@@ -18,6 +18,8 @@ links:
   - 易语言: https://eyuyan.com/
   - 精易论坛: https://bbs.125.la/
   - KFACBT's Toolkit: https://github.com/gytxtx/KFACBT_Toolkit_Deprecated/
+
+comments: true
 ---
 
 
