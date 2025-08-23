@@ -8,12 +8,12 @@ authors:
 readtime: 5
 
 categories:
-  - 建站日志
-  - 技术实践
+  - 建站
+  - 技术
 
 tags:
   - MkDocs
-  - 博客搭建
+  - 博客
   - 静态站点
   - 站点生成器
   - 云原生

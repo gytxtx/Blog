@@ -12,6 +12,7 @@ categories:
 
 tags:
   - GitHub
+  - 技术
 
 slug: GitHub-Block-CN-IP
 

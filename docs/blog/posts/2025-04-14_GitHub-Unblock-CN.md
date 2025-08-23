@@ -12,7 +12,7 @@ categories:
 
 tags:
   - GitHub
-  - 技术服务中断
+  - 技术
 
 slug: GitHub-Unblock-CN
 
