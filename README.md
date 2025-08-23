@@ -9,7 +9,7 @@ KFACBT's Blog - Based on MkDocs.
 本项目基于 [MkDocs-Material](https://github.com/squidfunk/mkdocs-material/) 构建。
 
 ## 预览
-主链接：<https://gytxtx-blog.pages.dev/>
+主链接：<https://blog-gytxtx.pages.dev/>
 
 仅跳转：<https://gytxtx.github.io/Blog/>
 

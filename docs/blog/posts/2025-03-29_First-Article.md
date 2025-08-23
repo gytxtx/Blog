@@ -9,14 +9,10 @@ readtime: 5
 
 categories:
   - 建站
-  - 技术
 
 tags:
   - MkDocs
   - 博客
-  - 静态站点
-  - 站点生成器
-  - 云原生
 
 slug: First-Article
 
@@ -74,7 +70,7 @@ comments: true
 
 我也同时在实践中学习，这也印证了 「Anyway, keep learning.」 这句话。
 
-尽管这是首次尝试博客创作，但我更愿意将其视为 **「数字花园」** 的播种——不追求日更的节奏，只聚焦于持续的知识沉淀与重构。如果您在阅读中发现任何技术谬误，或是有想探讨的话题，欢迎跳转至 [:material-email-outline: 关于我](https://gytxtx-blog.pages.dev/blog/about/) 页面获取联系方式与我交流。
+尽管这是首次尝试博客创作，但我更愿意将其视为 **「数字花园」** 的播种——不追求日更的节奏，只聚焦于持续的知识沉淀与重构。如果您在阅读中发现任何技术谬误，或是有想探讨的话题，欢迎跳转至 [:material-email-outline: 关于我](https://blog-gytxtx.pages.dev/blog/about/) 页面获取联系方式与我交流。
 
 静待思想的种子在此生根发芽。🌱
 
