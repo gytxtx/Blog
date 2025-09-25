@@ -1,5 +1,5 @@
 ---
-title: 首页
+title: 关于
 
 hide:
   - navigation
