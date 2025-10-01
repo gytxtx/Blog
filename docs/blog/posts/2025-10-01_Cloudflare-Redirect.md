@@ -43,7 +43,7 @@ comments: true
 ![](./assets/Cloudflare-Redirect/Image-1.png "就像这样")
 
 ## 2. 创建重定向规则
-进入 Cloudflare -> 点击需要重定向的主域名 -> 规则 -> 重定向规则 -> 创建规则
+进入 Cloudflare -> 点击需要重定向的主域名 -> 规则 -> 创建规则 -> 重定向规则
   
 选择模板 **从根重定向到 WWW**：
 ![](./assets/Cloudflare-Redirect/Image-2.png "示意")
@@ -55,7 +55,7 @@ comments: true
 ![](./assets/Cloudflare-Redirect/Image-4.png "模板示意")
 
 !!! note "提示"
-    此处的 gytxtx.xyz 可替换为您自己的域名。
+    此处的 `gytxtx.xyz` 可替换为您自己的域名。
 
 ## 3. 保存并部署
 点击 **部署**，稍等几分钟规则即可生效。
