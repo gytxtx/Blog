@@ -68,6 +68,10 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/gytxtx/
+  # Google Analytics
+  analytics:
+    provider: google
+    property: G-29NRC21SS3
 
 markdown_extensions: 
   - attr_list # https://squidfunk.github.io/mkdocs-material/reference/images/
