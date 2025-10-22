@@ -15,8 +15,9 @@ repo_name: gytxtx/Blog
 # 自定义导航栏
 nav:
   - 首页: index.md
-  - 文章: blog/index.md
-  - 标签: blog/tags.md
+  - 博客:
+    - blog/index.md
+    - blog/tags.md
   - 关于: blog/about.md
   - 友链: blog/links.md
 
@@ -35,8 +36,19 @@ theme:
     - navigation.expand
     - tabs
 
+    - navigation.top # "返回顶部" 按钮
+
     - navigation.footer # 自定义页脚（显示上一页和下一页的链接）
     - navigation.tabs # 将菜单呈现在位于上述视口标题下方的菜单层中。
+
+    # - navigation.indexes # 启用章节索引页后，文档可以直接附加到章节，这对于提供概览页面特别有用。
+
+    - toc.follow # 当启用目录的锚点跟随功能时，侧边栏会自动滚动，以便活动锚点始终可见。
+
+    - navigation.instant # 启用即时加载后，所有内部链接的点击都将被拦截并通过XHR进行调度，而无需完全重新加载页面。
+    - navigation.instant.progress # 依赖于 `navigation.instant` 的页面加载进度指示器
+
+    - search.highlight # 启用搜索高亮显示后，当用户点击搜索结果时，Material for MkDocs 将在点击链接后高亮显示所有匹配结果。
 
   # 提供切换 日间 / 夜间 模式的选项
   palette:
@@ -67,7 +79,13 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
+      name: GitHub 个人主页
       link: https://github.com/gytxtx/
+
+    - icon: material/email-outline
+      name: 使用 E-Mail 联系我
+      link: mailto:gytxtx@outlook.com
+
   # Google Analytics
   analytics:
     provider: google
@@ -127,7 +145,8 @@ plugins:
   # 灯箱，提供沉浸式的图片显示效果
   - glightbox
 
-  - blog # 博客插件
+  - blog: # 博客插件
+      blog_toc: true # Blog 索引页支持使用文章标题生成目录
   - tags: # 与博客集成的标签插件
       # 从 9.6.0 版本开始，此设置已弃用，因为此版本对标签插件进行了彻底重写，使其比上一版本功能强大得多。现在，标签列表可以在任何页面上使用。
       # tags_file: blog/tags.md # 标签索引文件
