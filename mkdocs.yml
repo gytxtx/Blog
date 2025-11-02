@@ -53,6 +53,12 @@ theme:
   # 提供切换 日间 / 夜间 模式的选项
   palette:
 
+    # 主色 
+    - primary: green
+
+    # 强调色
+    - accent: blue
+
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
       toggle:
