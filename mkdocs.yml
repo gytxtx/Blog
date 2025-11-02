@@ -53,12 +53,6 @@ theme:
   # 提供切换 日间 / 夜间 模式的选项
   palette:
 
-    # 主色 
-    - primary: green
-
-    # 强调色
-    - accent: blue
-
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
       toggle:
@@ -68,7 +62,12 @@ theme:
 
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
-      scheme: default 
+      scheme: default
+
+      # 主色 / 强调色
+      primary: green
+      accent: green
+
       toggle:
         icon: material/brightness-7
         # name: Switch to dark mode
@@ -77,6 +76,10 @@ theme:
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+
+      # 主色
+      primary: black
+
       toggle:
         icon: material/brightness-4
         # name: Switch to system preference
