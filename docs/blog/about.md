@@ -26,17 +26,17 @@ hide:
 ## 我的贡献
 目前担任 [蓝屏工具箱](https://tools.cnstlapy.cn/) 开发者。
 
-除此之外，我还在 [精易论坛](https://bbs.ijingyi.com/uid-714270) 上活动，发一些帖子等。
+除此之外，我还在 [精易论坛](https://bbs.ijingyi.com/uid-714270) 上活动，发一些帖子等。不过现在不经常上了。
 
 ---
 
 ## 相关链接
-| 名称      | 链接                                                       | 备注                                                                       |
-| -------- | ---------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Website  | <https://gytxtx.github.io/>                                | 个人主页                                                                   |
-| Blog     | <https://gytxtx.github.io/Blog/>                           | Based on [MkDocs-Material](https://squidfunk.github.io/mkdocs-material/). |
-| E-Mail   | [`gytxtx@outlook.com`](mailto:gytxtx@outlook.com)          | 不经常查看邮箱，因此可能不会及时回复。                                          |
-| Bilibili | [`UID 1582448018`](https://space.bilibili.com/1582448018/) | 没错，这是我 B 站账号...                                                     |
+| 名称 | 链接                                                       | 备注                                                                       |
+| --- | ---------------------------------------------------------- | ------------------------------------------------------------------------- |
+| 网站 | <https://gytxtx.github.io/>                                | 个人主页                                                                   |
+| 博客 | <https://gytxtx.github.io/Blog/>                           | Based on [MkDocs-Material](https://squidfunk.github.io/mkdocs-material/). |
+| 邮箱 | [`gytxtx@outlook.com`](mailto:gytxtx@outlook.com)          | 不经常查看邮箱，因此可能不会及时回复。                                          |
+| B 站 | [`UID 1582448018`](https://space.bilibili.com/1582448018/) | 没错，这是我 B 站账号...                                                     |
 
 ---
 
