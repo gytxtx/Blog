@@ -20,6 +20,7 @@ nav:
     - blog/tags.md
   - 关于: blog/about.md
   - 友链: blog/links.md
+  - 开往: https://www.travellings.cn/go.html
 
 theme:
   name: material
@@ -94,6 +95,10 @@ extra:
     - icon: material/email-outline
       name: 使用 E-Mail 联系我
       link: mailto:gytxtx@outlook.com
+
+    - icon: material/train
+      name: 跳转至“开往”
+      link: https://www.travellings.cn/go.html
 
   # Google Analytics
   analytics:
