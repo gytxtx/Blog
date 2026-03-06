@@ -1,6 +1,6 @@
 # 基本依赖包
 mkdocs
-mkdocs-material
+mkdocs-material[recommended,imaging]
 
 # 灯箱，提供沉浸式的图片显示效果
 mkdocs-glightbox
@@ -12,7 +12,5 @@ mkdocs-git-revision-date-localized-plugin
 mkdocs-exclude
 
 # 社交插件及依赖包
-mkdocs-material[imaging]
 mkdocs-social-plugin
-
 mkdocs-blog-plugin
