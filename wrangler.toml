@@ -1,0 +1,9 @@
+name = "gytxtx-blog"
+compatibility_date = "2025-07-31"
+
+[build]
+command = "chmod +x build.sh && ./build.sh"
+
+[assets]
+directory = "./site"
+not_found_handling = "404-page"
