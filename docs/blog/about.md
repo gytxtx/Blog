@@ -10,7 +10,7 @@ hide:
 # 关于
 
 ## 我的简介
-我是 KFACBT，也可以称呼为 KFA。生日是 **5 月 5 日**。
+我是 KFACBT，也可以称呼为 KFA。生日是 **5 月 5 日**。 \
 一个普普通通的人。个人开发者。学生。
 
 常用 ID：`gytxtx` 和 `KFACBT`。
@@ -24,9 +24,8 @@ hide:
 * 开发工具：`Visual Studio`, `VS Code`, `Git`
 
 ## 我的贡献
-目前担任 [蓝屏工具箱](https://tools.cnstlapy.cn/) 开发者。
-
-除此之外，我还在 [精易论坛](https://bbs.ijingyi.com/uid-714270) 上活动，发一些帖子等。不过现在不经常上了。
+目前担任 [蓝屏工具箱](https://tools.cnstlapy.cn/) 开发者。 \
+除此之外，我还在 [精易论坛](https://bbs.ijingyi.com/uid-714270) 上活动，发一些帖子等。不过现在不怎么访问了。
 
 ---
 
@@ -40,5 +39,8 @@ hide:
 
 ---
 
-## 其他内容
-[友情链接](links.md "友情链接")
+## 特别感谢
+* [Cloudflare](https://cloudflare.com/) 提供 DNS、网站托管、CDN 加速服务。
+* [MkDocs](https://www.mkdocs.org/) 提供站点框架。
+* [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) 提供网站主题。
+* [giscus](https://giscus.app/) 提供评论系统。
