@@ -14,8 +14,6 @@ hide:
 
 主要分享一些技术文章，偶尔也会发一些日常。
 
-本站简介：Anyway, keep learning.
-
 ## 跳转
 [:material-text-box: 文章](blog/index.md "文章"){ .md-button .md-button--primary }  [:material-tag-outline: 标签](blog/tags.md "标签"){ .md-button }
 
