@@ -25,7 +25,7 @@ hide:
 
 ## 我的贡献
 目前担任 [蓝屏工具箱](https://tools.cnstlapy.cn/) 开发者。
-除此之外，我还在 [精易论坛](https://bbs.ijingyi.com/uid-714270) 上活动，发一些帖子等。不过现在不怎么访问了。
+除此之外，我在空闲时间也会按兴趣开发一些项目，详情请参阅 GitHub 贡献活动。
 
 ---
 
@@ -40,7 +40,7 @@ hide:
 ---
 
 ## 特别感谢
-[Cloudflare](https://cloudflare.com/) 提供 DNS、网站托管、CDN 加速服务。
-[MkDocs](https://www.mkdocs.org/) 提供站点框架。
-[Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) 提供网站主题。
-[giscus](https://giscus.app/) 提供评论系统。
+* [Cloudflare](https://cloudflare.com/) 提供 DNS、网站托管、CDN 加速服务。
+* [MkDocs](https://www.mkdocs.org/) 提供站点框架。
+* [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) 提供网站主题。
+* [giscus](https://giscus.app/) 提供评论系统。
