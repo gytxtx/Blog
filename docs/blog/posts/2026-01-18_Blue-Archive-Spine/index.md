@@ -12,7 +12,7 @@ authors:
 categories:
   - 技术
 
-slug: Blue-Srchive-Sprine
+slug: Blue-Srchive-Spine
 
 comments: true
 ---

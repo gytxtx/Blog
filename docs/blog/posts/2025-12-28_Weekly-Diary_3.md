@@ -10,7 +10,7 @@ authors:
   - gytxtx
 
 categories:
-  - 建站
+  - 日常
 
 slug: Weekly-Diary_3
 
