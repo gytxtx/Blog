@@ -20,9 +20,10 @@ hide:
 游戏《[**蔚蓝档案**](https://bluearchive-cn.com/)》[才羽绿](https://kivo.wiki/data/character/27)厨。
 
 ## 这个网站
-本站始于 2025 年 3 月 29 日，一开始打算写一些关于技术分享的文章，但后面也开始写一些我的日常生活。
+本站始于 2025 年 3 月 29 日，一开始打算写一些关于技术分享的文章，但后面也开始写我的日常生活。    
+更新频率随缘，可能隔好几个月才会更一篇。
 
-使用 Mkdocs + Material for Mkdocs 主题搭建。
+使用 MkDocs + Material for MkDocs 主题搭建。
 
 ## 技术栈
 | 用途     | 分类 | 技术栈                    |
