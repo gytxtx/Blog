@@ -9,20 +9,8 @@ hide:
 
 # 链接列表
 
-## 单向订阅
-> 博主喜欢去逛的网站。至于您是否添加我，这对我不重要。
-
-| 名称 | 链接 |
-| ---- | ---- |
-| 林德熙 | <https://blog.lindexi.com/> |
-| 大贤者初春令月 | <https://mouri.moe/zh/index.html> |
-| walterlv |<https://blog.walterlv.com/> |
-| PumpkinJui's 自留地 | <https://pumpkinjui.pages.dev/> |
-| Arisa's Blog | <https://blog.arisa.moe/> |
-
----
-
 ## 友情链接
+
 | 名称 | 链接 | 描述 |
 | ---- | ---- | ---- |
 | LAGSNES | <https://lagsn.es/> | - |
