@@ -19,23 +19,41 @@ hide:
 
 游戏《[**蔚蓝档案**](https://bluearchive-cn.com/)》[才羽绿](https://kivo.wiki/data/character/27)厨。
 
-## 编程技能
-* 编程语言：~~`易语言`~~, `HTML + CSS + JS`, `C#`
-* 开发工具：`Visual Studio`, `VS Code`, `Git`
+## 这个网站
+本站始于 2025 年 3 月 29 日，一开始打算写一些关于技术分享的文章，但后面也开始写一些我的日常生活。
+
+使用 Mkdocs + Material for Mkdocs 主题搭建。
+
+## 技术栈
+| 用途     | 分类 | 技术栈                    |
+| -------- | ---- | ------------------------- |
+| Web 开发 | 语言 | `HTML` `CSS` `JavaScript` |
+|          | 框架 | `MkDocs` `Hugo` `Vite`          |
+| App 开发 | 语言 | ~~`易语言`~~ `Java` |
+| 杂项 | 代码编辑器 | `Visual Studio Code` `Notepads` |
+|  | 操作系统 | `Windows` `Arch Linux` |
+|  | Shell | `PowerShell` `Bash` `Zsh` |
+|  | AI 工具 | `Codex` `OpenCode` |
 
 ## 我的贡献
-目前担任 [蓝屏工具箱](https://tools.cnstlapy.cn/) 开发者。
+曾经的 [蓝屏工具箱](https://tools.cnstlapy.cn/) 开发者。
+
+在 [蔚蓝咖啡厅](https://github.com/bluearchive-cafe) 开发一些前端项目。
+
+[OpenJBD](https://github.com/gytxtx/OpenJBD) 是我使用 Java 开发的 Android 端嘉佰达 BMS 仪表板，用于替代原厂 App 糟糕的界面与功能实现逻辑。
+
 除此之外，我在空闲时间也会按兴趣开发一些项目，详情请参阅 GitHub 贡献活动。
 
 ---
 
 ## 相关链接
-| 名称 | 链接 | 备注 |
-| ---- | ---- | ---- |
-| 网站 | <https://gytxtx.github.io/> | 个人主页 |
-| 博客 | <https://blog.gytxtx.top/> | 基于 [MkDocs-Material](https://squidfunk.github.io/mkdocs-material/) 构建。 |
-| 邮箱 | [`gytxtx@outlook.com`](mailto:gytxtx@outlook.com) | 不经常查看邮箱，因此可能不会及时回复。 |
-| B 站 | [`UID 1582448018`](https://space.bilibili.com/1582448018/) | 没错，这是我 B 站账号... |
+| 名称 | 链接 |
+| ---- | ---- |
+| 网站 | <https://gytxtx.github.io/> |
+| 博客 | <https://blog.gytxtx.top/> |
+| 邮箱 | [gytxtx@outlook.com](mailto:gytxtx@outlook.com) |
+| B 站 | [UID 1582448018](https://space.bilibili.com/1582448018/) |
+| Steam | [@gytxtx](https://steamcommunity.com/id/gytxtx) |
 
 ---
 
