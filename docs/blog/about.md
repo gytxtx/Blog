@@ -29,19 +29,18 @@ hide:
 | 用途     | 分类 | 技术栈                    |
 | -------- | ---- | ------------------------- |
 | Web 开发 | 语言 | `HTML` `CSS` `JavaScript` |
-|          | 框架 | `MkDocs` `Hugo` `Vite`          |
-| App 开发 | 语言 | ~~`易语言`~~ `Java` |
+|          | 框架 | `MkDocs` `Hugo` `Vite` `Vue` |
+| App 开发 | 语言 | ~~`易语言`~~ `Java` `C#` |
 | 杂项 | 代码编辑器 | `Visual Studio Code` `Notepads` |
+|  | IDE | `Visual Studio`、`Android Studio` |
 |  | 操作系统 | `Windows` `Arch Linux` |
 |  | Shell | `PowerShell` `Bash` `Zsh` |
-|  | AI 工具 | `Codex` `OpenCode` |
+|  | AI 工具 | `Codex` `Claude Code` `OpenCode` |
 
 ## 我的贡献
-曾经的 [蓝屏工具箱](https://tools.cnstlapy.cn/) 开发者。
-
-在 [蔚蓝咖啡厅](https://github.com/bluearchive-cafe) 开发一些前端项目。
-
-[OpenJBD](https://github.com/gytxtx/OpenJBD) 是我使用 Java 开发的 Android 端嘉佰达 BMS 仪表板，用于替代原厂 App 糟糕的界面与功能实现逻辑。
+* 曾经的 [蓝屏工具箱](https://tools.cnstlapy.cn/) 开发者。
+* 在 [蔚蓝咖啡厅](https://github.com/bluearchive-cafe) 开发前端、桌面应用等项目。
+* [OpenJBD](https://github.com/gytxtx/OpenJBD) 是我使用 Java 开发的 Android 端嘉佰达 BMS 仪表板，用于替代原厂 App 糟糕的界面与功能实现逻辑。
 
 除此之外，我在空闲时间也会按兴趣开发一些项目，详情请参阅 GitHub 贡献活动。
 
