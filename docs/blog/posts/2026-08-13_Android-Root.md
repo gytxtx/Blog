@@ -35,7 +35,7 @@ APatch
 
 ### Magisk 模块
 
-- meta-overlayfs
+- [**hybrid mount**](https://github.com/YuzakiKokuban/meta-hybrid_mount)
 - <https://github.com/stanislawrogasik/Pixel5-VoLTE-VoWiFi>
 - Zygisk Next
 - LSPosed
