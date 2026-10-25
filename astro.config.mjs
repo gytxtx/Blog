@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import expressiveCode from 'astro-expressive-code';
 import sitemap from '@astrojs/sitemap';
+import icon from 'astro-icon';
 import remarkBreaks from 'remark-breaks';
 import remarkReadingTime from 'remark-reading-time';
 
@@ -21,6 +22,9 @@ export default defineConfig({
         `[data-theme="${theme.name.toLowerCase().replace(/\s+/g, '-')}"]`,
     }),
     sitemap(),
+    // 图标：Lucide 图标集（@iconify-json/lucide），用法 <Icon name="lucide:sun" />；
+    // 本地 SVG 放 src/icons/ 后用 <Icon name="文件名" />
+    icon(),
   ],
   markdown: {
     // remark-breaks 对应 Material 的 nl2br 扩展（单个换行渲染为 <br>）

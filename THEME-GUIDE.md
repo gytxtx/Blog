@@ -73,6 +73,11 @@ readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
 6. **GA**：gtag 片段（G-29NRC21SS3）保留在 head。
 7. **`.prose`**：Markdown 渲染的正文样式挂钩。已知内容事实：单换行会渲染为 `<br>`
    （remark-breaks）；admonition 已转成 `> **标题**` 引用块；脚注是 GFM 原生。
+8. **图标**：`astro-icon` 已在 `astro.config.mjs` 注册，Lucide 全集可用。用法：
+   `import { Icon } from 'astro-icon/components'` → `<Icon name="lucide:sun" size={24} />`，
+   构建期内联为 SVG、继承 `currentColor`（明暗模式免处理）。本地自定义图标放
+   `src/icons/*.svg` 后 `<Icon name="文件名" />`。现 Header 里 4 个手写 SVG 可在重写时
+   替换为对应 Lucide 图标（search / sun / sun-dim / moon-star 之类）。
 
 ## 4. 验收清单（每次提交前自查，review 时陪练会复跑）
 
