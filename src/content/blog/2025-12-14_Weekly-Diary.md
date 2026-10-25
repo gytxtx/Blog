@@ -1,6 +1,6 @@
 ---
 title: "琐事记 #1：生日、入团、技能大赛"
-date: "2025-12-14"
+pubDate: "2025-12-14"
 slug: "Weekly-Diary"
 authors:
   - "gytxtx"

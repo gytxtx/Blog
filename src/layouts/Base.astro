@@ -21,6 +21,7 @@ const ogImageAbs = new URL(ogImage, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -45,6 +46,7 @@ const ogImageAbs = new URL(ogImage, Astro.site);
           document.documentElement.dataset.theme = dark ? 'github-dark' : 'github-light';
           document.documentElement.dataset.mode = mode;
         };
+        window.__applyTheme = apply;
         apply();
         document.addEventListener('astro:after-swap', apply);
       })();
@@ -58,6 +60,10 @@ const ogImageAbs = new URL(ogImage, Astro.site);
       function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
       gtag('config', 'G-29NRC21SS3');
+      // ClientRouter 站内跳转不会重新加载页面，手动补发 page_view
+      document.addEventListener('astro:after-swap', function () {
+        gtag('event', 'page_view', { page_location: location.href, page_title: document.title });
+      });
     </script>
   </head>
   <body>

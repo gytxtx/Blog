@@ -23,7 +23,7 @@ export async function getStaticPaths() {
     { params: { slug: 'default' }, props: { title: SITE.title, subtitle: SITE.description, date: '' } },
     ...posts.map((post) => ({
       params: { slug: postOgPath(post) },
-      props: { title: post.data.title, subtitle: SITE.title, date: formatDate(post.data.date) },
+      props: { title: post.data.title, subtitle: SITE.title, date: formatDate(post.data.pubDate) },
     })),
   ];
 }
@@ -123,7 +123,7 @@ export const GET: APIRoute = async ({ props }) => {
   );
 
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } }).render().asPng();
-  return new Response(png, {
+  return new Response(new Uint8Array(png), {
     headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=31536000, immutable' },
   });
 };

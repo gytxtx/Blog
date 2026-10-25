@@ -1,6 +1,6 @@
 ---
 import { render } from 'astro:content';
-import { getPosts, postUrl } from '../../lib/posts';
+import { getPosts, postUrl, readingTime } from '../../lib/posts';
 import Post from '../../layouts/Post.astro';
 
 export async function getStaticPaths() {
@@ -16,8 +16,8 @@ export async function getStaticPaths() {
 }
 
 const { post, prev, next } = Astro.props;
-const { Content, remarkPluginFrontmatter } = await render(post);
-const readtime = post.data.readtime ?? Math.ceil(remarkPluginFrontmatter.minutes ?? 1);
+const { Content } = await render(post);
+const readtime = await readingTime(post);
 ---
 
 <Post post={post} prev={prev} next={next} readtime={readtime}>

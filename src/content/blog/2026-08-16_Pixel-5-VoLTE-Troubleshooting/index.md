@@ -1,6 +1,6 @@
 ---
 title: "Pixel 5 的 VoLTE 又坏了：一次 IMS 故障排查记录"
-date: "2026-08-16"
+pubDate: "2026-08-16"
 slug: "Pixel-5-VoLTE-Troubleshooting"
 authors:
   - "gytxtx"

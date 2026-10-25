@@ -5,10 +5,10 @@ import { getPosts, formatDate, postUrl, PAGE_SIZE } from '../../../../lib/posts'
 
 export async function getStaticPaths() {
   const posts = await getPosts();
-  const years = [...new Set(posts.map((p) => p.data.date.getUTCFullYear()))].sort((a, b) => b - a);
+  const years = [...new Set(posts.map((p) => p.data.pubDate.getUTCFullYear()))].sort((a, b) => b - a);
   return years.map((year) => ({
     params: { year: String(year) },
-    props: { year, posts: posts.filter((p) => p.data.date.getUTCFullYear() === year) },
+    props: { year, posts: posts.filter((p) => p.data.pubDate.getUTCFullYear() === year) },
   }));
 }
 
@@ -24,7 +24,7 @@ const pagePosts = posts.slice(0, PAGE_SIZE);
       {
         pagePosts.map((p) => (
           <li>
-            <time datetime={p.data.date.toISOString().slice(0, 10)}>{formatDate(p.data.date)}</time>
+            <time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{formatDate(p.data.pubDate)}</time>
             <a href={postUrl(p)}>{p.data.title}</a>
           </li>
         ))

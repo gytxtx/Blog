@@ -1,6 +1,6 @@
 ---
 title: "停更的这几个月，我在做什么"
-date: "2026-05-22"
+pubDate: "2026-05-22"
 slug: "Monthly-Summary"
 authors:
   - "gytxtx"

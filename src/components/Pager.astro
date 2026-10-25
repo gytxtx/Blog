@@ -6,7 +6,9 @@ interface Props {
 }
 
 const { current, total, base } = Astro.props;
-const href = (n: number) => (n === 1 ? `${base}/` : `${base}/page/${n}/`);
+// base 可能是 '/'（首页），去掉末尾斜杠再拼，避免生成 '//page/2/' 这种协议相对地址
+const root = base.replace(/\/$/, '');
+const href = (n: number) => (n === 1 ? `${root}/` : `${root}/page/${n}/`);
 ---
 
 {

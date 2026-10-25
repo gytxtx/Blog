@@ -1,6 +1,6 @@
 ---
 title: "使用 Cloudflare DNS 轻松实现域名重定向"
-date: "2025-10-01"
+pubDate: "2025-10-01"
 slug: "Cloudflare-Redirect"
 authors:
   - "gytxtx"

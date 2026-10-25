@@ -1,6 +1,7 @@
 ---
 title: "停更三年项目后，一个中学生亲历的易语言消亡史"
-date: "2025-06-03"
+pubDate: "2025-06-03"
+updatedDate: "2025-06-06"
 slug: "eyuyan"
 authors:
   - "gytxtx"

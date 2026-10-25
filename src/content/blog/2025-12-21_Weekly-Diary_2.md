@@ -1,6 +1,6 @@
 ---
 title: "琐事记 #2：被打、大赛后续、办卡"
-date: "2025-12-21"
+pubDate: "2025-12-21"
 slug: "Weekly-Diary_2"
 authors:
   - "gytxtx"

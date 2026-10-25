@@ -1,6 +1,7 @@
 ---
 title: "Blue Archive Spine 立绘提取与自定义导出全流程"
-date: "2026-01-18"
+pubDate: "2026-01-18"
+updatedDate: "2026-05-22"
 slug: "Blue-Srchive-Spine"
 authors:
   - "gytxtx"

@@ -4,7 +4,7 @@
  * 用法：node scripts/migrate-content.mjs <src-posts-dir> <dest-dir>
  *
  * 处理内容：
- *  - 拍平 Material 的嵌套日期（date.created → date）
+ *  - 拍平 Material 的嵌套日期（date.created → pubDate，date.updated → updatedDate）
  *  - title 缺失时取正文第一个 H1，并从正文中移除（由模板负责渲染标题）
  *  - 丢弃 Material 专有/无用的 links 字段
  *  - `!!! type "Title"` admonition 转为引用块
@@ -74,7 +74,7 @@ function convertAdmonitions(body) {
 
 function serialize(fm) {
   const order = [
-    'title', 'date', 'slug', 'description', 'authors', 'categories',
+    'title', 'pubDate', 'updatedDate', 'slug', 'description', 'authors', 'categories',
     'tags', 'readtime', 'draft', 'pin', 'comments',
   ];
   const keys = [...order.filter((k) => k in fm), ...Object.keys(fm).filter((k) => !order.includes(k))];
@@ -102,9 +102,12 @@ for (const file of mdFiles) {
   let body = raw.slice(m[0].length);
 
   // 拍平日期
+  const toDay = (v) => (v instanceof Date ? v.toISOString().slice(0, 10) : String(v));
   const created = fm.date?.created ?? fm.date;
   if (!created) throw new Error(`缺日期：${rel}`);
-  fm.date = created instanceof Date ? created.toISOString().slice(0, 10) : String(created);
+  fm.pubDate = toDay(created);
+  if (fm.date?.updated) fm.updatedDate = toDay(fm.date.updated);
+  delete fm.date;
 
   // 标题：front matter 优先，其次正文首个 H1（并从正文移除）
   if (!fm.title) {
@@ -133,7 +136,7 @@ for (const file of mdFiles) {
   fs.mkdirSync(path.dirname(destPath), { recursive: true });
   fs.writeFileSync(destPath, `---\n${serialize(fm)}\n---\n${body.replace(/^\n+/, '')}`);
 
-  const d = new Date(fm.date);
+  const d = new Date(fm.pubDate);
   const url = `/blog/${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}/${fm.slug}/`;
   report.push(`${rel.padEnd(50)} → ${url}`);
 }

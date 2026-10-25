@@ -1,6 +1,7 @@
 ---
 title: "GitHub 屏蔽中国地区访问的解决方案"
-date: "2025-04-13"
+pubDate: "2025-04-13"
+updatedDate: "2025-08-23"
 slug: "GitHub-Block-CN-IP"
 authors:
   - "gytxtx"

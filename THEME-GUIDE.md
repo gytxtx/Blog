@@ -41,18 +41,17 @@ getPostsForIndex(): Promise<Post[]>  // 置顶在前，其余日期倒序
 categorySlug(c): string        // "GitHub" -> "github"，中文原样
 formatDate(d): string          // "2025 年 3 月 29 日"
 excerpt(post, max=100): string // 以 <!-- more --> 为界的纯文本摘要
-gitDateKey(post): string       // git-dates.json 的键
 type Post = CollectionEntry<'blog'>
 ```
 
-`Post.data`：`title, date, slug, description?, authors[], categories[], tags[],
+`Post.data`：`title, description?, pubDate, updatedDate?, heroImage?, slug, authors[], categories[], tags[],
 readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
 
 布局 props 现状（可重新设计，但数据来源就这些）：
 
 - `Base.astro` ← `{ title, description?, ogImage? }`
 - `Post.astro` ← `{ post, readtime, prev, next }` + `<Content />` slot；
-  "更新于"来自 `git-dates.json`（构建期生成，`gitDateKey(post)` 取键）
+  "更新于"来自 front matter 的 `updatedDate`（可选）；`heroImage` 为可选题图（`astro:assets` 的 ImageMetadata）
 - `Prose.astro` ← `{ frontmatter: { title } }` + slot
 
 ## 3. 耦合点（重写时必须保持的协议）
@@ -62,7 +61,7 @@ readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
    `github-light` / `github-dark`。只改站点配色 → 动 `global.css` 即可；
    想换代码高亮配色 → 三处一起改。
 2. **主题引导脚本**（Base.astro inline）：必须早于首帧执行、localStorage key `theme`
-   取值 `auto|light|dark`、`astro:after-swap` 时重放、切换时 `dispatchEvent(new CustomEvent('themechange'))`
+   取值 `auto|light|dark`、`astro:after-swap` 时重放、切换时 `document.dispatchEvent(new CustomEvent('themechange'))`
    （Giscus 靠这个事件同步主题）。
 3. **Pagefind**：head 引 `/pagefind/pagefind-ui.css|js`（构建后产物，dev 下 404 属正常）；
    弹窗内保留 `#pagefind-search` 容器挂 PagefindUI。中文翻译对象可随意改文案。

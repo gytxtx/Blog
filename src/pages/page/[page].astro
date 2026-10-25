@@ -9,7 +9,7 @@ import { SITE } from '../../consts';
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getPostsForIndex();
   // 第一页由首页 / 负责，这里只生成 /page/2/ 起
-  return paginate(posts, { pageSize: PAGE_SIZE }).filter((p) => p.params.page >= 2);
+  return paginate(posts, { pageSize: PAGE_SIZE }).filter((p) => p.props.page.currentPage >= 2);
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;

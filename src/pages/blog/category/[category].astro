@@ -28,7 +28,7 @@ const { display, posts } = Astro.props;
       {
         posts.map((p) => (
           <li>
-            <time datetime={p.data.date.toISOString().slice(0, 10)}>{formatDate(p.data.date)}</time>
+            <time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{formatDate(p.data.pubDate)}</time>
             <a href={postUrl(p)}>{p.data.title}</a>
           </li>
         ))

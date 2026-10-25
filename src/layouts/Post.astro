@@ -2,8 +2,8 @@
 import Base from './Base.astro';
 import Giscus from '../components/Giscus.astro';
 import { authors } from '../data/authors';
-import { formatDate, postUrl, categorySlug, excerpt, gitDateKey, type Post } from '../lib/posts';
-import gitDates from '../data/git-dates.json';
+import { Image } from 'astro:assets';
+import { formatDate, postUrl, postOgPath, categorySlug, excerpt, type Post } from '../lib/posts';
 
 interface Props {
   post: Post;
@@ -14,29 +14,35 @@ interface Props {
 
 const { post, readtime, prev, next } = Astro.props;
 const author = authors[post.data.authors[0]] ?? { name: post.data.authors[0] };
-const updated = (gitDates as Record<string, string>)[gitDateKey(post)];
+const { updatedDate, heroImage } = post.data;
 const description = post.data.description ?? excerpt(post, 160);
 ---
 
 <Base
   title={`${post.data.title} - KFACBT 的博客`}
   description={description}
-  ogImage={`/og/${postUrl(post).replace('/blog/', '').replace(/\/$/, '')}.png`}
+  ogImage={`/og/${postOgPath(post)}.png`}
 >
   <article class="content prose">
     <header class="post-header">
       <h1>{post.data.title}</h1>
       <div class="card-meta">
-        <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time>
+        <time datetime={post.data.pubDate.toISOString().slice(0, 10)}>{formatDate(post.data.pubDate)}</time>
         <span>{readtime} 分钟</span>
         <span class="author">
           {author.avatar && <img src={author.avatar} alt="" width="20" height="20" loading="lazy" />}
           {author.name}
         </span>
         {post.data.categories.map((c) => <a class="chip" href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
-        {updated && <span>更新于 {updated.slice(0, 10)}</span>}
+        {updatedDate && (
+          <span>
+            更新于 <time datetime={updatedDate.toISOString().slice(0, 10)}>{formatDate(updatedDate)}</time>
+          </span>
+        )}
       </div>
     </header>
+
+    {heroImage && <Image src={heroImage} width={1020} height={510} alt="" />}
 
     <slot />
 

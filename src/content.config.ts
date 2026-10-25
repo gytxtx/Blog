@@ -1,4 +1,5 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const blog = defineCollection({
@@ -9,19 +10,24 @@ const blog = defineCollection({
     generateId: ({ entry }) =>
       entry.replace(/\.md$/, '').replace(/(^|\/)index$/, '$1'),
   }),
-  schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    slug: z.string(),
-    description: z.string().optional(),
-    authors: z.array(z.string()).default(['gytxtx']),
-    categories: z.array(z.string()).default([]),
-    tags: z.array(z.string()).default([]),
-    readtime: z.number().optional(),
-    draft: z.boolean().default(false),
-    pin: z.boolean().default(false),
-    comments: z.boolean().default(true),
-  }),
+  // 前四个字段与官方 blog 模板一致；description 保持可选（缺省时取正文摘要），
+  // 其余是从 Material 迁移来的扩展字段
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string().optional(),
+      pubDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
+      heroImage: z.optional(image()),
+      slug: z.string(),
+      authors: z.array(z.string()).default(['gytxtx']),
+      categories: z.array(z.string()).default([]),
+      tags: z.array(z.string()).default([]),
+      readtime: z.number().optional(),
+      draft: z.boolean().default(false),
+      pin: z.boolean().default(false),
+      comments: z.boolean().default(true),
+    }),
 });
 
 export const collections = { blog };

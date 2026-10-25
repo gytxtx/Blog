@@ -1,6 +1,7 @@
 ---
 title: "GitHub 暂时取消未登录用户从中国访问的限制"
-date: "2025-04-14"
+pubDate: "2025-04-14"
+updatedDate: "2025-08-23"
 slug: "GitHub-Unblock-CN"
 authors:
   - "gytxtx"

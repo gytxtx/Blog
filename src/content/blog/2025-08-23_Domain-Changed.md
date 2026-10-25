@@ -1,6 +1,6 @@
 ---
 title: "本站域名已更改"
-date: "2025-08-23"
+pubDate: "2025-08-23"
 slug: "Domain-Changed"
 authors:
   - "gytxtx"

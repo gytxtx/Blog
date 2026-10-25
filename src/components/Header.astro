@@ -81,8 +81,8 @@ const isActive = (href: string) =>
         const cur = (localStorage.getItem('theme') || 'auto') as (typeof MODES)[number];
         const next = MODES[(MODES.indexOf(cur) + 1) % MODES.length];
         localStorage.setItem('theme', next);
-        window.dispatchEvent(new CustomEvent('themechange'));
         (window as any).__applyTheme?.();
+        document.dispatchEvent(new CustomEvent('themechange'));
       });
   }
 

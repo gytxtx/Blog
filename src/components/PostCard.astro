@@ -1,11 +1,12 @@
 ---
-import { postUrl, formatDate, excerpt, categorySlug, type Post } from '../lib/posts';
+import { postUrl, formatDate, excerpt, categorySlug, readingTime, type Post } from '../lib/posts';
 
 interface Props {
   post: Post;
 }
 
 const { post } = Astro.props;
+const readtime = await readingTime(post);
 ---
 
 <article class="post-card">
@@ -13,9 +14,9 @@ const { post } = Astro.props;
     {post.data.title}{post.data.pin && <span class="pin-badge">置顶</span>}
   </a>
   <div class="card-meta">
-    <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time>
+    <time datetime={post.data.pubDate.toISOString().slice(0, 10)}>{formatDate(post.data.pubDate)}</time>
     {post.data.categories.map((c) => <a class="chip" href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
-    {post.data.readtime && <span>{post.data.readtime} 分钟</span>}
+    <span>{readtime} 分钟</span>
   </div>
   <p class="card-excerpt">{excerpt(post)}</p>
 </article>

@@ -1,4 +1,4 @@
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'blog'>;
 
@@ -6,7 +6,7 @@ export const PAGE_SIZE = 10;
 
 /** 与线上 Material 站点一致的 URL 规则：日期取 front matter 的 date.created */
 export function postUrl(post: Post): string {
-  const d = post.data.date;
+  const d = post.data.pubDate;
   const y = d.getUTCFullYear();
   const m = String(d.getUTCMonth() + 1).padStart(2, '0');
   const day = String(d.getUTCDate()).padStart(2, '0');
@@ -18,7 +18,7 @@ export function postOgPath(post: Post): string {
 }
 
 const byDateDesc = (a: Post, b: Post) =>
-  b.data.date.valueOf() - a.data.date.valueOf();
+  b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 
 export async function getPosts(): Promise<Post[]> {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -48,13 +48,18 @@ export function excerpt(post: Post, max = 100): string {
     .replace(/<[^>]+>/g, ' ')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/[#>*`~_|\-]/g, ' ')
+    // 只剥 Markdown 记号；正文里的 2025-12-25、snake_case 之类保留
+    .replace(/^\s*([-+*]|\d+\.)\s+/gm, ' ')
+    .replace(/-{3,}|_{2,}|\*{1,3}/g, ' ')
+    .replace(/[#>`~|]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
   return text.length > max ? `${text.slice(0, max)}…` : text;
 }
 
-/** git-dates.json 的键：id → 源文件相对路径 */
-export function gitDateKey(post: Post): string {
-  return post.id.includes('/') ? `${post.id}/index.md` : `${post.id}.md`;
+/** 阅读时间（分钟）：front matter 的 readtime 优先，否则取 remark-reading-time 的估算 */
+export async function readingTime(post: Post): Promise<number> {
+  if (post.data.readtime) return post.data.readtime;
+  const { remarkPluginFrontmatter } = await render(post);
+  return Math.ceil(remarkPluginFrontmatter.minutes ?? 1);
 }

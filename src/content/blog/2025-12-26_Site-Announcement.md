@@ -1,6 +1,6 @@
 ---
 title: "站点公告"
-date: "2025-12-26"
+pubDate: "2025-12-26"
 slug: "Site-Announcement"
 authors:
   - "gytxtx"

@@ -1,6 +1,7 @@
 ---
 title: "本站的第一篇文章"
-date: "2025-03-29"
+pubDate: "2025-03-29"
+updatedDate: "2025-08-23"
 slug: "First-Article"
 authors:
   - "gytxtx"

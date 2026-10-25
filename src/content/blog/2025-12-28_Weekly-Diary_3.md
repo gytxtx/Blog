@@ -1,6 +1,7 @@
 ---
 title: "琐事记 #3：训练日常、烫伤、长春一日游"
-date: "2025-12-28"
+pubDate: "2025-12-28"
+updatedDate: "2026-05-22"
 slug: "Weekly-Diary_3"
 authors:
   - "gytxtx"

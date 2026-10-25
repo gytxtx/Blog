@@ -28,13 +28,25 @@
 
 <script>
   // 明暗切换时同步 giscus 主题（等价于原 Material 主题联动逻辑）
-  document.addEventListener('themechange', () => {
-    const iframe = document.querySelector('iframe.giscus-frame');
+  function syncGiscusTheme() {
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
     const theme =
       document.documentElement.dataset.theme === 'github-dark' ? 'transparent_dark' : 'light';
     iframe?.contentWindow?.postMessage(
       { giscus: { setConfig: { theme } } },
       'https://giscus.app',
     );
+  }
+
+  document.addEventListener('themechange', syncGiscusTheme);
+  // iframe 初始按 preferred_color_scheme 加载，手动选了明/暗时要在它首次回消息后纠正。
+  // 每个 iframe 只纠正一次：setConfig 会触发 resize 消息，不设标记会来回循环。
+  let syncedFrame: Element | null = null;
+  window.addEventListener('message', (e) => {
+    if (e.origin !== 'https://giscus.app') return;
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if (!iframe || iframe === syncedFrame) return;
+    syncedFrame = iframe;
+    syncGiscusTheme();
   });
 </script>

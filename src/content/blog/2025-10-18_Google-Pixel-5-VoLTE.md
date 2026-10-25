@@ -1,6 +1,6 @@
 ---
 title: "Google Pixel 5 开启 VoLTE 实录"
-date: "2025-10-18"
+pubDate: "2025-10-18"
 slug: "Google-Pixel-5-VoLTE"
 authors:
   - "gytxtx"

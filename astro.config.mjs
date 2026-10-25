@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import expressiveCode from 'astro-expressive-code';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
+import { unified } from '@astrojs/markdown-remark';
 import remarkBreaks from 'remark-breaks';
 import remarkReadingTime from 'remark-reading-time';
 
@@ -27,7 +28,9 @@ export default defineConfig({
     icon(),
   ],
   markdown: {
+    // Astro 7 默认处理器是 Sätteri，remark 插件要挂在 unified() 处理器上。
     // remark-breaks 对应 Material 的 nl2br 扩展（单个换行渲染为 <br>）
-    remarkPlugins: [remarkBreaks, remarkReadingTime],
+    // remark-reading-time 的类型声明基于旧版 unified 的 Node，运行时没问题，这里只是绕过类型
+    processor: unified({ remarkPlugins: [remarkBreaks, /** @type {any} */ (remarkReadingTime)] }),
   },
 });

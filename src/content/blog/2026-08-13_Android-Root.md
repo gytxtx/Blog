@@ -1,6 +1,7 @@
 ---
 title: "记录我的 Android Root 方案"
-date: "2026-08-13"
+pubDate: "2026-08-13"
+updatedDate: "2026-08-16"
 slug: "Android-Root"
 authors:
   - "gytxtx"
