@@ -3,6 +3,8 @@
 基于 [Astro](https://astro.build/) 框架搭建的个人博客。由 Material for MkDocs 迁移而来，
 迁移评估与方案见旧仓库的 `MIGRATION-ASSESSMENT.md` / `MIGRATION-PLAN.md`。
 
+表现层由本人在 `theme` 分支上手写重写，契约与验收标准见 `THEME-GUIDE.md`。
+
 ## 常用命令
 
 ```bash
