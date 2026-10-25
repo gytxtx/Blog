@@ -75,19 +75,28 @@ const ogImageAbs = new URL(ogImage, Astro.site);
     <script is:inline>
       // 主题三档切换：auto / light / dark，早于首帧执行避免闪白
       (function () {
-        var apply = function () {
+        var apply = function (doc) {
+          doc = doc || document;
           var mode = localStorage.getItem('theme') || 'auto';
           var dark =
             mode === 'dark' ||
             (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-          document.documentElement.dataset.theme = dark ? 'github-dark' : 'github-light';
-          document.documentElement.dataset.mode = mode;
-          var meta = document.querySelector('meta[name="theme-color"]');
+          doc.documentElement.dataset.theme = dark ? 'github-dark' : 'github-light';
+          doc.documentElement.dataset.mode = mode;
+          var meta = doc.querySelector('meta[name="theme-color"]');
           if (meta) meta.setAttribute('content', dark ? '#121412' : '#fbfaf7');
         };
         window.__applyTheme = apply;
         apply();
-        document.addEventListener('astro:after-swap', apply);
+        // 站内跳转时先把主题写进新文档再换：换 <html> 属性那一刻若没有 data-theme，
+        // 中间一次样式计算就会落到浅色，body 的颜色过渡随即从浅色渐变回来，深色下闪一下白
+        document.addEventListener('astro:before-swap', function (e) { apply(e.newDocument); });
+        // 「跟随系统」档下系统明暗变了要立刻跟上（giscus 靠 themechange 同步）
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+          if ((localStorage.getItem('theme') || 'auto') !== 'auto') return;
+          apply();
+          document.dispatchEvent(new CustomEvent('themechange'));
+        });
       })();
     </script>
     <ClientRouter />
@@ -111,5 +120,13 @@ const ogImageAbs = new URL(ogImage, Astro.site);
       <slot />
     </main>
     <Footer />
+    <script>
+      import { dropOffscreenTitles, markPageTurn, recordTitleSizes, setTitleScale } from '../lib/transitions';
+      document.addEventListener('astro:before-preparation', markPageTurn);
+      document.addEventListener('astro:after-preparation', dropOffscreenTitles);
+      document.addEventListener('astro:after-preparation', recordTitleSizes);
+      document.addEventListener('astro:after-swap', dropOffscreenTitles);
+      document.addEventListener('astro:after-swap', setTitleScale);
+    </script>
   </body>
 </html>

@@ -1,5 +1,7 @@
 ---
+import { Icon } from 'astro-icon/components';
 import FormattedDate from './FormattedDate.astro';
+import { titleMorph, titleTransitionName } from '../lib/transitions';
 import { postUrl, excerpt, categorySlug, readingTime, wordCount, formatWords, type Post } from '../lib/posts';
 
 interface Props {
@@ -18,13 +20,13 @@ const url = postUrl(post);
     <FormattedDate date={post.data.pubDate} />
     {post.data.categories.map((c) => <a href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
   </div>
-  <h2><a href={url}>{post.data.title}</a></h2>
+  <h2 transition:name={titleTransitionName(post.data.slug)} transition:animate={titleMorph}><a href={url}>{post.data.title}</a></h2>
   <p>{excerpt(post)}</p>
   <div class="more">
-    <a href={url}>阅读全文 →</a>
     <span class="stats">
       <span>{formatWords(words)}</span>
       <span>{readtime} 分钟</span>
     </span>
+    <a class="go" href={url}>阅读全文<Icon class="arr" name="lucide:arrow-right" /></a>
   </div>
 </article>

@@ -62,6 +62,18 @@
 
 html {
   scroll-behavior: smooth;
+  /* 常驻滚动条（Chrome 接鼠标 / 系统设为始终显示）下，短页没有滚动条、长页有，
+     可用宽度差一条滚动条，居中的顶栏和正文跨页左右跳；始终留出滚动条槽位 */
+  scrollbar-gutter: stable;
+  /* iOS 横屏时不要自动放大正文 */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 站内跳转期间（ClientRouter 打的方向标记）滚动必须瞬时：后退恢复位置用的是 scrollTo(x, y)，
+   平滑滚动会让新页先停在顶部截图，过渡完再肉眼可见地滑下去 */
+html[data-astro-transition] {
+  scroll-behavior: auto;
 }
 
 body {
@@ -111,6 +123,8 @@ a:hover {
 
 /* ===== 顶栏 ===== */
 .site-header {
+  position: relative;
+  z-index: 10;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
 }
@@ -154,18 +168,20 @@ a:hover {
 .nav a {
   color: var(--muted);
   padding: 0.35rem 0;
-  border-bottom: 1px solid transparent;
   white-space: nowrap;
+  /* 下划线画在背景上，hover 时从左往右展开 */
+  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
 }
 
 .nav a:hover {
   color: var(--text);
   text-decoration: none;
+  background-size: 100% 1px;
 }
 
 .nav a[aria-current='page'] {
   color: var(--text);
-  border-bottom-color: var(--text);
+  background-size: 100% 1px;
 }
 
 .header-actions {
@@ -174,7 +190,8 @@ a:hover {
   margin-right: -10px;
 }
 
-.header-actions button {
+.header-actions button,
+#nav-btn {
   display: inline-grid;
   place-items: center;
   width: 44px;
@@ -187,13 +204,29 @@ a:hover {
   cursor: pointer;
 }
 
-.header-actions button:hover {
+.header-actions button:hover,
+#nav-btn:hover {
   color: var(--text);
   background: var(--bg-soft);
 }
 
 #theme-btn svg {
   display: none;
+}
+
+/* 窄屏才出现的导航按钮（见响应式一节） */
+#nav-btn {
+  display: none;
+  margin-left: -10px;
+}
+
+.site-header[data-nav-open] #nav-btn .i-menu,
+#nav-btn .i-close {
+  display: none;
+}
+
+.site-header[data-nav-open] #nav-btn .i-close {
+  display: block;
 }
 
 html[data-mode='auto'] #theme-btn .i-auto,
@@ -211,6 +244,8 @@ html[data-mode='dark'] #theme-btn .i-dark {
   background: var(--bg);
   color: var(--text);
   padding: 1.25rem;
+  /* 默认 max-height 没算上面的 margin-top，结果多时弹窗底部会伸出视口 */
+  max-height: calc(100% - 6.5rem);
 }
 
 #search-dialog::backdrop {
@@ -258,9 +293,11 @@ html[data-mode='dark'] #theme-btn .i-dark {
   color: var(--accent);
   border: 1px solid currentColor;
   border-radius: 3px;
-  padding: 0 0.45em;
+  /* 字距会在最后一个字后面也补 0.1em，右内边距扣掉它才左右对称；
+     中文字形在行框里偏下，上内边距比下面少一点把字托回框的正中 */
+  padding: 0.04em 0.35em 0.11em 0.45em;
   letter-spacing: 0.1em;
-  line-height: 1.5;
+  line-height: 1.35;
 }
 
 .entry h2 {
@@ -300,6 +337,45 @@ html[data-mode='dark'] #theme-btn .i-dark {
 .entry .stats {
   display: flex;
   gap: 1rem;
+}
+
+/* 方向箭头用图标而不是 →/← 字符：字符在中文字体里偏小偏低，各处粗细也不一 */
+.arr {
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+  transition: transform 0.2s ease;
+}
+
+.arr path {
+  stroke-width: 1.75;
+}
+
+.nav .ext,
+.entry .go,
+.pager a,
+.pager .off,
+.post-pn .dir {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.entry .go:hover,
+.pager a:hover {
+  text-decoration: none;
+}
+
+a:hover .arr[data-icon$='right'] {
+  transform: translateX(3px);
+}
+
+a:hover .arr[data-icon$='left'] {
+  transform: translateX(-3px);
+}
+
+a:hover .arr[data-icon$='up-right'] {
+  transform: translate(2px, -2px);
 }
 
 .pager {
@@ -409,6 +485,7 @@ html[data-mode='dark'] #theme-btn .i-dark {
   letter-spacing: 0.06em;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .post-list .title {
@@ -431,6 +508,8 @@ html[data-mode='dark'] #theme-btn .i-dark {
   column-gap: 3rem;
 }
 
+/* 标题区占第一行，正文与右侧目录同在第二行：目录顶端跟正文对齐，不受标题行数影响 */
+.post-header,
 .post-main {
   grid-column: 2;
   min-width: 0;
@@ -438,6 +517,7 @@ html[data-mode='dark'] #theme-btn .i-dark {
 
 .post-side {
   grid-column: 3;
+  grid-row: 2;
   min-width: 0;
 }
 
@@ -488,7 +568,6 @@ html[data-mode='dark'] #theme-btn .i-dark {
   top: 2rem;
   max-height: calc(100vh - 4rem);
   overflow-y: auto;
-  margin-top: 13.5rem;
   border-left: 1px solid var(--border);
   font-size: 0.875rem;
   line-height: 1.6;
@@ -594,7 +673,6 @@ html[data-mode='dark'] #theme-btn .i-dark {
 }
 
 .post-pn .dir {
-  display: block;
   margin-bottom: 0.35rem;
   font-size: var(--fs-meta);
   letter-spacing: 0.06em;
@@ -627,6 +705,8 @@ html[data-mode='dark'] #theme-btn .i-dark {
 .prose {
   font-size: var(--fs-body);
   line-height: 1.85;
+  /* 长链接、长路径的行内代码在窄屏上断行，不撑出横向滚动 */
+  overflow-wrap: break-word;
 }
 
 .prose p {
@@ -841,6 +921,244 @@ html[data-theme] .prose .expressive-code {
   color: var(--text);
 }
 
+/* ===== 动效 ===== */
+
+/* 站内跳转：整页旧图快速淡出，新图淡入上浮 8px，后退时从上往下落入。
+   只认 ClientRouter 跳转时打在 <html> 上的方向标记，主题切换不受影响；顶栏 transition:animate="none" 原地不动。
+   :only-child 是只在一侧出现的命名元素（没配上对的列表标题、换篇时的文章标题），跟整页一起走。
+   ClientRouter 在减少动效时自动跳过 */
+html[data-astro-transition]::view-transition-old(root),
+html[data-astro-transition]::view-transition-old(*):only-child {
+  animation: vt-fade-out 120ms ease-in both;
+}
+
+html[data-astro-transition='forward']::view-transition-new(root),
+html[data-astro-transition='forward']::view-transition-new(*):only-child {
+  animation: vt-rise-in 280ms cubic-bezier(0.2, 0.7, 0.2, 1) 60ms both;
+}
+
+html[data-astro-transition='back']::view-transition-new(root),
+html[data-astro-transition='back']::view-transition-new(*):only-child {
+  animation: vt-sink-in 280ms cubic-bezier(0.2, 0.7, 0.2, 1) 60ms both;
+}
+
+/* 分页翻页（markPageTurn 打的 page-next / page-prev）：同级页面横向推移，较旧从右边进、较新从左边进。
+   新旧两张图同时起步交叠淡变，不像上面先淡出再淡入那样中间留出一段空白帧。
+   列表标题去掉过渡名，跟整页一起平移，不单独上浮 */
+html[data-astro-transition^='page-'] .entry h2[data-astro-transition-scope] {
+  view-transition-name: none;
+}
+
+html[data-astro-transition='page-next']::view-transition-old(root) {
+  animation: vt-out-left 220ms ease-in both;
+}
+
+html[data-astro-transition='page-next']::view-transition-new(root) {
+  animation: vt-in-right 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+html[data-astro-transition='page-prev']::view-transition-old(root) {
+  animation: vt-out-right 220ms ease-in both;
+}
+
+html[data-astro-transition='page-prev']::view-transition-new(root) {
+  animation: vt-in-left 320ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* 主题切换（Header.astro）：去掉所有过渡名让整页作为一张图交叉淡入，并停掉 CSS 颜色过渡，
+   否则顶栏会因 animate="none" 直接跳变、正文颜色在新图里还要再渐变一遍 */
+html[data-theme-switching] [data-astro-transition-scope] {
+  view-transition-name: none;
+}
+
+html[data-theme-switching] * {
+  transition: none !important;
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes vt-sink-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes vt-out-left {
+  to {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+}
+
+@keyframes vt-out-right {
+  to {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+}
+
+@keyframes vt-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+}
+
+@keyframes vt-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+}
+
+/* 列表标题 → 文章大标题的共享元素过渡稍放慢，看得出是同一个标题在变形 */
+::view-transition-group(*) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* 截图从左上角缩放，跟标题文字的起点对齐；整页和顶栏的动画只有平移，不受影响 */
+::view-transition-old(*),
+::view-transition-new(*) {
+  transform-origin: 0 0;
+}
+
+/* 标题变形（transitions.ts 的 titleMorph）：旧图缩放到新字号、新图从旧字号缩放回原尺寸，
+   两者视觉字号、文字中心始终一致；交叉淡变是另一段短动画，交接时刻由 transitions.ts 按方向设置 */
+@keyframes vt-title-grow-old {
+  to {
+    transform: translateY(var(--vt-title-dy, 0px)) scale(var(--vt-title-scale, 1));
+  }
+}
+
+@keyframes vt-title-grow-new {
+  from {
+    transform: translateY(calc(var(--vt-title-dy, 0px) / var(--vt-title-scale, 1) * -1))
+      scale(calc(1 / var(--vt-title-scale, 1)));
+  }
+}
+
+@keyframes vt-title-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-title-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes icon-in {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nav a {
+    transition:
+      color 0.2s ease,
+      background-size 0.25s ease;
+  }
+
+  .header-actions button,
+  #nav-btn,
+  .entry h2 a,
+  .post-pn b,
+  .post-list .title,
+  .toc a {
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .prose a {
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  /* 主题按钮切到下一档时，新图标转入；只在点过之后（.switched），翻页和首次加载不转 */
+  #theme-btn.switched svg {
+    animation: icon-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .header-actions button:active svg {
+    transform: scale(0.88);
+  }
+
+  /* 搜索弹窗：淡入并从上方落下，关闭时反向；不支持 @starting-style 的浏览器直接出现 */
+  #search-dialog,
+  #search-dialog::backdrop {
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      overlay 0.2s allow-discrete,
+      display 0.2s allow-discrete;
+  }
+
+  #search-dialog:not([open]) {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+
+  #search-dialog:not([open])::backdrop {
+    opacity: 0;
+  }
+
+  @starting-style {
+    #search-dialog[open] {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+
+    #search-dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  /* 窄屏导航面板：淡入并轻微下落，收起时反向 */
+  @media (max-width: 760px) {
+    .nav {
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        display 0.2s allow-discrete;
+    }
+
+    .site-header:not([data-nav-open]) .nav {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+
+    @starting-style {
+      .site-header[data-nav-open] .nav {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+    }
+  }
+
+  /* 折叠目录展开 */
+  .toc-inline[open] ol {
+    animation: vt-rise-in 0.25s ease both;
+  }
+}
+
 /* 系统设置了减少动效：关掉平滑滚动与主题切换过渡 */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -859,6 +1177,7 @@ html[data-theme] .prose .expressive-code {
     justify-content: center;
   }
 
+  .post-header,
   .post-main {
     grid-column: 1;
   }
@@ -872,33 +1191,55 @@ html[data-theme] .prose .expressive-code {
   }
 }
 
-@media (max-width: 640px) {
-  :root {
-    --gutter: 1rem;
+/* 站名 + 六项导航 + 两个按钮一行约需 700px，再窄就把导航收进按钮。
+   左：导航按钮 + 站名，右：搜索 / 主题；导航收进按钮下方的面板，盖在正文上 */
+@media (max-width: 760px) {
+  .brand img {
+    display: none;
   }
 
   .header-inner {
-    gap: 0 1rem;
-    padding-top: 0.25rem;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
   }
 
-  .nav {
-    order: 3;
-    width: 100%;
-    margin-left: 0;
-    gap: 1.25rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding: 0.25rem 0;
-    border-top: 1px solid var(--border);
-  }
-
-  .nav::-webkit-scrollbar {
-    display: none;
+  #nav-btn {
+    display: inline-grid;
+    margin-right: 0.5rem;
   }
 
   .header-actions {
     margin-left: auto;
+  }
+
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: 0.5rem var(--gutter) 1rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    font-size: var(--fs-body);
+  }
+
+  .site-header[data-nav-open] .nav {
+    display: flex;
+  }
+
+  .nav a {
+    align-self: flex-start;
+    padding: 0.6rem 0 0.3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 1rem;
   }
 
   .intro,
@@ -929,7 +1270,7 @@ html[data-theme] .prose .expressive-code {
   }
 
   .post-list.full-date li {
-    grid-template-columns: 6.5rem minmax(0, 1fr);
+    grid-template-columns: 7.25rem minmax(0, 1fr);
   }
 
   .post-list .cat {
@@ -957,12 +1298,5 @@ html[data-theme] .prose .expressive-code {
 
   .footer-inner {
     flex-direction: column;
-  }
-}
-
-/* 最窄的手机（≤360px）：导航间距再收一点，六项一行放得下 */
-@media (max-width: 360px) {
-  .nav {
-    gap: 0.9rem;
   }
 }
