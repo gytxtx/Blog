@@ -10,7 +10,15 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const baselineFile = path.join(root, 'urls-baseline-raw.xml');
 
-const ALLOW_NEW = [/^\/rss\.xml$/, /^\/og\//, /^\/sitemap/, /^\/robots\.txt$/, /^\/pagefind\//];
+const ALLOW_NEW = [
+  /^\/rss\.xml$/,
+  /^\/og\//,
+  /^\/sitemap/,
+  /^\/robots\.txt$/,
+  /^\/pagefind\//,
+  // 首页分页（2026-10-25 结构调整：首页即文章列表，分页自 /blog/page/N/ 迁至 /page/N/）
+  /^\/page\/\d+\/$/,
+];
 
 /**
  * 已解释的基线缺失（不许新增，除非有对应 commits 证据）：

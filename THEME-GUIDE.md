@@ -90,7 +90,7 @@ npm run dev          # 视觉走查
 1. `global.css`：设计令牌 + 字体（定调子，反馈最快）
 2. `Base.astro`：骨架 + head（把耦合点 2/4/6 原样搬好）
 3. `Header.astro`：导航 + 搜索 + 主题按钮（耦合点 1/3）
-4. `PostCard.astro` + `blog/index.astro`：列表观感
+4. `PostCard.astro` + `index.astro`：首页即文章列表（2026-10-25 结构调整）
 5. `Post.astro` + `.prose`：正文排版（最见功力的部分）
 6. `Footer/Giscus/404/index`：收尾
 
@@ -101,3 +101,10 @@ npm run dev          # 视觉走查
 - 工作分支：`theme`（main 保持已验收状态，随时 `git diff main` 对照、`git show main:<file>` 看旧实现）。
 - 写完（或卡住）直接说 **"review"** 或描述问题；陪练跑验收、按普通同事标准 review，不代笔。
 - 想要某个效果的实现思路/API 讲解，直接问——讲思路不算代笔。
+
+## 7. 结构决策记录
+
+- **2026-10-25 · 首页即文章列表**：原「独立首页 + /blog/ 索引」取消。`/` 直接呈现文章卡片
+  （置顶在前），分页迁至 `/page/N/`；基线 URL `/blog/` 与 `/blog/page/2/` 以静态重定向
+  （meta refresh + noindex）接到新位置，URL 门保持绿色。`/blog/` 前缀下的文章、归档、
+  分类、标签、about、links 一概不动。标签入口移入主导航。
