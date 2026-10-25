@@ -1,0 +1,39 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  /** side：宽屏右侧 sticky；inline：窄屏正文前的折叠目录 */
+  variant: 'side' | 'inline';
+}
+
+const { headings, variant } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  items.length >= 3 &&
+    (variant === 'side' ? (
+      <nav class="toc" aria-label="目录">
+        <p class="toc-title">目录</p>
+        <ol>
+          {items.map((h) => (
+            <li class={`depth-${h.depth}`}>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    ) : (
+      <details class="toc-inline">
+        <summary>目录（{items.filter((h) => h.depth === 2).length} 节）</summary>
+        <ol>
+          {items.map((h) => (
+            <li class={`depth-${h.depth}`}>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </details>
+    ))
+}

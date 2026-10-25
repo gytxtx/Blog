@@ -1,0 +1,23 @@
+---
+import { getPosts } from '../lib/posts';
+
+interface Props {
+  year: number;
+}
+
+const { year } = Astro.props;
+const years = [...new Set((await getPosts()).map((p) => p.data.pubDate.getUTCFullYear()))];
+---
+
+<header class="page-head">
+  <h1>归档</h1>
+  <nav class="years" aria-label="按年份">
+    {
+      years.map((y) => (
+        <a href={`/blog/archive/${y}/`} aria-current={y === year ? 'page' : undefined}>
+          {y}
+        </a>
+      ))
+    }
+  </nav>
+</header>

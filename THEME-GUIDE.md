@@ -39,8 +39,11 @@ postOgPath(post): string       // "2025/03/29/First-Article"（og 图去前缀�
 getPosts(): Promise<Post[]>    // 非草稿，日期倒序
 getPostsForIndex(): Promise<Post[]>  // 置顶在前，其余日期倒序
 categorySlug(c): string        // "GitHub" -> "github"，中文原样
-formatDate(d): string          // "2025 年 3 月 29 日"
+formatDate(d, withYear=true): string // "2025年3月29日" / "3月29日"（toLocaleDateString zh-CN，UTC）；组件 FormattedDate 包了一层 <time>
 excerpt(post, max=100): string // 以 <!-- more --> 为界的纯文本摘要
+readingTime(post): Promise<number>  // 分钟，front matter readtime 优先
+wordCount(post): Promise<number>    // 汉字 + 英文单词，不含代码块（src/lib/remark-reading-stats.mjs）
+formatWords(n): string             // "3,902 字"
 type Post = CollectionEntry<'blog'>
 ```
 
@@ -50,7 +53,7 @@ readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
 布局 props 现状（可重新设计，但数据来源就这些）：
 
 - `Base.astro` ← `{ title, description?, ogImage? }`
-- `Post.astro` ← `{ post, readtime, prev, next }` + `<Content />` slot；
+- `Post.astro` ← `{ post, readtime, headings, prev, next }` + `<Content />` slot；`headings` 来自 `render(post)`，供 `Toc.astro` 生成目录；
   "更新于"来自 front matter 的 `updatedDate`（可选）；`heroImage` 为可选题图（`astro:assets` 的 ImageMetadata）
 - `Prose.astro` ← `{ frontmatter: { title } }` + slot
 

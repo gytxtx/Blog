@@ -5,7 +5,8 @@ import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import { unified } from '@astrojs/markdown-remark';
 import remarkBreaks from 'remark-breaks';
-import remarkReadingTime from 'remark-reading-time';
+import remarkReadingStats from './src/lib/remark-reading-stats.mjs';
+import serifSubset from './src/integrations/serif-subset.mjs';
 
 export default defineConfig({
   site: 'https://blog-gytxtx.pages.dev',
@@ -26,11 +27,13 @@ export default defineConfig({
     // 图标：Lucide 图标集（@iconify-json/lucide），用法 <Icon name="lucide:sun" />；
     // 本地 SVG 放 src/icons/ 后用 <Icon name="文件名" />
     icon(),
+    // 标题衬线字体按页面实际用字裁子集并自托管（/fonts/NotoSerifSC-Bold.woff2）
+    serifSubset(),
   ],
   markdown: {
     // Astro 7 默认处理器是 Sätteri，remark 插件要挂在 unified() 处理器上。
     // remark-breaks 对应 Material 的 nl2br 扩展（单个换行渲染为 <br>）
-    // remark-reading-time 的类型声明基于旧版 unified 的 Node，运行时没问题，这里只是绕过类型
-    processor: unified({ remarkPlugins: [remarkBreaks, /** @type {any} */ (remarkReadingTime)] }),
+    // remark-reading-stats 往 remarkPluginFrontmatter 写字数 words 与阅读时间 minutes
+    processor: unified({ remarkPlugins: [remarkBreaks, remarkReadingStats] }),
   },
 });

@@ -9,7 +9,7 @@ const { frontmatter } = Astro.props;
 ---
 
 <Base title={`${frontmatter.title} - KFACBT 的博客`}>
-  <article class="content prose">
+  <article class="content prose" data-pagefind-body>
     <slot />
   </article>
 </Base>

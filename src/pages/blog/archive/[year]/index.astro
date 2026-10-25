@@ -1,7 +1,9 @@
 ---
 import Base from '../../../../layouts/Base.astro';
 import Pager from '../../../../components/Pager.astro';
-import { getPosts, formatDate, postUrl, PAGE_SIZE } from '../../../../lib/posts';
+import PostList from '../../../../components/PostList.astro';
+import ArchiveHead from '../../../../components/ArchiveHead.astro';
+import { getPosts, PAGE_SIZE } from '../../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -19,17 +21,9 @@ const pagePosts = posts.slice(0, PAGE_SIZE);
 
 <Base title={`${year} 年文章 - KFACBT 的博客`} description={`${year} 年发布的所有文章`}>
   <div class="content">
-    <h1 class="page-title">{year} 年文章</h1>
-    <ul class="tag-list">
-      {
-        pagePosts.map((p) => (
-          <li>
-            <time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{formatDate(p.data.pubDate)}</time>
-            <a href={postUrl(p)}>{p.data.title}</a>
-          </li>
-        ))
-      }
-    </ul>
+    <ArchiveHead year={year} />
+    <h2 class="group-head">{year}<span>{posts.length} 篇</span></h2>
+    <PostList posts={pagePosts} />
     <Pager current={1} total={totalPages} base={`/blog/archive/${year}`} />
   </div>
 </Base>

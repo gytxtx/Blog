@@ -1,6 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import { getPosts, categorySlug, formatDate, postUrl } from '../../../lib/posts';
+import PostList from '../../../components/PostList.astro';
+import { getPosts, categorySlug } from '../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -19,20 +20,28 @@ export async function getStaticPaths() {
 }
 
 const { display, posts } = Astro.props;
+const years = [...new Set(posts.map((p) => p.data.pubDate.getUTCFullYear()))];
 ---
 
 <Base title={`分类：${display} - KFACBT 的博客`} description={`分类「${display}」下的所有文章`}>
   <div class="content">
-    <h1 class="page-title">分类：{display}</h1>
-    <ul class="tag-list">
-      {
-        posts.map((p) => (
-          <li>
-            <time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{formatDate(p.data.pubDate)}</time>
-            <a href={postUrl(p)}>{p.data.title}</a>
-          </li>
-        ))
-      }
-    </ul>
+    <header class="page-head">
+      <h1>{display}</h1>
+      <p>分类下共 {posts.length} 篇文章</p>
+    </header>
+    {
+      years.map((y) => {
+        const yearPosts = posts.filter((p) => p.data.pubDate.getUTCFullYear() === y);
+        return (
+          <>
+            <h2 class="group-head">
+              {y}
+              <span>{yearPosts.length} 篇</span>
+            </h2>
+            <PostList posts={yearPosts} />
+          </>
+        );
+      })
+    }
   </div>
 </Base>

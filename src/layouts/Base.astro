@@ -9,9 +9,16 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  /** 文章页传入：og:type 变为 article，并输出 article:* 元数据 */
+  article?: {
+    publishedTime: Date;
+    modifiedTime?: Date;
+    section?: string;
+    tags?: string[];
+  };
 }
 
-const { title, description = SITE.description, ogImage = '/og/default.png' } = Astro.props;
+const { title, description = SITE.description, ogImage = '/og/default.png', article } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImageAbs = new URL(ogImage, Astro.site);
 ---
@@ -25,16 +32,46 @@ const ogImageAbs = new URL(ogImage, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/img/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- 浏览器地址栏配色，主题脚本会按当前明暗改写 -->
+    <meta name="theme-color" content="#fbfaf7" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:locale" content="zh_CN" />
     <meta property="og:site_name" content={SITE.title} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageAbs} />
+    {
+      article && (
+        <>
+          <meta property="article:published_time" content={article.publishedTime.toISOString()} />
+          {article.modifiedTime && (
+            <meta property="article:modified_time" content={article.modifiedTime.toISOString()} />
+          )}
+          {article.section && <meta property="article:section" content={article.section} />}
+          {article.tags?.map((t) => <meta property="article:tag" content={t} />)}
+        </>
+      )
+    }
     <meta name="twitter:card" content="summary_large_image" />
+    <slot name="head" />
+    <!-- 标题衬线字体：自托管子集，构建后按页面用字生成（src/integrations/serif-subset.mjs）。
+         写在 inline style 里：文件构建完才存在，放进打包的 CSS 会被 Vite 当成未解析资源 -->
+    <link rel="preload" href="/fonts/NotoSerifSC-Bold.woff2" as="font" type="font/woff2" crossorigin />
+    <style is:inline>
+      @font-face {
+        font-family: 'Noto Serif SC';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('/fonts/NotoSerifSC-Bold.woff2') format('woff2');
+      }
+    </style>
     <script is:inline>
       // 主题三档切换：auto / light / dark，早于首帧执行避免闪白
       (function () {
@@ -45,6 +82,8 @@ const ogImageAbs = new URL(ogImage, Astro.site);
             (mode === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
           document.documentElement.dataset.theme = dark ? 'github-dark' : 'github-light';
           document.documentElement.dataset.mode = mode;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', dark ? '#121412' : '#fbfaf7');
         };
         window.__applyTheme = apply;
         apply();

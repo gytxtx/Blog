@@ -1,0 +1,19 @@
+# Cloudflare Pages 响应头（https://developers.cloudflare.com/pages/configuration/headers/）
+
+# Astro 产物文件名带内容哈希，可以永久缓存
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Pagefind 分片带哈希；入口 pagefind-entry.json 与 *.js 文件名固定，走默认的重新验证
+/pagefind/fragment/*
+  Cache-Control: public, max-age=31536000, immutable
+/pagefind/index/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 标题字体子集文件名固定、内容随新文章变化：缓存一天，之后按 ETag 重新验证
+/fonts/*
+  Cache-Control: public, max-age=86400, must-revalidate
+
+# OG 卡片按文章 URL 命名，改标题后会重新生成
+/og/*
+  Cache-Control: public, max-age=86400

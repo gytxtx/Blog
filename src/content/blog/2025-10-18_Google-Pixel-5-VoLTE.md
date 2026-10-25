@@ -9,8 +9,6 @@ categories:
 readtime: 3
 comments: true
 ---
-# Google Pixel 5 开启 VoLTE 实录
-
 我之前一直在用的 Vivo X9 Plus，因为性能老旧、系统卡顿等原因，使用体验越来越差。于是我开始考虑更换一部能解锁、能折腾的手机。
 
 本来打算买小米，但近几年小米对 Bootloader 解锁限制越来越严格，最终我把目标转向了朋友推荐的 **Google Pixel 系列**。  

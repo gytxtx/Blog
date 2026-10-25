@@ -10,7 +10,7 @@
 ```bash
 npm ci                # 安装依赖
 npm run dev           # 本地开发（搜索索引在构建后才存在，dev 下搜索按钮无效属正常）
-npm run build         # astro build → pagefind 索引
+npm run build         # astro build（含标题字体子集）→ pagefind 索引
 npm run check         # astro check 类型检查
 npm run preview       # 预览构建产物
 npm run check-urls    # URL 验收门：构建产物 vs 线上基线 diff
@@ -33,7 +33,11 @@ npm run check-urls    # URL 验收门：构建产物 vs 线上基线 diff
 - **OG 社交卡片**：`src/pages/og/[...slug].png.ts` 用 satori 逐页生成；
   中文字体为 GB2312 全集子集（`scripts/subset-font.mjs` 预生成、已入库，构建期零网络依赖）。
   注意 satori 默认按 content-box 处理尺寸，样式里必须显式 `boxSizing: 'border-box'`。
-- **搜索**：Pagefind（内置 CJK 支持），构建后运行于 `dist`；UI 走官方 Default UI。
+- **标题字体**：Noto Serif SC Bold 自托管，`src/integrations/serif-subset.mjs` 在构建结束时扫 `dist`
+  里的标题文字，从入库的 GB2312 子集再裁出 `/fonts/NotoSerifSC-Bold.woff2`（约 80 KB）；dev 下直接提供完整
+  GB2312 子集。不依赖 Google Fonts（国内不可达时会阻塞首屏）。缓存策略见 `public/_headers`。
+- **搜索**：Pagefind，`scripts/pagefind-index.mjs` 建索引（中文按 Intl.Segmenter 预切词，与查询端一致）；
+  只索引文章正文和关于/友链；UI 走官方 Default UI。
 - **评论**：Giscus 按 pathname 映射，参数与旧站一致，URL 不变即评论不丢。
 - `src/content/blog/2026-09-17_Fuck.md` 在源仓库中当前为草稿（`draft: true`），
   因此不出现在站点中——这与旧站行为一致。

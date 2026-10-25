@@ -1,27 +1,33 @@
 ---
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.jpg';
 import { SITE } from '../consts';
+import { getPosts } from '../lib/posts';
 
+const latestYear = (await getPosts())[0]?.data.pubDate.getUTCFullYear();
 const nav = [
   { href: '/', label: '首页' },
   { href: '/blog/tags/', label: '标签' },
+  { href: `/blog/archive/${latestYear}/`, label: '归档', match: '/blog/archive/' },
   { href: '/blog/about/', label: '关于' },
   { href: '/blog/links/', label: '友链' },
 ];
 const current = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === '/' ? current === '/' : current === href || current.startsWith(href);
+const isActive = (item: (typeof nav)[number]) =>
+  item.href === '/' ? current === '/' : current.startsWith(item.match ?? item.href);
 ---
 
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="brand" href="/">
-      <img src="/img/logo.jpg" alt="" width="28" height="28" />
+      <Image src={logo} alt="" width={28} height={28} densities={[1, 2]} loading="eager" />
       {SITE.title}
     </a>
     <nav class="nav" aria-label="主导航">
       {
         nav.map((item) => (
-          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+          <a href={item.href} aria-current={isActive(item) ? 'page' : undefined}>
             {item.label}
           </a>
         ))
@@ -29,13 +35,13 @@ const isActive = (href: string) =>
       <a href="https://www.travellings.cn/go.html" target="_blank" rel="noopener">开往 ↗</a>
     </nav>
     <div class="header-actions">
-      <button id="search-btn" type="button" aria-label="搜索" title="搜索 (Ctrl+K)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+      <button id="search-btn" type="button" aria-label="搜索" title="搜索（Ctrl+K / ⌘K）">
+        <Icon name="lucide:search" size={20} />
       </button>
       <button id="theme-btn" type="button" aria-label="切换主题" title="切换主题">
-        <svg class="i-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
-        <svg class="i-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M3.5 3.5l1.5 1.5M19 19l1.5 1.5M1 12h2M21 12h2M3.5 20.5L5 19M19 5l1.5-1.5"></path></svg>
-        <svg class="i-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        <Icon class="i-auto" name="lucide:sun-moon" size={20} />
+        <Icon class="i-light" name="lucide:sun" size={20} />
+        <Icon class="i-dark" name="lucide:moon" size={20} />
       </button>
     </div>
   </div>
@@ -56,7 +62,20 @@ const isActive = (href: string) =>
     searching: '正在搜索 “[SEARCH_TERM]”…',
   };
 
+  // 索引里为对齐中文分词插了零宽空格（scripts/pagefind-index.mjs），展示前去掉
+  const stripZwsp = (s?: string) => s?.replaceAll('​', '');
+  const processResult = (r: any) => {
+    r.meta.title = stripZwsp(r.meta.title);
+    r.excerpt = stripZwsp(r.excerpt);
+    for (const sub of r.sub_results ?? []) {
+      sub.title = stripZwsp(sub.title);
+      sub.excerpt = stripZwsp(sub.excerpt);
+    }
+    return r;
+  };
+
   const MODES = ['auto', 'light', 'dark'] as const;
+  const MODE_LABELS = { auto: '跟随系统', light: '浅色', dark: '深色' };
 
   function initHeader() {
     // 搜索弹窗（pagefind 产物仅在构建后存在，dev 下给出提示）
@@ -64,9 +83,16 @@ const isActive = (href: string) =>
     const dlg = document.getElementById('search-dialog') as HTMLDialogElement | null;
     const el = document.getElementById('pagefind-search');
     if (btn && dlg && el) {
-      if (window.PagefindUI && !el.dataset.pfInit) {
+      if (!window.PagefindUI) {
+        el.textContent = '搜索索引在构建时生成，dev 下不可用：npm run build 后用 npm run preview 预览。';
+      } else if (!el.dataset.pfInit) {
         el.dataset.pfInit = '1';
-        new window.PagefindUI({ element: el, showImages: false, translations: PF_TRANSLATIONS });
+        new window.PagefindUI({
+          element: el,
+          showImages: false,
+          translations: PF_TRANSLATIONS,
+          processResult,
+        });
       }
       btn.onclick = () => dlg.showModal();
       dlg.onclick = (e) => {
@@ -74,17 +100,36 @@ const isActive = (href: string) =>
       };
     }
 
-    // 主题三档循环：auto → light → dark
+    // 主题三档循环：auto → light → dark；aria-label 报出当前档位
     const themeBtn = document.getElementById('theme-btn');
-    themeBtn &&
-      (themeBtn.onclick = () => {
-        const cur = (localStorage.getItem('theme') || 'auto') as (typeof MODES)[number];
-        const next = MODES[(MODES.indexOf(cur) + 1) % MODES.length];
+    if (themeBtn) {
+      const current = () => (localStorage.getItem('theme') || 'auto') as (typeof MODES)[number];
+      const label = () => {
+        const text = `主题：${MODE_LABELS[current()]}（点击切换）`;
+        themeBtn.setAttribute('aria-label', text);
+        themeBtn.title = text;
+      };
+      label();
+      themeBtn.onclick = () => {
+        const next = MODES[(MODES.indexOf(current()) + 1) % MODES.length];
         localStorage.setItem('theme', next);
         (window as any).__applyTheme?.();
         document.dispatchEvent(new CustomEvent('themechange'));
-      });
+        label();
+      };
+    }
   }
 
   document.addEventListener('astro:page-load', initHeader);
+
+  // Ctrl+K / ⌘K 开关搜索弹窗。模块脚本只执行一次，监听挂在 document 上跨页面有效
+  document.addEventListener('keydown', (e) => {
+    if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'k') return;
+    const dlg = document.getElementById('search-dialog') as HTMLDialogElement | null;
+    if (!dlg) return;
+    e.preventDefault();
+    if (dlg.open) return dlg.close();
+    dlg.showModal();
+    dlg.querySelector<HTMLInputElement>('input')?.focus();
+  });
 </script>

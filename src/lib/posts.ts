@@ -36,15 +36,26 @@ export function categorySlug(c: string): string {
   return c.toLowerCase();
 }
 
-export function formatDate(d: Date): string {
-  return `${d.getUTCFullYear()} 年 ${d.getUTCMonth() + 1} 月 ${d.getUTCDate()} 日`;
+/** "2026年8月16日"，withYear=false 时为 "8月16日"。按 UTC 取日，与 postUrl 的日期一致 */
+export function formatDate(d: Date, withYear = true): string {
+  return d.toLocaleDateString('zh-CN', {
+    year: withYear ? 'numeric' : undefined,
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
 }
 
 /** 纯文本摘要：优先 `<!-- more -->` 之前的内容（Material 摘要语义） */
 export function excerpt(post: Post, max = 100): string {
   const body = (post.body ?? '').split('<!-- more -->')[0];
+  // 行内代码先换成占位符，剥完记号再放回，代码里的 * # 等字符原样保留
+  const codes: string[] = [];
   const text = body
     .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`\n]+)`/g, (_, code: string) => `\u0000${codes.push(code) - 1}\u0000`)
+    // 标题行不进摘要（如「## 起因」）
+    .replace(/^#{1,6}\s.*$/gm, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
@@ -53,13 +64,25 @@ export function excerpt(post: Post, max = 100): string {
     .replace(/-{3,}|_{2,}|\*{1,3}/g, ' ')
     .replace(/[#>`~|]/g, ' ')
     .replace(/\s+/g, ' ')
-    .trim();
+    .trim()
+    .replace(/\u0000(\d+)\u0000/g, (_, i: string) => codes[Number(i)]);
   return text.length > max ? `${text.slice(0, max)}…` : text;
 }
 
-/** 阅读时间（分钟）：front matter 的 readtime 优先，否则取 remark-reading-time 的估算 */
+/** 阅读时间（分钟）：front matter 的 readtime 优先，否则取 remark-reading-stats 的估算 */
 export async function readingTime(post: Post): Promise<number> {
   if (post.data.readtime) return post.data.readtime;
   const { remarkPluginFrontmatter } = await render(post);
-  return Math.ceil(remarkPluginFrontmatter.minutes ?? 1);
+  return remarkPluginFrontmatter.minutes ?? 1;
+}
+
+/** 字数：汉字 + 英文单词，不含代码块（remark-reading-stats） */
+export async function wordCount(post: Post): Promise<number> {
+  const { remarkPluginFrontmatter } = await render(post);
+  return remarkPluginFrontmatter.words ?? 0;
+}
+
+/** "3,456 字" */
+export function formatWords(n: number): string {
+  return `${n.toLocaleString('zh-CN')} 字`;
 }

@@ -1,11 +1,12 @@
 /**
  * OG 字体子集化（一次性）：生成 GB2312 全集 + ASCII + 常用标点的字符集文件，
- * 并调用 fontTools（pyftsubset）裁剪 Noto Sans CJK SC。
+ * 并调用 fontTools（pyftsubset）裁剪 Noto Sans SC Regular（元信息）与 Noto Serif SC Bold（标题）。
  * （曾尝试 harfbuzz（subset-font npm 包），对 16MB CFF 格式 CJK 字体直接失败，故用 fontTools。）
  * 产物提交进仓库，构建期不再依赖网络。
  *
  * 前置：python -m pip install fonttools
- * 用法：node scripts/subset-font.mjs <regular.otf> <bold.otf>
+ * 用法：node scripts/subset-font.mjs <NotoSansSC-Regular.otf> <NotoSerifSC-Bold.otf>
+ * 源字体：github.com/notofonts/noto-cjk 的 Sans|Serif/SubsetOTF/SC/
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -30,9 +31,9 @@ function charset() {
   return [...chars].join('');
 }
 
-const [reg, bold] = process.argv.slice(2);
-if (!reg || !bold) {
-  console.error('用法：node scripts/subset-font.mjs <regular.otf> <bold.otf>');
+const [sans, serif] = process.argv.slice(2);
+if (!sans || !serif) {
+  console.error('用法：node scripts/subset-font.mjs <NotoSansSC-Regular.otf> <NotoSerifSC-Bold.otf>');
   process.exit(1);
 }
 
@@ -43,8 +44,8 @@ console.log(`字符集：${text.length} 个字符 → ${charsetFile}`);
 
 fs.mkdirSync(outDir, { recursive: true });
 for (const [src, out] of [
-  [reg, 'NotoSansSC-Regular-subset.otf'],
-  [bold, 'NotoSansSC-Bold-subset.otf'],
+  [sans, 'NotoSansSC-Regular-subset.otf'],
+  [serif, 'NotoSerifSC-Bold-subset.otf'],
 ]) {
   const dest = path.join(outDir, out);
   execSync(
