@@ -3,11 +3,15 @@
   "type": "module",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=22.23.4"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/git-dates.mjs && astro build && pagefind --site dist",
     "preview": "astro preview",
-    "check-urls": "node scripts/check-urls.mjs"
+    "check-urls": "node scripts/check-urls.mjs",
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.4",
