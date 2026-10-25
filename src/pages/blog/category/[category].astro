@@ -1,0 +1,38 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { getPosts, categorySlug, formatDate, postUrl } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const byCat = new Map<string, { display: string; posts: typeof posts }>();
+  for (const p of posts) {
+    for (const c of p.data.categories) {
+      const key = categorySlug(c);
+      if (!byCat.has(key)) byCat.set(key, { display: c, posts: [] });
+      byCat.get(key)!.posts.push(p);
+    }
+  }
+  return [...byCat.entries()].map(([key, v]) => ({
+    params: { category: key },
+    props: { display: v.display, posts: v.posts },
+  }));
+}
+
+const { display, posts } = Astro.props;
+---
+
+<Base title={`分类：${display} - KFACBT 的博客`} description={`分类「${display}」下的所有文章`}>
+  <div class="content">
+    <h1 class="page-title">分类：{display}</h1>
+    <ul class="tag-list">
+      {
+        posts.map((p) => (
+          <li>
+            <time datetime={p.data.date.toISOString().slice(0, 10)}>{formatDate(p.data.date)}</time>
+            <a href={postUrl(p)}>{p.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Base>

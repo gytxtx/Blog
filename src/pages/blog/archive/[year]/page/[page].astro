@@ -1,0 +1,37 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../../../layouts/Base.astro';
+import Pager from '../../../../../components/Pager.astro';
+import { getPosts, formatDate, postUrl, PAGE_SIZE } from '../../../../../lib/posts';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getPosts();
+  const years = [...new Set(posts.map((p) => p.data.date.getUTCFullYear()))].sort((a, b) => b - a);
+  return years.flatMap((year) => {
+    const yearPosts = posts.filter((p) => p.data.date.getUTCFullYear() === year);
+    // 第一页由 archive/[year]/index.astro 负责
+    return paginate(yearPosts, { pageSize: PAGE_SIZE, params: { year: String(year) } }).filter(
+      (p) => p.params.page >= 2,
+    );
+  });
+}) satisfies GetStaticPaths;
+
+const { year, page } = Astro.props;
+---
+
+<Base title={`${year} 年文章 - 第 ${page.currentPage} 页 - KFACBT 的博客`} description={`${year} 年发布的所有文章`}>
+  <div class="content">
+    <h1 class="page-title">{year} 年文章</h1>
+    <ul class="tag-list">
+      {
+        page.data.map((p) => (
+          <li>
+            <time datetime={p.data.date.toISOString().slice(0, 10)}>{formatDate(p.data.date)}</time>
+            <a href={postUrl(p)}>{p.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+    <Pager current={page.currentPage} total={page.lastPage} base={`/blog/archive/${year}`} />
+  </div>
+</Base>

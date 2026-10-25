@@ -1,0 +1,25 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import PostCard from '../../../components/PostCard.astro';
+import Pager from '../../../components/Pager.astro';
+import { getPostsForIndex, PAGE_SIZE } from '../../../lib/posts';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getPostsForIndex();
+  // 第一页由 /blog/（index.astro）负责，这里只生成 /blog/page/2/ 起
+  return paginate(posts, { pageSize: PAGE_SIZE }).filter((p) => p.params.page >= 2);
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+
+<Base title={`文章 - 第 ${page.currentPage} 页 - KFACBT 的博客`} description="所有文章">
+  <div class="content">
+    <h1 class="page-title">所有文章</h1>
+    <div>
+      {page.data.map((p) => <PostCard post={p} />)}
+    </div>
+    <Pager current={page.currentPage} total={page.lastPage} base="/blog" />
+  </div>
+</Base>

@@ -1,0 +1,25 @@
+---
+import { render } from 'astro:content';
+import { getPosts, postUrl } from '../../lib/posts';
+import Post from '../../layouts/Post.astro';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: postUrl(post).replace(/^\/blog\//, '').replace(/\/$/, '') },
+    props: {
+      post,
+      prev: posts[i + 1] ?? null, // 更早一篇
+      next: posts[i - 1] ?? null, // 更新一篇
+    },
+  }));
+}
+
+const { post, prev, next } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(post);
+const readtime = post.data.readtime ?? Math.ceil(remarkPluginFrontmatter.minutes ?? 1);
+---
+
+<Post post={post} prev={prev} next={next} readtime={readtime}>
+  <Content />
+</Post>

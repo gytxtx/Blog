@@ -1,0 +1,15 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  frontmatter: { title: string };
+}
+
+const { frontmatter } = Astro.props;
+---
+
+<Base title={`${frontmatter.title} - KFACBT 的博客`}>
+  <article class="content prose">
+    <slot />
+  </article>
+</Base>

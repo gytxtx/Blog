@@ -1,0 +1,8 @@
+name = "gytxtx-blog"
+compatibility_date = "2025-07-31"
+
+[build]
+command = "git fetch --unshallow && npm ci && npm run build"
+
+[assets]
+directory = "./dist"

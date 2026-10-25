@@ -1,0 +1,40 @@
+---
+// Giscus 评论：参数与 Material overrides/partials/comments.html 完全一致，
+// pathname 映射保证 URL 冻结后既有评论不丢失。
+---
+
+<section class="giscus-wrap">
+  <h2 id="__comments">评论</h2>
+  <script
+    is:inline
+    src="https://giscus.app/client.js"
+    data-repo="gytxtx/Blog_Comments"
+    data-repo-id="R_kgDOO28D8g"
+    data-category="General"
+    data-category-id="DIC_kwDOO28D8s4CrGKY"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async
+  >
+  </script>
+</section>
+
+<script>
+  // 明暗切换时同步 giscus 主题（等价于原 Material 主题联动逻辑）
+  document.addEventListener('themechange', () => {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    const theme =
+      document.documentElement.dataset.theme === 'github-dark' ? 'transparent_dark' : 'light';
+    iframe?.contentWindow?.postMessage(
+      { giscus: { setConfig: { theme } } },
+      'https://giscus.app',
+    );
+  });
+</script>

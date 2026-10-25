@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../consts';
+---
+
+<Base title={`找不到页面 - ${SITE.title}`}>
+  <div class="content prose">
+    <h1>找不到页面</h1>
+    <p>您正在试图访问网站上不存在的内容。</p>
+    <p>请试试以下办法：</p>
+    <ul>
+      <li>检查网址</li>
+      <li><a href="/">回到首页</a></li>
+      <li>向网站所有者反馈</li>
+    </ul>
+    <h6>ERR_404_Not_Found</h6>
+  </div>
+</Base>

@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import Pager from '../../components/Pager.astro';
+import { getPostsForIndex, PAGE_SIZE } from '../../lib/posts';
+
+const posts = await getPostsForIndex();
+const totalPages = Math.ceil(posts.length / PAGE_SIZE);
+const pagePosts = posts.slice(0, PAGE_SIZE);
+---
+
+<Base title={`文章 - KFACBT 的博客`} description="所有文章">
+  <div class="content">
+    <h1 class="page-title">所有文章</h1>
+    <div>
+      {pagePosts.map((p) => <PostCard post={p} />)}
+    </div>
+    <Pager current={1} total={totalPages} base="/blog" />
+  </div>
+</Base>
