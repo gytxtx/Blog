@@ -105,6 +105,9 @@ npm run test:browser # Chromium 交互回归（包含构建）
 npm run dev -- --background # 开发走查；用 astro dev stop/status/logs 管理
 ```
 
+视觉走查：三档主题切换且无闪白 → 搜索弹窗出结果 → 文章页 Giscus 加载 →
+正文图片灯箱 → 暗色下代码块配色 → 375px 移动端 → `/rss.xml` 可订阅。
+
 公共卡片外观由 `src/styles/cards.css` 管理，避免在三种卡片中分别覆写表面样式。
 标题动效通过项目自有的 `data-post-title="list|post"` 定位，保留该标记与 transition:name。
 导航进度位于 `src/lib/navigation.ts`。
