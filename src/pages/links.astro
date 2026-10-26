@@ -1,0 +1,23 @@
+---
+import FriendLinkCard from '../components/FriendLinkCard.astro';
+import { friends } from '../data/friends';
+import Prose from '../layouts/Prose.astro';
+---
+
+<Prose frontmatter={{ title: '友链' }}>
+  <h1>友情链接</h1>
+  <ul class="friend-grid" role="list">
+    {friends.map((friend) => (
+      <li><FriendLinkCard friend={friend} /></li>
+    ))}
+  </ul>
+  <p class="friend-note">以上排名不分先后。</p>
+</Prose>
+
+<style>
+  .friend-note {
+    color: var(--muted);
+    font-size: var(--fs-small);
+  }
+
+</style>

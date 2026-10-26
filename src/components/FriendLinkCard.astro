@@ -1,0 +1,142 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { FriendLink } from '../data/friends';
+
+// 层级：名称为主、完整简介为辅、域名为补充；整卡一个外链。
+// 沿用 text/muted/border/accent/bg-soft、字号令牌、1.25rem 内边距与 6px 圆角。
+interface Props {
+  friend: FriendLink;
+}
+
+const { friend } = Astro.props;
+const initial = Array.from(friend.name.trim())[0]?.toLocaleUpperCase() ?? '?';
+const domain = new URL(friend.url).hostname.replace(/^www\./, '');
+---
+
+<a class="friend-card custom-card" href={friend.url} target="_blank" rel="noopener noreferrer">
+  <friend-avatar class="friend-card__avatar" aria-hidden="true">
+    <span>{initial}</span>
+    <img
+      class="friend-card__image"
+      src={friend.avatar}
+      alt=""
+      width="56"
+      height="56"
+      loading="lazy"
+      decoding="async"
+      referrerpolicy="no-referrer"
+    />
+  </friend-avatar>
+  <div class="friend-card__body">
+    <h2 class="friend-card__name">{friend.name}</h2>
+    <p class="friend-card__description">{friend.description?.trim() || '暂无简介'}</p>
+    <span class="friend-card__domain">
+      {domain}
+      <Icon name="lucide:arrow-up-right" size={14} aria-hidden="true" />
+    </span>
+  </div>
+  <span class="sr-only">（在新标签页打开）</span>
+</a>
+
+<script>
+  // 自定义元素在 ClientRouter 换页后也会初始化，并处理脚本执行前已失败的图片。
+  class FriendAvatar extends HTMLElement {
+    connectedCallback() {
+      const image = this.querySelector('img');
+      if (!image) return;
+      const ready = () => { this.toggleAttribute('data-ready', image.naturalWidth > 0); };
+      image.addEventListener('load', ready, { once: true });
+      image.addEventListener('error', () => { image.hidden = true; }, { once: true });
+      if (image.complete) ready();
+      if (image.complete && image.naturalWidth === 0) image.hidden = true;
+    }
+  }
+
+  if (!customElements.get('friend-avatar')) {
+    customElements.define('friend-avatar', FriendAvatar);
+  }
+</script>
+
+<style>
+  .friend-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--card-gap);
+  }
+
+  .friend-card__avatar {
+    display: grid;
+    flex: none;
+    width: 3.5rem;
+    height: 3.5rem;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--bg-soft);
+    color: var(--accent);
+    font-size: var(--fs-h2);
+    font-weight: 600;
+  }
+
+  .friend-card__avatar > * {
+    grid-area: 1 / 1;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .friend-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border-radius: 50%;
+    background: var(--bg-soft);
+    object-fit: cover;
+  }
+
+  .friend-card__image[hidden] {
+    display: none;
+  }
+
+  friend-avatar:not([data-ready]) .friend-card__image {
+    opacity: 0;
+  }
+
+  .friend-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-self: stretch;
+    gap: var(--space-2);
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .friend-card__name {
+    margin: 0;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: var(--card-title-size);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .friend-card__description {
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--card-description-size);
+  }
+
+  .friend-card__domain {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: auto;
+    color: var(--muted);
+    font-size: var(--fs-meta);
+  }
+
+  .friend-card__domain :global(svg) {
+    flex: none;
+  }
+
+</style>

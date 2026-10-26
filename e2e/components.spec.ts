@@ -76,6 +76,36 @@ test('搜索脚本失败显示重试，恢复后可搜索', async ({ page }) => 
   expect(requests).toBe(2);
 });
 
+test('卡片共享表面、字级与手机单列规则，切换页面后仍一致', async ({ page }, info) => {
+  await page.goto('/about/');
+  const metrics = (selector: string) => page.locator(selector).first().evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { padding: style.padding, radius: style.borderRadius, border: style.borderWidth, font: style.fontSize };
+  });
+  const content = await metrics('.content-card');
+  expect(await metrics('.github-repo-card__link')).toEqual(content);
+  await page.locator('.github-repo-cards').first().scrollIntoViewIfNeeded();
+  await expect(page.locator('[data-metric="star"]').first()).toContainText('12');
+  await capture(page, info, 'desktop-repo-cards.png');
+  await page.locator('#theme-btn').click();
+  await page.locator('#theme-btn').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+  await page.locator('.github-repo-cards').first().scrollIntoViewIfNeeded();
+  await capture(page, info, 'desktop-repo-cards-dark.png');
+  await page.setViewportSize({ width: 375, height: 812 });
+  for (const selector of ['.content-cards', '.github-repo-cards']) {
+    expect(await page.locator(selector).first().evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ').length)).toBe(1);
+  }
+  await page.locator('.content-cards').first().scrollIntoViewIfNeeded();
+  await capture(page, info, 'mobile-content-cards-dark.png');
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.getByRole('navigation', { name: '主导航' }).getByRole('link', { name: '友链' }).click();
+  expect(await metrics('.friend-card')).toEqual(content);
+  await page.setViewportSize({ width: 375, height: 812 });
+  expect(await page.locator('.friend-grid').evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ').length)).toBe(1);
+  await capture(page, info, 'mobile-friends.png');
+});
+
 test('减少动效下箭头不位移，图片灯箱开关和离开文章均正常', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');

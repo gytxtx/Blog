@@ -112,6 +112,46 @@ test('模拟横屏安全区，菜单可滚动到底部，搜索和按钮避开�
   await page.getByRole('button', { name: '关闭搜索' }).click();
 });
 
+test('手机和平板上的自定义卡片保持统一外观，长表格和代码仅在容器内滚动', async ({ page }, info) => {
+  for (const width of [320, 600, 768, 1024]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/about/');
+    const metrics = (selector: string) => page.locator(selector).first().evaluate((element) => {
+      const css = getComputedStyle(element);
+      return { padding: css.padding, radius: css.borderRadius, border: css.borderWidth };
+    });
+    const content = await metrics('.content-card');
+    expect(await metrics('.github-repo-card__link')).toEqual(content);
+    await page.locator('.content-cards').first().scrollIntoViewIfNeeded();
+    if ([320, 768].includes(width)) await screenshot(page, info, `cards-${width}.png`);
+    await page.goto('/links/');
+    expect(await metrics('.friend-card')).toEqual(content);
+    const columns = await page.locator('.friend-grid').evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(' ').length);
+    expect(columns).toBe(width <= 640 ? 1 : 2);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  }
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto(ARTICLE);
+  await page.locator('.prose').evaluate((element) => {
+    const table = document.createElement('table');
+    table.innerHTML = `<tbody><tr>${'<td>long_unbroken_table_value</td>'.repeat(8)}</tr></tbody>`;
+    element.prepend(table);
+  });
+  const table = page.locator('.prose table').first();
+  expect(await table.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true);
+  await table.evaluate((element) => { element.scrollLeft = 100; });
+  expect(await table.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+  const code = page.locator('.expressive-code pre').first();
+  await code.evaluate((element) => {
+    const line = document.createElement('div');
+    line.textContent = 'long_code_line_'.repeat(80);
+    element.append(line);
+    element.scrollLeft = 100;
+  });
+  expect(await code.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+});
+
 test('手机完整日期独占一行，阅读全文与标签入口有足够触屏区域', async ({ page }, info) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('/tags/');
