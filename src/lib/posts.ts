@@ -6,7 +6,12 @@ export type Post = CollectionEntry<'blog'>;
 export const PAGE_SIZE = 10;
 
 /** 文章地址按年、月分层，slug 统一小写；日期取 front matter 的 pubDate（UTC）。 */
-export function postUrl(post: Post): string { return legacyPostUrl(post); }
+export function postUrl(post: Post): string {
+  const d = post.data.pubDate;
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  return `/article/${y}/${m}/${post.data.slug.toLowerCase()}/`;
+}
 
 /** 迁移前的日级地址：用于旧链接跳转、既有评论标识和分享图地址。 */
 export function legacyPostUrl(post: Post): string {
@@ -26,7 +31,7 @@ const byDateDesc = (a: Post, b: Post) =>
 
 export async function getPosts(): Promise<Post[]> {
   // 开发服务器包含草稿，生产构建仍统一排除草稿及其索引、旧地址和分享图。
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
   const urls = new Map<string, string>();
   for (const post of posts) {
     const url = postUrl(post);

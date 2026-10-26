@@ -18,7 +18,17 @@ export default defineConfig({
   site,
   // 页面地址统一使用末尾斜杠，动态旧地址直接跳到规范地址。
   trailingSlash: 'always',
-  redirects: { '/blog': '/', '/blog/page/2': '/page/2' },
+  // 保留旧导航页地址，文章旧地址由 pages/blog/[...slug].astro 统一跳转。
+  redirects: {
+    '/blog': '/',
+    '/blog/page/2': '/page/2/',
+    '/blog/tags': '/tags/',
+    '/blog/about': '/about/',
+    '/blog/links': '/links/',
+    '/blog/category/[category]': '/category/[category]',
+    '/blog/archive/[year]': '/archive/[year]',
+    '/blog/archive/[year]/page/[page]': '/archive/[year]/page/[page]',
+  },
   integrations: [
     expressiveCode({
       themes: Object.values(THEMES).map((theme) => theme.name),
@@ -27,6 +37,8 @@ export default defineConfig({
         `[data-theme="${theme.name.toLowerCase().replace(/\s+/g, '-')}"]`,
     }),
     sitemap({
+      // /blog/ 下只保留旧地址跳转，站点地图不再发布这些地址。
+      filter: (page) => !new URL(page).pathname.startsWith('/blog/'),
     }),
     // 图标：Lucide 图标集（@iconify-json/lucide），用法 <Icon name="lucide:sun" />；
     // 本地 SVG 放 src/icons/ 后用 <Icon name="文件名" />

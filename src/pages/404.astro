@@ -1,18 +1,97 @@
 ---
+import { Icon } from 'astro-icon/components';
 import Base from '../layouts/Base.astro';
 import { SITE } from '../consts';
+
+// 层级：404 与缺页标题 → 说明与首页入口 → 标签和反馈。
+// 沿用全站配色、衬线字体、阅读栏与空间令牌。
 ---
 
-<Base title={`找不到页面 - ${SITE.title}`}>
-  <div class="content prose">
-    <h1>找不到页面</h1>
-    <p>您正在试图访问网站上不存在的内容。</p>
-    <p>请试试以下办法：</p>
-    <ul>
-      <li>检查网址</li>
-      <li><a href="/">回到首页</a></li>
-      <li>向网站所有者反馈</li>
-    </ul>
-    <h6>ERR_404_Not_Found</h6>
-  </div>
+<Base
+  title={`404 · 找不到页面 - ${SITE.title}`}
+  description="这一页暂时翻不到了。检查一下网址，或回到首页继续阅读。"
+>
+  <meta slot="head" name="robots" content="noindex, follow" />
+  <section class="content not-found" aria-labelledby="not-found-title">
+    <p class="not-found-code" aria-hidden="true">404</p>
+    <h1 id="not-found-title"><span class="sr-only">404：找不到页面。</span>这一页，暂时翻不到了。</h1>
+    <p class="not-found-description">
+      链接可能有误，或页面已经搬家。<br />
+      检查一下网址，也可以回到首页继续阅读。
+    </p>
+    <div class="not-found-actions">
+      <a class="ui-button ui-button--primary" href="/">
+        <Icon class="arr" name="lucide:arrow-left" aria-hidden="true" />
+        回到首页
+      </a>
+      <a class="not-found-tags" href="/tags/">
+        浏览标签
+        <Icon class="arr" name="lucide:arrow-right" aria-hidden="true" />
+      </a>
+    </div>
+    <p class="not-found-help">
+      如果是站内链接出了问题，欢迎<a href="mailto:gytxtx@outlook.com?subject=博客链接反馈">告诉我</a>。
+    </p>
+  </section>
 </Base>
+
+<style>
+  .not-found {
+    padding-top: var(--page-start);
+  }
+
+  .not-found-code {
+    margin: 0 0 var(--space-6);
+    font-family: var(--serif);
+    font-size: clamp(6rem, 14vw, 11rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: var(--fs-title);
+    font-weight: 700;
+    line-height: var(--leading-title);
+    text-wrap: balance;
+  }
+
+  .not-found-description {
+    margin: var(--space-6) 0 0;
+    color: var(--muted);
+    font-size: var(--fs-small);
+  }
+
+  .not-found-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-8);
+    margin-top: var(--space-8);
+    font-size: var(--fs-small);
+  }
+
+  .not-found-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--control-size);
+  }
+
+  .not-found-tags,
+  .not-found-help a {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .not-found-help {
+    margin: var(--section-gap) 0 0;
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: var(--fs-small);
+  }
+</style>

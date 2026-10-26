@@ -20,7 +20,7 @@ const summary = excerpt(post);
     {post.data.pin && <span class="pin">置顶</span>}
     {post.data.draft && <span class="draft">草稿</span>}
     <FormattedDate date={post.data.pubDate} />
-    {post.data.categories.map((c) => <a href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
+    {post.data.categories.map((c) => <a href={`/category/${categorySlug(c)}/`}>{c}</a>)}
   </div>
   <h2 data-post-title="list" transition:name={titleTransitionName(post.data.slug)} transition:animate={titleMorph}><a href={url}>{post.data.title}</a></h2>
   {summary && <p>{summary}</p>}

@@ -8,7 +8,7 @@ import { authors } from '../data/authors';
 import { Image } from 'astro:assets';
 import FormattedDate from '../components/FormattedDate.astro';
 import { titleMorph, titleTransitionName } from '../lib/transitions';
-import { postUrl, postOgPath, categorySlug, excerpt, wordCount, formatWords, type Post } from '../lib/posts';
+import { postUrl, legacyPostUrl, postOgPath, categorySlug, excerpt, wordCount, formatWords, type Post } from '../lib/posts';
 import 'glightbox/dist/css/glightbox.min.css';
 
 interface Props {
@@ -60,7 +60,7 @@ const jsonLd = {
       <div class="meta" data-pagefind-ignore>
         {post.data.draft && <span class="draft">草稿</span>}
         <FormattedDate date={post.data.pubDate} />
-        {post.data.categories.map((c) => <a href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
+        {post.data.categories.map((c) => <a href={`/category/${categorySlug(c)}/`}>{c}</a>)}
         <span>{formatWords(words)}</span>
         <span>约 {readtime} 分钟</span>
       </div>
@@ -112,7 +112,7 @@ const jsonLd = {
         }
       </nav>
 
-      {post.data.comments && <Giscus />}
+      {post.data.comments && <Giscus term={legacyPostUrl(post).slice(1)} />}
     </div>
 
   </div>

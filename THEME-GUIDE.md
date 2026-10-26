@@ -13,6 +13,14 @@
 
 ### 内容与路由
 
+- `src/content.config.ts`（zod schema = 内容契约）
+- `src/lib/posts.ts`（URL 规则、排序、摘要——年月地址与旧地址兼容的实现）
+- `src/lib/post-groups.ts` 提供按 UTC 年份、分类、标签分组的纯查询。保持组内输入顺序；
+  分类用小写地址、首次显示名，标签保留大小写并按数量与名称排序。
+- `src/pages/**` 的 frontmatter 保留 `getStaticPaths`、`params` 和 Astro 分页调用；
+  查询规则交给 `post-groups.ts`，归档呈现交给 `Archive.astro`。
+- `src/pages/og/[...slug].png.ts`、`src/pages/rss.xml.js`、`scripts/**`、`astro.config.mjs`
+
 ## 2. 你消费的 API（`src/lib/posts.ts`）
 
 `Post.data`：`title, description?, pubDate, updatedDate?, heroImage?, slug, authors[], categories[], tags[],

@@ -24,6 +24,6 @@ const pageTitle = current === 1 ? `${year} 年文章` : `${year} 年文章 - 第
     <ArchiveHead year={year} years={years} />
     <h2 class="group-head">{year}<span>{total} 篇</span></h2>
     <PostList posts={posts} />
-    <Pager current={current} total={totalPages} base={`/blog/archive/${year}`} />
+    <Pager current={current} total={totalPages} base={`/archive/${year}`} />
   </div>
 </Base>

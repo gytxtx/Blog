@@ -1,7 +1,7 @@
 ---
-import Archive from '../../../../layouts/Archive.astro';
-import { getPosts, PAGE_SIZE } from '../../../../lib/posts';
-import { groupPostsByYear } from '../../../../lib/post-groups';
+import Archive from '../../../layouts/Archive.astro';
+import { getPosts, PAGE_SIZE } from '../../../lib/posts';
+import { groupPostsByYear } from '../../../lib/post-groups';
 
 export async function getStaticPaths() {
   const posts = await getPosts();

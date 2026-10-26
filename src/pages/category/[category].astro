@@ -1,9 +1,9 @@
 ---
-import Base from '../../../layouts/Base.astro';
-import PostList from '../../../components/PostList.astro';
-import { getPosts } from '../../../lib/posts';
-import { groupPostsByCategory, groupPostsByYear } from '../../../lib/post-groups';
-import { SITE } from '../../../consts';
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/posts';
+import { groupPostsByCategory, groupPostsByYear } from '../../lib/post-groups';
+import { SITE } from '../../consts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();

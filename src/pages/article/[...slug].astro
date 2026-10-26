@@ -1,0 +1,25 @@
+---
+import { render } from 'astro:content';
+import { getPosts, postUrl, readingTime } from '../../lib/posts';
+import Post from '../../layouts/Post.astro';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: postUrl(post).replace(/^\/article\//, '').replace(/\/$/, '') },
+    props: {
+      post,
+      prev: posts[i + 1] ?? null,
+      next: posts[i - 1] ?? null,
+    },
+  }));
+}
+
+const { post, prev, next } = Astro.props;
+const { Content, headings } = await render(post);
+const readtime = await readingTime(post);
+---
+
+<Post post={post} prev={prev} next={next} readtime={readtime} headings={headings}>
+  <Content />
+</Post>
