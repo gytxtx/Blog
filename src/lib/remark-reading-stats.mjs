@@ -7,16 +7,22 @@
 const HAN = /[㐀-鿿豈-﫿]/g;
 const LATIN_WORD = /[A-Za-z0-9]+(?:['’.\-][A-Za-z0-9]+)*/g;
 
-function collectText(node, out) {
+function collectText(node, out, source, inCards = false) {
   if (node.type === 'code' || node.type === 'html' || node.type === 'yaml') return;
+  if (inCards && node.type === 'textDirective' && node.name === 'icon') return;
+  if (node.type === 'textDirective') {
+    out.push(source.slice(node.position.start.offset, node.position.end.offset));
+    return;
+  }
   if (node.type === 'text' || node.type === 'inlineCode') out.push(node.value);
-  for (const child of node.children ?? []) collectText(child, out);
+  const cards = inCards || (node.type === 'containerDirective' && node.name === 'cards');
+  for (const child of node.children ?? []) collectText(child, out, source, cards);
 }
 
 export default function remarkReadingStats() {
   return (tree, file) => {
     const parts = [];
-    collectText(tree, parts);
+    collectText(tree, parts, String(file.value));
     const text = parts.join(' ');
     const han = text.match(HAN)?.length ?? 0;
     const latin = text.replace(HAN, ' ').match(LATIN_WORD)?.length ?? 0;

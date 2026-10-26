@@ -6,12 +6,13 @@ import remarkDirective from 'remark-directive';
 import { parseGitHubRepo, renderGitHubRepoCard } from '../src/lib/github-repo-card.mjs';
 import remarkGitHubRepoCard from '../src/lib/remark-github-repo-card.mjs';
 import remarkReadingStats from '../src/lib/remark-reading-stats.mjs';
+import remarkContentCards from '../src/lib/remark-content-cards.mjs';
 
 const renderer = await createMarkdownProcessor({
   syntaxHighlight: false,
   smartypants: false,
   remarkPlugins: [remarkDirective, remarkBreaks, remarkReadingStats,
-    remarkGitHubRepoCard],
+    [remarkContentCards, { site: 'https://blog.gytxtx.top' }], remarkGitHubRepoCard],
 });
 
 test('仓库解析限制目标站点，拒绝子页面、注入和路径穿越', () => {
@@ -83,6 +84,20 @@ test('仓库卡片组支持正整数列数、默认两列以及自定义简介',
     assert.ok(!result.code.includes(':::'));
     assert.ok(result.code.includes('target="_blank" rel="noopener noreferrer"'));
   }
+});
+
+test('原有段落链接可包进容器，多组仓库卡片与正文自定义卡片互不干扰', async () => {
+  const result = await renderer.render([
+    ':::github-cards{columns=1}\n[gytxtx/OpenJBD](https://github.com/gytxtx/OpenJBD "github-card")\n\n[桌面工具](https://github.com/gytxtx/kagami-desktop "github-card")\n:::',
+    ':::cards\n- 描述\n  标题\n:::',
+    ':::github-cards{columns=3}\n- [gytxtx/Blog_Astro](https://github.com/gytxtx/Blog_Astro)\n:::',
+    '[gytxtx/OpenJBD](https://github.com/gytxtx/OpenJBD "github-card")',
+  ].join('\n\n'));
+  assert.equal((result.code.match(/class="github-repo-cards"/g) ?? []).length, 2);
+  assert.equal((result.code.match(/<github-repo-card /g) ?? []).length, 4);
+  assert.ok(result.code.includes('class="content-cards"'));
+  assert.ok(result.code.includes('data-columns="1"'));
+  assert.ok(result.code.includes('data-columns="3"'));
 });
 
 test('代码中的仓库卡片组不转换，原有行内链接仍不转换', async () => {

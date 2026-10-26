@@ -106,6 +106,24 @@ test('禁用存储时主题仍可切换，并在站内导航后保留', async ({
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
 });
 
+test('仓库首次请求失败后，后续页面访问可恢复统计', async ({ page }) => {
+  let calls = 0;
+  await page.route('https://api.github.com/repos/bluearchive-cafe/frontend-new', (route) => {
+    if (++calls === 1) return route.fulfill({ status: 503, body: '' });
+    return route.fulfill({ json: { description: '恢复后的项目', language: 'TypeScript', stargazers_count: 42, forks_count: 0 } });
+  });
+  await page.goto('/about/');
+  const card = page.locator('github-repo-card[data-repo="bluearchive-cafe/frontend-new"]');
+  await card.scrollIntoViewIfNeeded();
+  await expect.poll(() => calls).toBe(1);
+  await expect(card).not.toHaveAttribute('aria-busy', 'true');
+  await page.locator('.brand').click();
+  await page.getByRole('navigation', { name: '主导航' }).getByRole('link', { name: '关于' }).click();
+  await card.scrollIntoViewIfNeeded();
+  await expect(card.locator('[data-metric="star"]')).toContainText('42');
+  expect(calls).toBe(2);
+});
+
 test('灯箱打开时后退会清理遮罩和键盘监听，正文导航继续可用', async ({ page }) => {
   await page.goto('/');
   await page.locator('.entry h2 a[href="' + IMAGES + '"]').click();

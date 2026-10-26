@@ -1,0 +1,9 @@
+/* §2.1：上方描述、下方标题；表面样式由 cards.css 统一管理。 */
+.content-card { display: flex; flex-direction: column; gap: var(--card-gap); }
+.content-card__header {
+  display: flex; align-items: flex-start; gap: var(--space-2);
+  color: var(--muted); font-size: var(--card-description-size);
+}
+.content-card__icon { flex: none; width: 1.25rem; height: 1.25rem; margin-top: 0.125rem; }
+.content-card__description { min-width: 0; }
+.content-card__title { font-size: var(--card-title-size); font-weight: 600; line-height: 1.4; }

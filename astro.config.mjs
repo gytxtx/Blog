@@ -8,6 +8,7 @@ import remarkBreaks from 'remark-breaks';
 import remarkDirective from 'remark-directive';
 import remarkNoLegacyIcons from './src/lib/remark-no-legacy-icons.mjs';
 import remarkReadingStats from './src/lib/remark-reading-stats.mjs';
+import remarkContentCards from './src/lib/remark-content-cards.mjs';
 import remarkGitHubRepoCard from './src/lib/remark-github-repo-card.mjs';
 import serifSubset from './src/integrations/serif-subset.mjs';
 import { SITE } from './src/consts.ts';
@@ -56,6 +57,7 @@ export default defineConfig({
       remarkNoLegacyIcons,
       remarkBreaks,
       remarkReadingStats,
+      [remarkContentCards, { site }],
       remarkGitHubRepoCard,
     ] }),
   },
