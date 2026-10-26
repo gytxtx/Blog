@@ -1,0 +1,43 @@
+{
+  "name": "blog",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "node --test",
+    "check-urls": "node scripts/check-urls.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.4",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@iconify-json/lucide": "^1.2.147",
+    "astro": "^7.4.2",
+    "astro-expressive-code": "^0.44.3",
+    "astro-icon": "^1.2.0",
+    "glightbox": "^3.3.1",
+    "pagefind": "^1.5.2",
+    "remark-breaks": "^4.0.0",
+    "remark-directive": "^4.0.0",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@playwright/test": "^1.64.1",
+    "@resvg/resvg-js": "^2.6.2",
+    "iconv-lite": "^0.7.3",
+    "js-yaml": "^5.5.0",
+    "satori": "^0.63.2",
+    "subset-font": "^2.9.0",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.152.0"
+  }
+}

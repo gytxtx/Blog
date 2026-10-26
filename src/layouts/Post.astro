@@ -1,0 +1,93 @@
+---
+import Base from './Base.astro';
+import Giscus from '../components/Giscus.astro';
+import { authors } from '../data/authors';
+import { Image } from 'astro:assets';
+import { formatDate, postUrl, postOgPath, categorySlug, excerpt, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+  readtime: number;
+  prev?: Post | null; // 更早一篇
+  next?: Post | null; // 更新一篇
+}
+
+const { post, readtime, prev, next } = Astro.props;
+const author = authors[post.data.authors[0]] ?? { name: post.data.authors[0] };
+const { updatedDate, heroImage } = post.data;
+const description = post.data.description ?? excerpt(post, 160);
+---
+
+<Base
+  title={`${post.data.title} - KFACBT 的博客`}
+  description={description}
+  ogImage={`/og/${postOgPath(post)}.png`}
+>
+  <article class="content prose">
+    <header class="post-header">
+      <h1>{post.data.title}</h1>
+      <div class="card-meta">
+        <time datetime={post.data.pubDate.toISOString().slice(0, 10)}>{formatDate(post.data.pubDate)}</time>
+        <span>{readtime} 分钟</span>
+        <span class="author">
+          {author.avatar && <img src={author.avatar} alt="" width="20" height="20" loading="lazy" />}
+          {author.name}
+        </span>
+        {post.data.categories.map((c) => <a class="chip" href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
+        {updatedDate && (
+          <span>
+            更新于 <time datetime={updatedDate.toISOString().slice(0, 10)}>{formatDate(updatedDate)}</time>
+          </span>
+        )}
+      </div>
+    </header>
+
+    {heroImage && <Image src={heroImage} width={1020} height={510} alt="" />}
+
+    <slot />
+
+    <nav class="post-pn" aria-label="上一篇下一篇">
+      {
+        prev ? (
+          <a href={postUrl(prev)}>
+            <span class="dir">← 上一篇</span>
+            {prev.data.title}
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a href={postUrl(next)} style="text-align: right">
+            <span class="dir">下一篇 →</span>
+            {next.data.title}
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+
+    {post.data.comments && <Giscus />}
+  </article>
+</Base>
+
+<script>
+  // glightbox 图片灯箱：正文图片自动包一层链接（等价于 Material 的 glightbox 插件）
+  import GLightbox from 'glightbox';
+  import 'glightbox/dist/css/glightbox.min.css';
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.prose > img, .prose p > img').forEach((img) => {
+      if (img.closest('a')) return;
+      const a = document.createElement('a');
+      a.href = (img as HTMLImageElement).src;
+      a.className = 'glightbox';
+      a.setAttribute('data-gallery', 'post');
+      img.replaceWith(a);
+      a.appendChild(img);
+    });
+    GLightbox({ selector: '.glightbox' });
+  });
+</script>

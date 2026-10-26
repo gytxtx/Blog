@@ -1,0 +1,4 @@
+name = "blog-gytxtx"
+compatibility_date = "2025-07-31"
+# Cloudflare Pages 只认 pages_build_output_dir；构建命令在 Pages 控制台设为 `npm run build`
+pages_build_output_dir = "./dist"
