@@ -22,12 +22,10 @@ const ALLOW_NEW = [
 ];
 
 /**
- * 已解释的基线缺失（不许新增，除非有对应 commits 证据）：
- * 线上最后一次部署落后于源仓库 HEAD——文章《反思》在源仓库已转草稿并改写过
- * （线上旧版：/blog/2026/09/26/Cat/，仓库现版：2026-09-17_Fuck.md，draft: true），
- * 随之消失的还有仅由该文章产生的分类页 /blog/category/生活/。
+ * 当前无已解释的基线缺失（不许新增，除非有对应 commits 证据）。
+ * 《猫》与「生活」分类已补齐，均须参与完整的 URL 与重定向验收。
  */
-const EXPLAINED_MISSING = new Set(['/blog/2026/09/26/Cat/', '/blog/category/生活/']);
+const EXPLAINED_MISSING = new Set();
 
 function walk(dir) {
   const out = [];
