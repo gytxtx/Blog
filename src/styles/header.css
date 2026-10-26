@@ -1,0 +1,256 @@
+/* Header 的顶栏与导航，包括折叠菜单、触屏和动效。搜索单独见 search.css。 */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding-top: var(--safe-top);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+/* 沿用 cafe-frontend 顶栏的 82% 背景与 10px 模糊，颜色仍跟随本站主题。 */
+
+@supports ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
+  .site-header {
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+  min-height: var(--header-bar-height);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: var(--fs-h3);
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.brand img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-6);
+  margin-left: auto;
+  font-size: var(--fs-small);
+}
+
+.nav a {
+  color: var(--muted);
+  padding: var(--space-2) 0;
+  white-space: nowrap;
+  /* 下划线画在背景上，hover 时从左往右展开 */
+  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+}
+
+.nav a:hover {
+  color: var(--text);
+  text-decoration: none;
+  background-size: 100% 1px;
+}
+
+.nav a[aria-current='page'] {
+  color: var(--text);
+  background-size: 100% 1px;
+}
+
+.header-actions {
+  display: flex;
+  flex: none;
+  gap: var(--space-1);
+  margin-right: calc(-10px + min(10px, var(--safe-right)));
+}
+
+#theme-btn svg {
+  display: none;
+}
+
+/* 窄屏才出现的导航按钮（见响应式一节） */
+
+#nav-btn,
+#toc-btn {
+  display: none;
+}
+
+#nav-btn {
+  margin-left: calc(-10px + min(10px, var(--safe-left)));
+}
+
+#toc-btn[aria-expanded='true'] {
+  color: var(--accent);
+  background: var(--accent-weak);
+}
+
+@media (max-width: 1279px) {
+  #toc-btn {
+    display: inline-grid;
+  }
+}
+
+.site-header[data-nav-open] #nav-btn .i-menu,
+#nav-btn .i-close {
+  display: none;
+}
+
+.site-header[data-nav-open] #nav-btn .i-close {
+  display: block;
+}
+
+html[data-mode='auto'] #theme-btn .i-auto,
+html[data-mode='light'] #theme-btn .i-light,
+html[data-mode='dark'] #theme-btn .i-dark {
+  display: block;
+}
+
+.nav .ext {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+@keyframes icon-in {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nav a {
+    transition: color var(--motion-fast) var(--ease-ui),
+      background-size var(--motion-fast) var(--ease-ui);
+  }
+
+  /* 主题按钮切到下一档时，新图标转入；只在点过之后（.switched），翻页和首次加载不转 */
+
+  #theme-btn.switched svg {
+    animation: icon-in var(--motion-enter) var(--ease-enter);
+  }
+
+  .header-actions button:active svg {
+    transform: scale(0.88);
+  }
+
+  /* 窄屏导航面板：淡入并轻微下落，收起时反向 */
+
+  @media (max-width: 960px) {
+    .nav {
+      transition: opacity var(--motion-enter) var(--ease-enter),
+        transform var(--motion-enter) var(--ease-enter),
+        display var(--motion-enter) allow-discrete;
+    }
+
+    .site-header:not([data-nav-open]) .nav {
+      opacity: 0;
+      transform: translateY(calc(-1 * var(--motion-distance)));
+    }
+
+    @starting-style {
+      .site-header[data-nav-open] .nav {
+        opacity: 0;
+        transform: translateY(calc(-1 * var(--motion-distance)));
+      }
+    }
+  }
+}
+
+/* 手机与竖屏平板使用折叠菜单，给站名和触屏按钮留出空间。
+   左：导航按钮 + 站名，右：搜索 / 文章目录 / 主题；面板盖在正文上 */
+
+@media (max-width: 960px) {
+  .brand {
+    min-width: 0;
+    font-size: clamp(1rem, 4.5vw, 1.2rem);
+  }
+
+  .brand-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand img {
+    display: none;
+  }
+
+  .header-inner {
+    flex-wrap: nowrap;
+    gap: var(--space-1);
+  }
+
+  #nav-btn {
+    display: inline-grid;
+    margin-right: var(--space-2);
+  }
+
+  .header-actions {
+    margin-left: auto;
+  }
+
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    max-height: calc(100dvh - var(--header-height));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    padding: var(--space-2) var(--page-inset-right) max(var(--space-4), var(--safe-bottom)) var(--page-inset-left);
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    font-size: var(--fs-body);
+  }
+
+  .site-header[data-nav-open] .nav {
+    display: flex;
+  }
+
+  .nav a {
+    display: flex;
+    align-items: center;
+    min-height: var(--control-size);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background: none;
+  }
+
+  .nav a:hover {
+    background: var(--bg-soft);
+  }
+
+  .nav a[aria-current='page'] {
+    background: var(--accent-weak);
+  }
+}
+
+/* 触屏扩大独立入口；正文行内链接保留自然排版。 */
+
+@media (any-pointer: coarse) {
+  .nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-size);
+  }
+}

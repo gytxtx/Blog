@@ -1,0 +1,179 @@
+/* Markdown 正文排版；输出节点不带 Astro 作用域，保留全局选择器。 */
+.prose {
+  font-size: var(--fs-body);
+  line-height: var(--leading-body);
+  /* 长链接、长路径的行内代码在窄屏上断行，不撑出横向滚动 */
+  overflow-wrap: break-word;
+}
+
+.prose p {
+  margin: 0 0 1.1em;
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--serif);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.prose h2 {
+  font-size: var(--fs-h2);
+  margin: var(--space-12) 0 var(--space-4);
+}
+
+.prose h3 {
+  font-size: var(--fs-h3);
+  margin: var(--space-8) 0 var(--space-3);
+}
+
+.prose h4 {
+  font-size: var(--fs-body);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--border);
+  text-underline-offset: 0.25em;
+}
+
+.prose a:hover {
+  text-decoration-color: var(--accent);
+}
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: var(--space-6) auto;
+  border-radius: var(--radius-md);
+}
+
+.prose code {
+  font-family: var(--mono);
+  font-size: 0.875em;
+  background: var(--bg-soft);
+  padding: 0.12em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* expressive-code 代码块：配色仍走 github-light/dark，只换底色、边框与阴影。
+   ec 的变量挂在 [data-theme] .expressive-code:not(...) 上，这里多带一个 html 才压得住 */
+
+html[data-theme] .prose .expressive-code {
+  --ec-codeBg: var(--bg-soft);
+  --ec-frm-edBg: var(--bg-soft);
+  --ec-frm-trmBg: var(--bg-soft);
+  --ec-frm-trmTtbBg: var(--bg-soft);
+  --ec-frm-edActTabBg: var(--bg-soft);
+  --ec-frm-edTabBarBg: var(--bg-soft);
+  --ec-brdCol: var(--border);
+  --ec-frm-trmTtbBrdBtmCol: var(--border);
+  --ec-frm-edTabBarBrdBtmCol: var(--border);
+  --ec-brdRad: var(--radius-md);
+  --ec-frm-frameBoxShdCssVal: none;
+  --ec-codeFontFml: var(--mono);
+  margin: var(--space-5) 0 var(--space-6);
+}
+
+.prose blockquote {
+  margin: var(--space-6) 0;
+  padding: 0.1rem 0 0.1rem var(--space-5);
+  border-left: 2px solid var(--rule);
+  color: var(--muted);
+}
+
+.prose blockquote p {
+  margin: 0.4em 0;
+}
+
+/* admonition 迁移成了「> **标题**」：首段开头的加粗独占一行（单独成段或紧跟 <br>）时当小标题 */
+
+.prose blockquote > p:first-child > strong:first-child:is(:only-child, :has(+ br)) {
+  display: block;
+  font-size: var(--fs-meta);
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.prose blockquote > p:first-child > strong:first-child + br {
+  display: none;
+}
+
+.prose blockquote ul,
+.prose blockquote ol {
+  margin: var(--space-1) 0;
+  padding-left: var(--space-5);
+}
+
+.prose table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  margin: var(--space-6) 0;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+}
+
+.prose th,
+.prose td {
+  padding: 0.6rem var(--space-4) 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border-bottom-color: var(--rule);
+}
+
+.prose hr {
+  width: 4rem;
+  height: 0;
+  margin: var(--space-12) auto var(--space-8);
+  border: 0;
+  border-top: 1px solid var(--muted);
+}
+
+/* 下间距已由 hr 提供，避免与 h2 的上外边距叠加成 3rem */
+
+.prose hr + h2 {
+  margin-top: 0;
+}
+
+.prose sup a {
+  font-size: var(--fs-label);
+  text-decoration: none;
+}
+
+.prose .footnotes {
+  margin-top: var(--space-8);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-caption);
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.prose input[type='checkbox'] {
+  accent-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .prose a {
+    transition: text-decoration-color var(--motion-fast) var(--ease-ui);
+  }
+}

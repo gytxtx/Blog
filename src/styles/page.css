@@ -1,0 +1,37 @@
+/* §2.6 / §3.6：页首共享标题、起始留白与分隔线，组件仅定义内部内容。 */
+.intro,
+.page-head,
+.post-header,
+.prose > h1:first-child {
+  padding-block: var(--page-start) var(--page-head-padding);
+  border-bottom: 2px solid var(--rule);
+}
+
+.intro h1,
+.page-head h1,
+.post-header h1,
+.prose > h1:first-child {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: var(--fs-title);
+  font-weight: 700;
+  line-height: var(--leading-title);
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+
+.intro p,
+.page-head p {
+  margin: var(--space-2) 0 0;
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.post-header,
+.prose > h1:first-child {
+  margin-bottom: var(--page-head-gap);
+}
+
+.post-header h1 {
+  margin-block: var(--space-3) var(--space-5);
+}

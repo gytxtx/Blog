@@ -1,0 +1,29 @@
+---
+import Base from './Base.astro';
+import ArchiveHead from '../components/ArchiveHead.astro';
+import PostList from '../components/PostList.astro';
+import Pager from '../components/Pager.astro';
+import { SITE } from '../consts';
+import type { Post } from '../lib/posts';
+
+interface Props {
+  year: number;
+  years: number[];
+  posts: Post[];
+  total: number;
+  current: number;
+  totalPages: number;
+}
+
+const { year, years, posts, total, current, totalPages } = Astro.props;
+const pageTitle = current === 1 ? `${year} 年文章` : `${year} 年文章 - 第 ${current} 页`;
+---
+
+<Base title={`${pageTitle} - ${SITE.title}`} description={`${year} 年发布的所有文章`}>
+  <div class="content">
+    <ArchiveHead year={year} years={years} />
+    <h2 class="group-head">{year}<span>{total} 篇</span></h2>
+    <PostList posts={posts} />
+    <Pager current={current} total={totalPages} base={`/blog/archive/${year}`} />
+  </div>
+</Base>

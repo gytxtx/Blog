@@ -1,0 +1,31 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import { postUrl, categorySlug, type Post } from '../lib/posts';
+
+interface Props {
+  posts: Post[];
+  /** 不在年份分组下时显示完整日期 */
+  fullDate?: boolean;
+}
+
+const { posts, fullDate = false } = Astro.props;
+---
+
+<ul class:list={['post-list', { 'full-date': fullDate }]}>
+  {
+    posts.map((p) => (
+      <li>
+        <FormattedDate date={p.data.pubDate} withYear={fullDate} />
+        <a class="title" href={postUrl(p)}>
+          {p.data.title}
+          {p.data.draft && <span class="draft">草稿</span>}
+        </a>
+        <span class="cat">
+          {p.data.categories.map((c) => (
+            <a href={`/blog/category/${categorySlug(c)}/`}>{c}</a>
+          ))}
+        </span>
+      </li>
+    ))
+  }
+</ul>

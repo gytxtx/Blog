@@ -1,5 +1,8 @@
 ---
-import { postUrl, formatDate, excerpt, categorySlug, readingTime, type Post } from '../lib/posts';
+import { Icon } from 'astro-icon/components';
+import FormattedDate from './FormattedDate.astro';
+import { titleMorph, titleTransitionName } from '../lib/transitions';
+import { postUrl, excerpt, categorySlug, readingTime, wordCount, formatWords, type Post } from '../lib/posts';
 
 interface Props {
   post: Post;
@@ -7,16 +10,114 @@ interface Props {
 
 const { post } = Astro.props;
 const readtime = await readingTime(post);
+const words = await wordCount(post);
+const url = postUrl(post);
+const summary = excerpt(post);
 ---
 
-<article class="post-card">
-  <a class="card-title" href={postUrl(post)}>
-    {post.data.title}{post.data.pin && <span class="pin-badge">置顶</span>}
-  </a>
-  <div class="card-meta">
-    <time datetime={post.data.pubDate.toISOString().slice(0, 10)}>{formatDate(post.data.pubDate)}</time>
-    {post.data.categories.map((c) => <a class="chip" href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
-    <span>{readtime} 分钟</span>
+<article class="entry">
+  <div class="meta">
+    {post.data.pin && <span class="pin">置顶</span>}
+    {post.data.draft && <span class="draft">草稿</span>}
+    <FormattedDate date={post.data.pubDate} />
+    {post.data.categories.map((c) => <a href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
   </div>
-  <p class="card-excerpt">{excerpt(post)}</p>
+  <h2 data-post-title="list" transition:name={titleTransitionName(post.data.slug)} transition:animate={titleMorph}><a href={url}>{post.data.title}</a></h2>
+  {summary && <p>{summary}</p>}
+  <div class="more">
+    <span class="stats">
+      <span>{formatWords(words)}</span>
+      <span>约 {readtime} 分钟</span>
+    </span>
+    <a class="go" href={url}>阅读全文<Icon class="arr" name="lucide:arrow-right" /></a>
+  </div>
 </article>
+
+<style>
+  .entry {
+    display: flex;
+    flex-direction: column;
+    gap: var(--entry-gap);
+    padding: var(--entry-padding) 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .entry h2 {
+    font-family: var(--serif);
+    font-size: var(--fs-entry);
+    line-height: 1.45;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .entry h2 a {
+    color: var(--text);
+  }
+
+  .entry h2 a:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .entry p {
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--fs-small);
+    line-height: 1.75;
+  }
+
+  .entry .more {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+    margin-top: 0;
+    font-size: var(--fs-caption);
+    color: var(--muted);
+  }
+
+  .entry .stats {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .entry .go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+
+  .entry .go:hover {
+    text-decoration: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .entry h2 a {
+      transition: color var(--motion-fast) var(--ease-ui),
+        background-color var(--motion-fast) var(--ease-ui),
+        border-color var(--motion-fast) var(--ease-ui);
+    }
+  }
+
+  /* 触屏扩大独立入口；正文行内链接保留自然排版。 */
+
+  @media (any-pointer: coarse) {
+    .entry .go {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--control-size);
+    }
+
+    /* 点击区域向上下留白延伸，不让 44px 的按钮撑高整行，造成分隔线上下视觉边距不等。 */
+
+    .entry .go {
+      margin-block: min(0px, calc((1lh - 44px) / 2));
+    }
+
+    .entry .more {
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-1) var(--space-4);
+    }
+  }
+</style>

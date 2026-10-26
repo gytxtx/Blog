@@ -2,19 +2,26 @@
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import Pager from '../components/Pager.astro';
-import { getPostsForIndex, PAGE_SIZE } from '../lib/posts';
+import { getPostsForIndex, wordCount, PAGE_SIZE } from '../lib/posts';
 import { SITE } from '../consts';
 
 const posts = await getPostsForIndex();
 const totalPages = Math.ceil(posts.length / PAGE_SIZE);
 const pagePosts = posts.slice(0, PAGE_SIZE);
+const years = posts.map((p) => p.data.pubDate.getUTCFullYear());
+const totalWords = (await Promise.all(posts.map(wordCount))).reduce((a, b) => a + b, 0);
 ---
 
 <Base title={SITE.title} description={SITE.description}>
   <div class="content">
-    <div>
-      {pagePosts.map((p) => <PostCard post={p} />)}
-    </div>
+    <section class="intro">
+      <h1>{SITE.title}</h1>
+      <p>{SITE.description}</p>
+      <p class="stats">
+        {posts.length} 篇文章，共 {(totalWords / 10000).toFixed(1)} 万字，{Math.min(...years)} — {Math.max(...years)}
+      </p>
+    </section>
+    {pagePosts.map((p) => <PostCard post={p} />)}
     <Pager current={1} total={totalPages} base="/" />
   </div>
 </Base>

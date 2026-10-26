@@ -8,12 +8,13 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && pagefind --site dist",
+    "build": "astro build && node scripts/pagefind-index.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "test": "node --test",
     "check-urls": "node scripts/check-urls.mjs",
-    "astro": "astro"
+    "astro": "astro",
+    "test:browser": "npm run build && playwright test"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.4",

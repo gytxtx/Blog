@@ -1,0 +1,89 @@
+/* 文章索引标题和 PostList 紧凑列表，包括日期列与触屏布局。 */
+.intro .stats {
+  margin-top: var(--space-1);
+  font-size: var(--fs-meta);
+  letter-spacing: 0.04em;
+}
+
+.post-list .draft {
+  margin-left: var(--space-2);
+}
+
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.post-list li {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+  gap: var(--space-4);
+  align-items: baseline;
+  padding: var(--post-row-padding) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-list.full-date li {
+  grid-template-columns: 8rem minmax(0, 1fr) auto;
+}
+
+.post-list time {
+  font-size: var(--fs-meta);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.post-list .title {
+  color: var(--text);
+}
+
+.post-list .title:hover {
+  color: var(--accent);
+}
+
+.post-list .cat {
+  font-size: var(--fs-meta);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .post-list .title {
+    transition: color var(--motion-fast) var(--ease-ui),
+      background-color var(--motion-fast) var(--ease-ui),
+      border-color var(--motion-fast) var(--ease-ui);
+  }
+}
+
+@media (max-width: 640px) {
+  .post-list li,
+  .post-list.full-date li {
+    grid-template-columns: 4rem minmax(0, 1fr);
+  }
+
+  .post-list.full-date li {
+    grid-template-columns: 7.25rem minmax(0, 1fr);
+  }
+
+  .post-list .cat {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-list.full-date li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+}
+
+/* 触屏扩大独立入口；正文行内链接保留自然排版。 */
+
+@media (any-pointer: coarse) {
+  .post-list .title {
+    display: block;
+    min-height: var(--control-size);
+  }
+}

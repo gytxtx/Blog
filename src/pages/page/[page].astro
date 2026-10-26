@@ -17,9 +17,11 @@ const { page } = Astro.props;
 
 <Base title={`文章 - 第 ${page.currentPage} 页 - ${SITE.title}`} description="所有文章">
   <div class="content">
-    <div>
-      {page.data.map((p) => <PostCard post={p} />)}
-    </div>
+    <section class="intro">
+      <h1>全部文章</h1>
+      <p>第 {page.currentPage} / {page.lastPage} 页，共 {page.total} 篇</p>
+    </section>
+    {page.data.map((p) => <PostCard post={p} />)}
     <Pager current={page.currentPage} total={page.lastPage} base="/" />
   </div>
 </Base>

@@ -1,0 +1,68 @@
+/* 归档、分类、标签的标题、年份导航与标签云。 */
+.years,
+.cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin-top: var(--space-4);
+}
+
+.years a {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.years a[aria-current='page'] {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.cloud a {
+  font-size: var(--fs-body);
+}
+
+.cloud sup {
+  font-size: var(--fs-label);
+  color: var(--muted);
+  margin-left: 0.15rem;
+}
+
+.group-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-family: var(--serif);
+  font-size: var(--fs-group);
+  font-weight: 700;
+  line-height: 1.4;
+  margin: var(--section-gap) 0 var(--space-2);
+}
+
+.group-head span {
+  font-family: var(--sans);
+  font-size: var(--fs-meta);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+/* 触屏扩大独立入口；正文行内链接保留自然排版。 */
+
+@media (any-pointer: coarse) {
+  .cloud a,
+  .years a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-size);
+  }
+
+  .cloud,
+  .years {
+    gap: var(--space-1) var(--space-4);
+  }
+
+  .cloud a,
+  .years a {
+    padding-inline: var(--space-1);
+  }
+}

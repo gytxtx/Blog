@@ -1,35 +1,21 @@
 ---
-import Base from '../../../../layouts/Base.astro';
-import Pager from '../../../../components/Pager.astro';
-import { getPosts, formatDate, postUrl, PAGE_SIZE } from '../../../../lib/posts';
+import Archive from '../../../../layouts/Archive.astro';
+import { getPosts, PAGE_SIZE } from '../../../../lib/posts';
+import { groupPostsByYear } from '../../../../lib/post-groups';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
-  const years = [...new Set(posts.map((p) => p.data.pubDate.getUTCFullYear()))].sort((a, b) => b - a);
-  return years.map((year) => ({
+  const groups = groupPostsByYear(posts);
+  const years = groups.map(({ year }) => year);
+  return groups.map(({ year, posts }) => ({
     params: { year: String(year) },
-    props: { year, posts: posts.filter((p) => p.data.pubDate.getUTCFullYear() === year) },
+    props: { year, years, posts },
   }));
 }
 
-const { year, posts } = Astro.props;
+const { year, years, posts } = Astro.props;
 const totalPages = Math.ceil(posts.length / PAGE_SIZE);
 const pagePosts = posts.slice(0, PAGE_SIZE);
 ---
 
-<Base title={`${year} 年文章 - KFACBT 的博客`} description={`${year} 年发布的所有文章`}>
-  <div class="content">
-    <h1 class="page-title">{year} 年文章</h1>
-    <ul class="tag-list">
-      {
-        pagePosts.map((p) => (
-          <li>
-            <time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{formatDate(p.data.pubDate)}</time>
-            <a href={postUrl(p)}>{p.data.title}</a>
-          </li>
-        ))
-      }
-    </ul>
-    <Pager current={1} total={totalPages} base={`/blog/archive/${year}`} />
-  </div>
-</Base>
+<Archive year={year} years={years} posts={pagePosts} total={posts.length} current={1} totalPages={totalPages} />

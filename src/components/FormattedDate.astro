@@ -1,0 +1,12 @@
+---
+import { formatDate } from '../lib/posts';
+
+interface Props {
+  date: Date;
+  withYear?: boolean;
+}
+
+const { date, withYear = true } = Astro.props;
+---
+
+<time datetime={date.toISOString()}>{formatDate(date, withYear)}</time>

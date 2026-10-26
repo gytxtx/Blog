@@ -1,5 +1,6 @@
 ---
 import Base from './Base.astro';
+import { SITE } from '../consts';
 
 interface Props {
   frontmatter: { title: string };
@@ -8,8 +9,8 @@ interface Props {
 const { frontmatter } = Astro.props;
 ---
 
-<Base title={`${frontmatter.title} - KFACBT 的博客`}>
-  <article class="content prose">
+<Base title={`${frontmatter.title} - ${SITE.title}`}>
+  <article class="content prose" data-pagefind-body>
     <slot />
   </article>
 </Base>

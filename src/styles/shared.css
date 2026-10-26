@@ -1,0 +1,131 @@
+/* §1.5 / §3.5：公共控件统一尺寸、圆角与状态；定位由使用方负责。 */
+.ui-icon-button {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--control-size);
+  height: var(--control-size);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.ui-icon-button:hover {
+  color: var(--text);
+  background: var(--bg-soft);
+}
+
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-size);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  color: var(--accent);
+  font-size: var(--fs-small);
+  line-height: var(--leading-ui);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.ui-button:hover {
+  border-color: var(--accent);
+  background: var(--bg-soft);
+  text-decoration: none;
+}
+
+.ui-button--primary {
+  padding-inline: var(--space-6);
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.ui-button--primary:hover {
+  border-color: var(--text);
+  background: var(--text);
+}
+
+/* 保留 hidden 的原生语义，避免公共 display 规则提前显示重试入口。 */
+.ui-icon-button[hidden],
+.ui-button[hidden] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ui-icon-button,
+  .ui-button {
+    transition: color var(--motion-fast) var(--ease-ui),
+      background-color var(--motion-fast) var(--ease-ui),
+      border-color var(--motion-fast) var(--ease-ui);
+  }
+}
+
+/* 跨模块共享的状态标记与方向箭头；具体布局由使用方负责。 */
+/* 状态标记弱于文章标题，沿用置顶的尺寸和边框，草稿使用主题内的次要文字色。 */
+
+.pin,
+.draft {
+  font-size: var(--fs-label);
+  color: var(--accent);
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  /* 字距会在最后一个字后面也补 0.1em，右内边距扣掉它才左右对称；
+     中文字形在行框里偏下，上内边距比下面少一点把字托回框的正中 */
+  padding: 0.04em 0.35em 0.11em 0.45em;
+  letter-spacing: 0.1em;
+  line-height: 1.35;
+}
+
+.draft {
+  display: inline-block;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-weight: 400;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* 方向箭头用图标而不是 →/← 字符：字符在中文字体里偏小偏低，各处粗细也不一 */
+
+.arr {
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+  transition: transform var(--motion-fast) var(--ease-ui);
+}
+
+.arr path {
+  stroke-width: 1.75;
+}
+
+a:hover .arr[data-icon$='right'] {
+  transform: translateX(var(--motion-arrow));
+}
+
+a:hover .arr[data-icon$='left'] {
+  transform: translateX(calc(-1 * var(--motion-arrow)));
+}
+
+a:hover .arr[data-icon$='up-right'] {
+  transform: translate(var(--motion-nudge), calc(-1 * var(--motion-nudge)));
+}
+
+/* §1.5：小交互共享时长；减少动效同时停用箭头位移。 */
+
+@media (prefers-reduced-motion: reduce) {
+  .arr,
+  a:hover .arr[data-icon] {
+    transition: none;
+    transform: none;
+  }
+}

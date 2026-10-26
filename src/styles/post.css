@@ -1,0 +1,150 @@
+/* Post 布局、作者信息和上下篇导航，包括窄屏重排。 */
+.post-pn .draft {
+  margin-left: var(--space-2);
+}
+
+.post-pn .dir {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.post-layout {
+  display: grid;
+  /* 外框跟随正文加宽，正文保持居中，并为目录保留可读宽度。 */
+  max-width: calc(var(--measure) + 35rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr);
+  column-gap: var(--space-6);
+}
+
+/* 标题区占第一行，正文与右侧目录同在第二行：目录顶端跟正文对齐，不受标题行数影响 */
+
+.post-header,
+.post-main {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.post-side {
+  grid-column: 3;
+  grid-row: 2;
+  min-width: 0;
+}
+
+.byline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  flex-wrap: wrap;
+  font-size: var(--fs-caption);
+  color: var(--muted);
+}
+
+.byline img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.byline b {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-10);
+}
+
+.post-pn {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: var(--section-gap);
+  border-top: 2px solid var(--rule);
+  border-bottom: 1px solid var(--border);
+}
+
+.post-pn > * {
+  padding: var(--space-6) var(--space-6) var(--space-6) 0;
+}
+
+.post-pn > :last-child {
+  padding: var(--space-6) 0 var(--space-6) var(--space-6);
+  border-left: 1px solid var(--border);
+  text-align: right;
+}
+
+.post-pn a {
+  color: var(--text);
+}
+
+.post-pn a:hover {
+  text-decoration: none;
+}
+
+.post-pn a:hover b {
+  color: var(--accent);
+}
+
+.post-pn .dir {
+  margin-bottom: 0.35rem;
+  font-size: var(--fs-meta);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.post-pn b {
+  display: block;
+  font-family: var(--serif);
+  font-size: var(--fs-h3);
+  line-height: 1.5;
+}
+
+.post-pn .none {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .post-pn b {
+    transition: color var(--motion-fast) var(--ease-ui),
+      background-color var(--motion-fast) var(--ease-ui),
+      border-color var(--motion-fast) var(--ease-ui);
+  }
+}
+
+@media (max-width: 1279px) {
+  .post-layout {
+    grid-template-columns: minmax(0, var(--measure));
+    justify-content: center;
+  }
+
+  .post-header,
+  .post-main {
+    grid-column: 1;
+  }
+
+  .post-side {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .post-pn {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .post-pn > *,
+  .post-pn > :last-child {
+    padding: var(--space-5) 0;
+    border-left: 0;
+    text-align: left;
+  }
+
+  .post-pn > :last-child {
+    border-top: 1px solid var(--border);
+  }
+}

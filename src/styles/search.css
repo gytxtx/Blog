@@ -1,0 +1,114 @@
+/* 搜索弹窗、结果容器与重试入口，包括小屏与开关动效。 */
+/* 搜索弹窗 */
+
+#search-dialog {
+  --search-viewport-height: 100dvh;
+  --search-viewport-top: 0px;
+  --search-gap: clamp(var(--space-2), calc(var(--search-viewport-height) * 0.06), var(--space-16));
+  --search-top-gap: max(var(--search-gap), var(--safe-top));
+  --search-bottom-gap: max(var(--search-gap), var(--safe-bottom));
+  inset-inline: var(--page-inset-left) var(--page-inset-right);
+  width: auto;
+  max-width: 40rem;
+  margin-inline: auto;
+  margin-top: calc(var(--search-viewport-top) + var(--search-top-gap));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  color: var(--text);
+  padding: 0;
+  max-height: calc(var(--search-viewport-height) - var(--search-top-gap) - var(--search-bottom-gap));
+  overflow: hidden;
+}
+
+#search-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+#search-dialog::backdrop {
+  background: rgb(0 0 0 / 0.35);
+}
+
+#search-dialog mark {
+  background: var(--accent-weak);
+  color: var(--text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* 搜索弹窗：淡入并从上方落下，关闭时反向；不支持 @starting-style 的浏览器直接出现 */
+
+  #search-dialog,
+  #search-dialog::backdrop {
+    transition: opacity var(--motion-enter) var(--ease-enter),
+      transform var(--motion-enter) var(--ease-enter),
+      overlay var(--motion-enter) allow-discrete,
+      display var(--motion-enter) allow-discrete;
+  }
+
+  #search-dialog:not([open]) {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--motion-distance))) scale(0.98);
+  }
+
+  #search-dialog:not([open])::backdrop {
+    opacity: 0;
+  }
+
+  @starting-style {
+    #search-dialog[open] {
+      opacity: 0;
+      transform: translateY(calc(-1 * var(--motion-distance))) scale(0.98);
+    }
+
+    #search-dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+}
+
+/* 搜索有独立标题和关闭入口；结果区域滚动时工具栏始终可见。 */
+
+.search-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex: none;
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5);
+  border-bottom: 1px solid var(--border);
+}
+
+.search-heading h2 {
+  margin: 0;
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+
+.search-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: var(--space-5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (max-width: 640px) {
+  #search-dialog {
+    --pagefind-ui-scale: 0.85;
+  }
+
+  .search-body {
+    padding: var(--space-4);
+  }
+}
+
+#search-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+body:has(#search-dialog[open]) {
+  overflow: hidden;
+}

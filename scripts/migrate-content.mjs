@@ -137,7 +137,7 @@ for (const file of mdFiles) {
   fs.writeFileSync(destPath, `---\n${serialize(fm)}\n---\n${body.replace(/^\n+/, '')}`);
 
   const d = new Date(fm.pubDate);
-  const url = `/blog/${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}/${fm.slug}/`;
+  const url = `/article/${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${fm.slug.toLowerCase()}/`;
   report.push(`${rel.padEnd(50)} → ${url}`);
 }
 

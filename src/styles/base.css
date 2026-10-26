@@ -1,0 +1,104 @@
+/* 全局重置、页面骨架、共享元信息与可访问性工具。 */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-height) + var(--space-4));
+  /* 常驻滚动条（Chrome 接鼠标 / 系统设为始终显示）下，短页没有滚动条、长页有，
+     可用宽度差一条滚动条，居中的顶栏和正文跨页左右跳；始终留出滚动条槽位 */
+  scrollbar-gutter: stable;
+  /* iOS 横屏时不要自动放大正文 */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  /* 短页填满视口，让页脚落在底部；长页随正文自然撑开。 */
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  line-height: var(--leading-body);
+  transition: background-color var(--motion-enter) var(--ease-ui),
+    color var(--motion-enter) var(--ease-ui);
+}
+
+body > main {
+  flex: 1;
+  min-width: 0;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--page-inset-right) 0 var(--page-inset-left);
+}
+
+.content {
+  max-width: calc(var(--measure) + var(--page-inset-left) + var(--page-inset-right));
+  margin: 0 auto;
+  padding: 0 var(--page-inset-right) var(--space-4) var(--page-inset-left);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  flex-wrap: wrap;
+  font-size: var(--fs-meta);
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* GFM 脚注的「Footnotes」标题只给读屏用 */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 系统设置了减少动效：关掉平滑滚动与主题切换过渡 */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    transition: none;
+  }
+}
+
+:where(a, button, summary, input, textarea, select, [tabindex]):focus-visible {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--focus-offset);
+}

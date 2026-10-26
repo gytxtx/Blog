@@ -1,45 +1,38 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import { getPosts, formatDate, postUrl, categorySlug } from '../../../lib/posts';
+import PostList from '../../../components/PostList.astro';
+import { getPosts } from '../../../lib/posts';
+import { groupPostsByTag } from '../../../lib/post-groups';
+import { SITE } from '../../../consts';
 
 const posts = await getPosts();
-const tagMap = new Map<string, typeof posts>();
-for (const p of posts) {
-  for (const t of p.data.tags) {
-    if (!tagMap.has(t)) tagMap.set(t, []);
-    tagMap.get(t)!.push(p);
-  }
-}
-const tags = [...tagMap.entries()].sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+const tags = groupPostsByTag(posts);
 const anchor = (t: string) => t.toLowerCase().replace(/\s+/g, '-');
 ---
 
-<Base title={`标签 - KFACBT 的博客`} description="所有标签">
+<Base title={`标签 - ${SITE.title}`} description="所有标签">
   <div class="content">
-    <h1 class="page-title">所有标签</h1>
-    <div class="tag-cloud">
-      {
-        tags.map(([t, ps]) => (
-          <a class="chip" href={`#${anchor(t)}`}>
-            {t}（{ps.length}）
-          </a>
-        ))
-      }
-    </div>
-
+    <header class="page-head">
+      <h1>标签</h1>
+      <div class="cloud">
+        {
+          tags.map(([t, ps]) => (
+            <a href={`#${anchor(t)}`}>
+              #{t}
+              <sup>{ps.length}</sup>
+            </a>
+          ))
+        }
+      </div>
+    </header>
     {
       tags.map(([t, ps]) => (
-        <section class="tag-section">
-          <h2 id={anchor(t)}>#{t}</h2>
-          <ul class="tag-list">
-            {ps.map((p) => (
-              <li>
-                <time datetime={p.data.pubDate.toISOString().slice(0, 10)}>{formatDate(p.data.pubDate)}</time>
-                <a href={postUrl(p)}>{p.data.title}</a>
-                {p.data.categories.map((c) => <a class="chip" href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
-              </li>
-            ))}
-          </ul>
+        <section>
+          <h2 class="group-head" id={anchor(t)}>
+            #{t}
+            <span>{ps.length} 篇</span>
+          </h2>
+          <PostList posts={ps} fullDate />
         </section>
       ))
     }

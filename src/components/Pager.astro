@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon/components';
+
 interface Props {
   current: number;
   total: number;
@@ -14,23 +16,58 @@ const href = (n: number) => (n === 1 ? `${root}/` : `${root}/page/${n}/`);
 {
   total > 1 && (
     <nav class="pager" aria-label="分页">
+      {current > 1 ? (
+        <a href={href(current - 1)} rel="prev">
+          <Icon class="arr" name="lucide:arrow-left" />较新
+        </a>
+      ) : (
+        <span class="off"><Icon class="arr" name="lucide:arrow-left" />较新</span>
+      )}
       <span>
-        {current > 1 && (
-          <a href={href(current - 1)} rel="prev">
-            ← 上一页
-          </a>
-        )}
+        第 {current} / {total} 页
       </span>
-      <span>
-        {current} / {total}
-      </span>
-      <span>
-        {current < total && (
-          <a href={href(current + 1)} rel="next">
-            下一页 →
-          </a>
-        )}
-      </span>
+      {current < total ? (
+        <a href={href(current + 1)} rel="next">
+          较旧<Icon class="arr" name="lucide:arrow-right" />
+        </a>
+      ) : (
+        <span class="off">较旧<Icon class="arr" name="lucide:arrow-right" /></span>
+      )}
     </nav>
   )
 }
+
+<style>
+  .pager a,
+  .pager .off {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+
+  .pager a:hover {
+    text-decoration: none;
+  }
+
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+    padding-top: var(--space-10);
+    font-size: var(--fs-small);
+    color: var(--muted);
+  }
+
+  .pager a,
+  .pager .off {
+    min-height: var(--control-size);
+  }
+
+  /* 禁用项：比正文淡，但仍看得清（约 3:1） */
+
+  .pager .off {
+    color: var(--muted);
+    opacity: 0.6;
+  }
+</style>
