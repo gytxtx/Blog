@@ -1,0 +1,43 @@
+/* Giscus 容器、加载状态与备用入口。 */
+.giscus-wrap {
+  margin-top: var(--section-gap);
+}
+
+.giscus-wrap h2 {
+  font-family: var(--serif);
+  font-size: var(--fs-h3);
+  margin: 0 0 var(--space-4);
+}
+
+/* 触屏扩大独立入口；正文行内链接保留自然排版。 */
+
+@media (any-pointer: coarse) {
+  .comments-help a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-size);
+  }
+}
+
+giscus-comments {
+  display: block;
+}
+
+.comments-status,
+.comments-help {
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.comments-help {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+}
+
+.comments-help a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}

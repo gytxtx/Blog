@@ -106,6 +106,20 @@ test('卡片共享表面、字级与手机单列规则，切换页面后仍一�
   await capture(page, info, 'mobile-friends.png');
 });
 
+test('评论进入视口才请求，失败后保留备用入口和重试', async ({ page }) => {
+  let requests = 0;
+  await page.route('https://giscus.app/client.js', (route) => { requests++; return route.abort(); });
+  await page.goto(LONG);
+  expect(requests).toBe(0);
+  const comments = page.locator('giscus-comments');
+  await comments.scrollIntoViewIfNeeded();
+  await expect(comments).toHaveAttribute('data-state', 'error');
+  await expect(comments.getByRole('link')).toHaveAttribute('href', 'https://github.com/gytxtx/Blog_Comments/discussions');
+  await comments.getByRole('button', { name: '重新加载评论' }).click();
+  await expect.poll(() => requests).toBe(2);
+  await expect(comments).toHaveAttribute('data-state', 'error');
+});
+
 test('减少动效下箭头不位移，图片灯箱开关和离开文章均正常', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
@@ -152,6 +166,29 @@ test('仓库首次请求失败后，后续页面访问可恢复统计', async ({
   await card.scrollIntoViewIfNeeded();
   await expect(card.locator('[data-metric="star"]')).toContainText('42');
   expect(calls).toBe(2);
+});
+
+test('评论加载成功和主题同步只接受当前 iframe 的消息', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('theme', 'dark'));
+  await page.route('https://giscus.app/client.js', (route) => route.fulfill({
+    contentType: 'text/javascript',
+    body: `const frame = document.createElement('iframe'); frame.className = 'giscus-frame'; frame.src = 'https://giscus.app/test-frame'; document.currentScript.parentElement.append(frame);`,
+  }));
+  await page.route('https://giscus.app/test-frame', (route) => route.fulfill({
+    contentType: 'text/html',
+    body: `<script>addEventListener('message', e => { if(e.data.giscus?.setConfig) document.body.dataset.theme = e.data.giscus.setConfig.theme; }); parent.postMessage({giscus:{resizeHeight:240}}, '*');</script><body>Comments</body>`,
+  }));
+  await page.goto(LONG);
+  const comments = page.locator('giscus-comments');
+  await comments.scrollIntoViewIfNeeded();
+  await expect(comments).toHaveAttribute('data-state', 'ready');
+  await expect(comments.locator('.comments-status')).not.toBeVisible();
+  await expect(comments.locator('script')).toHaveAttribute('data-theme', 'transparent_dark');
+  await expect(page.frameLocator('iframe.giscus-frame').locator('body')).toHaveAttribute('data-theme', 'transparent_dark');
+  await page.locator('#theme-btn').click();
+  // dark → auto 在系统浅色环境解析为 light。
+  await expect(page.locator('html')).toHaveAttribute('data-mode', 'auto');
+  await expect(page.frameLocator('iframe.giscus-frame').locator('body')).toHaveAttribute('data-theme', 'light');
 });
 
 test('灯箱打开时后退会清理遮罩和键盘监听，正文导航继续可用', async ({ page }) => {
