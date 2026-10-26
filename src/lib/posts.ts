@@ -29,7 +29,8 @@ const byDateDesc = (a: Post, b: Post) =>
   b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 
 export async function getPosts(): Promise<Post[]> {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  // 开发服务器包含草稿，生产构建仍统一排除草稿及其索引、旧地址和分享图。
+  const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
   const urls = new Map<string, string>();
   for (const post of posts) {
     const url = postUrl(post);

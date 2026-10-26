@@ -18,6 +18,7 @@ const { posts, fullDate = false } = Astro.props;
         <FormattedDate date={p.data.pubDate} withYear={fullDate} />
         <a class="title" href={postUrl(p)}>
           {p.data.title}
+          {p.data.draft && <span class="draft">草稿</span>}
         </a>
         <span class="cat">
           {p.data.categories.map((c) => (

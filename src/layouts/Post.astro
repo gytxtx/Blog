@@ -57,6 +57,7 @@ const jsonLd = {
   <div class="wrap post-layout">
     <header class="post-header" data-pagefind-body>
       <div class="meta" data-pagefind-ignore>
+        {post.data.draft && <span class="draft">草稿</span>}
         <FormattedDate date={post.data.pubDate} />
         {post.data.categories.map((c) => <a href={`/category/${categorySlug(c)}/`}>{c}</a>)}
         <span>{formatWords(words)}</span>
@@ -88,7 +89,7 @@ const jsonLd = {
           prev ? (
             <a href={postUrl(prev)}>
               <span class="dir"><Icon class="arr" name="lucide:arrow-left" />上一篇</span>
-              <b>{prev.data.title}</b>
+              <b>{prev.data.title}{prev.data.draft && <span class="draft">草稿</span>}</b>
             </a>
           ) : (
             <div>
@@ -101,7 +102,7 @@ const jsonLd = {
           next ? (
             <a href={postUrl(next)}>
               <span class="dir">下一篇<Icon class="arr" name="lucide:arrow-right" /></span>
-              <b>{next.data.title}</b>
+              <b>{next.data.title}{next.data.draft && <span class="draft">草稿</span>}</b>
             </a>
           ) : (
             <div>

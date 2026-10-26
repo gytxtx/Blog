@@ -17,6 +17,7 @@ const url = postUrl(post);
 <article class="entry">
   <div class="meta">
     {post.data.pin && <span class="pin">置顶</span>}
+    {post.data.draft && <span class="draft">草稿</span>}
     <FormattedDate date={post.data.pubDate} />
     {post.data.categories.map((c) => <a href={`/category/${categorySlug(c)}/`}>{c}</a>)}
   </div>
