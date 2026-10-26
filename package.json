@@ -10,6 +10,8 @@
     "dev": "astro dev",
     "build": "astro build && node scripts/pagefind-index.mjs",
     "preview": "astro preview",
+    "preview:worker": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
     "check": "astro check",
     "test": "node --test",
     "check-urls": "node scripts/check-urls.mjs",

@@ -3,5 +3,5 @@ export const SITE = {
   shortName: 'KFACBT',
   description: 'Anyway, keep learning.',
   author: 'gytxtx',
-  url: 'https://blog-gytxtx.pages.dev',
+  url: 'https://blog.gytxtx.top',
 };

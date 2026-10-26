@@ -1,4 +1,17 @@
-name = "blog-gytxtx"
+name = "blog"
 compatibility_date = "2025-07-31"
-# Cloudflare Pages 只认 pages_build_output_dir；构建命令在 Pages 控制台设为 `npm run build`
-pages_build_output_dir = "./dist"
+# 保留 workers.dev 入口，便于验证与回退。
+workers_dev = true
+
+# Workers 静态资源：dist 构建产物整体上传，页面地址保持末尾斜杠。
+[assets]
+directory = "./dist"
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"
+
+# 使用 Worker 路由接入，DNS 在控制台单独维护：
+# blog CNAME -> cf.090227.xyz，仅 DNS（灰云），保留优选域名的解析结果。
+# 不要改回 Custom Domain，以免与优选 CNAME 冲突。
+[[routes]]
+pattern = "blog.gytxtx.top/*"
+zone_name = "gytxtx.top"

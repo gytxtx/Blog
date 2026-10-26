@@ -10,6 +10,19 @@
 
 ## 常用命令
 
+```bash
+npm ci                # 安装依赖
+npm run dev -- --background # 后台开发；搜索弹窗显示开发预览提示
+npm run build         # astro build（含标题字体子集）→ pagefind 索引
+npm run check         # astro check 类型检查
+npm test              # 内容转换、目录、请求恢复等单元回归
+npm run test:browser  # 构建后运行 Chromium 浏览器回归
+npm run preview       # 预览构建产物
+npm run preview:worker # 构建后在本地 Workers 运行时预览
+npm run deploy        # 构建并部署到 Cloudflare Workers
+npm run check-urls    # URL 验收门：构建产物 vs 线上基线 diff
+```
+
 首次运行浏览器回归前执行 `npx playwright install chromium`。测试会启动并关闭
 `127.0.0.1:4322` 的生产预览，截图和失败轨迹保存在系统临时目录
 `blog-astro-playwright`，不会写入站点源码。第三方服务使用确定性模拟；真实搜索使用本次构建的索引。
@@ -28,6 +41,19 @@
 480px 及以下完整日期独占一行并缩小卡片留白。导航、标签和阅读全文等触屏入口至少高 44px。
 顶栏、正文和页脚使用安全区留白，搜索弹窗监听 VisualViewport，在横屏和软键盘弹出时
 保留关闭入口并让结果单独滚动。浏览器回归包含 320–1180px 手机、平板横竖屏；软键盘和安全区采用模拟验证。
+
+## 部署（Cloudflare Workers）
+
+站点以 Workers 静态资源方式托管：`wrangler.toml` 的 `assets.directory` 指向 `dist`，
+`npm run deploy` 会先构建再上传（首次使用先执行 `npx wrangler login`）。
+
+- `blog.gytxtx.top/*` 由 `wrangler.toml` 的 Worker 路由接入 `blog`，所属区域为 `gytxtx.top`。
+  DNS 在 Cloudflare 控制台单独维护：`blog` 的 CNAME 指向 `cf.090227.xyz`，设为**仅 DNS（灰云）**，
+  让访客使用优选域名的解析结果；该 DNS 记录不由 Wrangler 管理。
+  不要再添加同名 Custom Domain，以免与优选 CNAME 冲突；HTTPS 证书在区域的 SSL/TLS 中管理。
+- 默认的 `https://blog.<账户子域>.workers.dev` 可用于部署后验证与回退。
+- `public/_redirects` 与 `public/_headers` 在 Workers 静态资源下同样生效；
+  `public/CNAME` 仅为历史遗留，Workers 不读取。
 
 ## 友链卡片
 
