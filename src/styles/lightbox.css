@@ -1,0 +1,13 @@
+/* 灯箱的减少动效规则；保留 animationend 以完成关闭清理。 */
+/* 系统设置了减少动效：关掉平滑滚动与主题切换过渡 */
+
+@media (prefers-reduced-motion: reduce) {
+  /* 保留 animationend，让已在播放的灯箱关闭动画仍能完成清理。 */
+
+  .glightbox-container,
+  .glightbox-container * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

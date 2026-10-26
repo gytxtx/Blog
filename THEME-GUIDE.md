@@ -30,6 +30,17 @@ readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
 
 ## 3. 耦合点（重写时必须保持的协议）
 
+## 4. 客户端脚本的初始化与清理
+
 ## 5. 验收清单
+
+```bash
+npm run build        # 零报错
+npm run check        # 类型检查零诊断
+npm run check-urls   # ✅ 未解释差异为 0（URL 门）
+npm test             # 内容及请求恢复回归
+npm run test:browser # Chromium 交互回归（包含构建）
+npm run dev -- --background # 开发走查；用 astro dev stop/status/logs 管理
+```
 
 ## 6. 结构决策记录

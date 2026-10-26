@@ -1,0 +1,230 @@
+/* 跨页面过渡、共享标题和持久进度条，需要作用于文档级伪元素。 */
+/* 站内跳转期间（ClientRouter 打的方向标记）滚动必须瞬时：后退恢复位置用的是 scrollTo(x, y)，
+   平滑滚动会让新页先停在顶部截图，过渡完再肉眼可见地滑下去 */
+
+html[data-astro-transition] {
+  scroll-behavior: auto;
+}
+
+/* 站内跳转进度条：固定视口顶部，加载较慢时才淡入；增长曲线由 Base 的脚本驱动 */
+
+.nav-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 20;
+  height: 2px;
+  overflow: hidden;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* 完成动画：冲满后整条发光，一道高光从左扫到右（脚本负责加/去 .is-done） */
+
+.nav-progress::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.nav-progress.is-done {
+  box-shadow: 0 0 6px var(--accent);
+}
+
+.nav-progress.is-done::after {
+  animation: nav-progress-sweep var(--motion-sweep) var(--ease-progress) forwards;
+}
+
+@keyframes nav-progress-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-progress.is-done::after {
+    animation: none;
+  }
+}
+
+/* 站内跳转：整页旧图快速淡出，新图淡入上浮 8px，后退时从上往下落入。
+   只认 ClientRouter 跳转时打在 <html> 上的方向标记，主题切换不受影响；顶栏 transition:animate="none" 原地不动。
+   :only-child 是只在一侧出现的命名元素（没配上对的列表标题、换篇时的文章标题），跟整页一起走。
+   ClientRouter 在减少动效时自动跳过 */
+
+html[data-astro-transition]::view-transition-old(root),
+html[data-astro-transition]::view-transition-old(*):only-child {
+  animation: vt-fade-out var(--motion-fade) var(--ease-exit) both;
+}
+
+html[data-astro-transition='forward']::view-transition-new(root),
+html[data-astro-transition='forward']::view-transition-new(*):only-child {
+  animation: vt-rise-in var(--motion-enter) var(--ease-enter) var(--motion-delay) both;
+}
+
+html[data-astro-transition='back']::view-transition-new(root),
+html[data-astro-transition='back']::view-transition-new(*):only-child {
+  animation: vt-sink-in var(--motion-enter) var(--ease-enter) var(--motion-delay) both;
+}
+
+/* 分页翻页（markPageTurn 打的 page-next / page-prev）：同级页面横向推移，较旧从右边进、较新从左边进。
+   新旧两张图同时起步交叠淡变，不像上面先淡出再淡入那样中间留出一段空白帧。
+   列表标题去掉过渡名，跟整页一起平移，不单独上浮 */
+
+html[data-astro-transition^='page-'] [data-post-title="list"] {
+  view-transition-name: none;
+}
+
+html[data-astro-transition='page-next']::view-transition-old(root) {
+  animation: vt-out-left var(--motion-exit) var(--ease-exit) both;
+}
+
+html[data-astro-transition='page-next']::view-transition-new(root) {
+  animation: vt-in-right var(--motion-page) var(--ease-enter) both;
+}
+
+html[data-astro-transition='page-prev']::view-transition-old(root) {
+  animation: vt-out-right var(--motion-exit) var(--ease-exit) both;
+}
+
+html[data-astro-transition='page-prev']::view-transition-new(root) {
+  animation: vt-in-left var(--motion-page) var(--ease-enter) both;
+}
+
+/* 主题切换（Header.astro）：去掉所有过渡名让整页作为一张图交叉淡入，并停掉 CSS 颜色过渡，
+   否则顶栏会因 animate="none" 直接跳变、正文颜色在新图里还要再渐变一遍 */
+
+html[data-theme-switching] [data-astro-transition-scope] {
+  view-transition-name: none;
+}
+
+html[data-theme-switching] * {
+  transition: none !important;
+}
+
+html[data-theme-switching]::view-transition-old(root),
+html[data-theme-switching]::view-transition-new(root) {
+  animation-duration: var(--motion-enter);
+  animation-timing-function: var(--ease-ui);
+}
+
+/* 可访问性扩展：关闭文档过渡，控件自身的动效由 no-preference 分支控制。 */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-distance));
+  }
+}
+
+@keyframes vt-sink-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--motion-distance)));
+  }
+}
+
+@keyframes vt-out-left {
+  to {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--motion-page-distance)));
+  }
+}
+
+@keyframes vt-out-right {
+  to {
+    opacity: 0;
+    transform: translateX(var(--motion-page-distance));
+  }
+}
+
+@keyframes vt-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(var(--motion-page-distance));
+  }
+}
+
+@keyframes vt-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-1 * var(--motion-page-distance)));
+  }
+}
+
+[data-post-title="list"],
+[data-post-title="post"] {
+  view-transition-class: title;
+}
+
+/* 仅标题的共享元素过渡稍放慢，不影响顶栏 */
+
+::view-transition-group(*.title) {
+  animation-duration: var(--motion-page);
+  animation-timing-function: var(--ease-enter);
+}
+
+/* 保持截图原始宽度，避免容器宽度变化再次缩放字号；文字从左上角对齐 */
+
+::view-transition-old(*.title),
+::view-transition-new(*.title) {
+  inline-size: auto;
+  transform-origin: 0 0;
+}
+
+/* 标题变形（transitions.ts 的 titleMorph）：旧图缩放到新字号、新图从旧字号缩放回原尺寸，
+   两者视觉字号、文字中心始终一致；交叉淡变是另一段短动画，交接时刻由 transitions.ts 按方向设置 */
+
+@keyframes vt-title-grow-old {
+  to {
+    transform: translateY(var(--vt-title-dy, 0px)) scale(var(--vt-title-scale, 1));
+  }
+}
+
+@keyframes vt-title-grow-new {
+  from {
+    transform: translateY(calc(var(--vt-title-dy, 0px) / var(--vt-title-scale, 1) * -1))
+      scale(calc(1 / var(--vt-title-scale, 1)));
+  }
+}
+
+@keyframes vt-title-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-title-fade-in {
+  from {
+    opacity: 0;
+  }
+}

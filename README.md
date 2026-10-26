@@ -5,7 +5,15 @@
 基于 [Astro](https://astro.build/) 框架搭建的个人博客。由 Material for MkDocs 迁移而来，
 迁移评估与方案见旧仓库的 `MIGRATION-ASSESSMENT.md` / `MIGRATION-PLAN.md`。
 
+模块归属、主题与路由兼容契约、脚本清理方式和验收标准见 `THEME-GUIDE.md`。
+全站布局、字号、空间尺度、公共控件与动效约定见 [DESIGN.md](./DESIGN.md)。
+
 ## 常用命令
+
+响应式规则：960px 及以下使用折叠导航，跨断点切换后重置菜单状态；640px 及以下卡片单列，
+480px 及以下完整日期独占一行并缩小卡片留白。导航、标签和阅读全文等触屏入口至少高 44px。
+顶栏、正文和页脚使用安全区留白，搜索弹窗监听 VisualViewport，在横屏和软键盘弹出时
+保留关闭入口并让结果单独滚动。浏览器回归包含 320–1180px 手机、平板横竖屏；软键盘和安全区采用模拟验证。
 
 - [查看官方使用说明](https://docs.astro.build)
   Astro 文档

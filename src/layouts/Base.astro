@@ -98,10 +98,15 @@ const ogImageAbs = new URL(ogImage, import.meta.env.DEV ? Astro.url.origin : Ast
     </script>
   </head>
   <body>
+    <!-- 站内跳转进度条：persist 让它在换页时保留当前进度，而不是从 0 重来 -->
+    <div class="nav-progress" transition:persist="nav-progress" aria-hidden="true"></div>
     <Header />
     <main>
       <slot />
     </main>
     <Footer />
+    <script>
+      import '../lib/navigation';
+    </script>
   </body>
 </html>
