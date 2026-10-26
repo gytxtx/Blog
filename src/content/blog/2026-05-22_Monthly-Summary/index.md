@@ -135,7 +135,7 @@ comments: true
 
 目前项目已经在 GitHub 开源，欢迎各位提出建议或 Pull Request：
 
-<https://github.com/gytxtx/OpenJBD>
+[gytxtx/OpenJBD](https://github.com/gytxtx/OpenJBD "github-card")
 
 ---
 

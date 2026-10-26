@@ -42,6 +42,8 @@ title: 关于
 * 在 [蔚蓝咖啡厅](https://github.com/bluearchive-cafe) 开发前端、桌面应用等项目。
 * [OpenJBD](https://github.com/gytxtx/OpenJBD) 是我使用 Java 开发的 Android 端嘉佰达 BMS 仪表板，用于替代原厂 App 糟糕的界面与功能实现逻辑。
 
+[gytxtx/OpenJBD](https://github.com/gytxtx/OpenJBD "github-card")
+
 除此之外，我在空闲时间也会按兴趣开发一些项目，详情请参阅 GitHub 贡献活动。
 
 ---

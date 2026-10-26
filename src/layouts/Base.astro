@@ -4,6 +4,7 @@ import { SITE } from '../consts';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import '../styles/github-repo-card.css';
 
 interface Props {
   title: string;
@@ -127,12 +128,19 @@ const ogImageAbs = new URL(ogImage, import.meta.env.DEV ? Astro.url.origin : Ast
     </main>
     <Footer />
     <script>
-      import { dropOffscreenTitles, markPageTurn, recordTitleSizes, setTitleScale } from '../lib/transitions';
+      import { dropOffscreenTitles, markPageTurn, prepareTitleTransition, recordTitleSizes, setTitleScale } from '../lib/transitions';
       document.addEventListener('astro:before-preparation', markPageTurn);
+      document.addEventListener('astro:before-preparation', prepareTitleTransition);
       document.addEventListener('astro:after-preparation', dropOffscreenTitles);
       document.addEventListener('astro:after-preparation', recordTitleSizes);
       document.addEventListener('astro:after-swap', dropOffscreenTitles);
       document.addEventListener('astro:after-swap', setTitleScale);
+      // 普通 Markdown 的仓库卡片按需加载；自定义元素自动接管后续站内跳转的新实例。
+      document.addEventListener('astro:page-load', () => {
+        if (document.querySelector('github-repo-card')) {
+          void import('../lib/github-repo-card-client');
+        }
+      });
     </script>
   </body>
 </html>

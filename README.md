@@ -22,6 +22,43 @@ npm run check-urls    # URL 验收门：构建产物 vs 线上基线 diff
 
 - 自定义域名 `blog.gytxtx.top` 在 Cloudflare 控制台绑定（`public/CNAME` 为历史遗留保留）。
 
+## GitHub 仓库卡片
+
+普通 `.md` 文章中，将带 `github-card` 标记的链接独占一段即可，前后留空行：
+
+```markdown
+[gytxtx/OpenJBD](https://github.com/gytxtx/OpenJBD "github-card")
+```
+
+链接文字为 `owner/repo` 时，简介自动获取；换成其他文字可作为自定义简介：
+
+```markdown
+[通过蓝牙连接 JBD 智能 BMS 的 Android 应用](https://github.com/gytxtx/OpenJBD "github-card")
+```
+
+普通链接、行内链接和代码块不转换。Astro 页面可直接使用同一组件：
+
+```astro
+---
+import GitHubRepoCard from '../components/GitHubRepoCard.astro';
+---
+
+<GitHubRepoCard repo="gytxtx/OpenJBD" />
+<GitHubRepoCard
+  repo="gytxtx/OpenJBD"
+  description="通过蓝牙连接 JBD 智能 BMS 的 Android 应用"
+  language="Kotlin"
+  stars={0}
+  forks={0}
+  fetchMetadata={false}
+/>
+```
+
+卡片的仓库名和链接在 HTML 中直接输出，无 JavaScript 时仍可访问。进入视口后获取公开 GitHub
+信息，补全简介、语言、Stars 和 Forks；同一仓库请求去重，成功结果在会话内缓存 30 分钟。
+请求失败、仓库不存在或触发限流时保留原卡片，不显示虚假的零统计，也不影响构建。
+`fetchMetadata={false}` 可关闭自动获取，完全使用手动填写的数据。构建不请求 GitHub API，无需 Token。
+
 ## 迁移要点（面向未来的自己）
 
 - **页面 URL**：标签 `/tags/`、归档 `/archive/YYYY/`、关于 `/about/`、友链 `/links/`、

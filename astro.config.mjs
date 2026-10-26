@@ -6,6 +6,7 @@ import icon from 'astro-icon';
 import { unified } from '@astrojs/markdown-remark';
 import remarkBreaks from 'remark-breaks';
 import remarkReadingStats from './src/lib/remark-reading-stats.mjs';
+import remarkGitHubRepoCard from './src/lib/remark-github-repo-card.mjs';
 import serifSubset from './src/integrations/serif-subset.mjs';
 
 export default defineConfig({
@@ -44,6 +45,6 @@ export default defineConfig({
     // Astro 7 默认处理器是 Sätteri，remark 插件要挂在 unified() 处理器上。
     // remark-breaks 对应 Material 的 nl2br 扩展（单个换行渲染为 <br>）
     // remark-reading-stats 往 remarkPluginFrontmatter 写字数 words 与阅读时间 minutes
-    processor: unified({ remarkPlugins: [remarkBreaks, remarkReadingStats] }),
+    processor: unified({ remarkPlugins: [remarkBreaks, remarkReadingStats, remarkGitHubRepoCard] }),
   },
 });

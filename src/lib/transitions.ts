@@ -42,7 +42,26 @@ const titleMorphPair = {
 };
 export const titleMorph: TransitionDirectionalAnimations = { forwards: titleMorphPair, backwards: titleMorphPair };
 
-const TITLES = '.entry h2[data-astro-transition-scope], .post-header h1[data-astro-transition-scope]';
+const LIST_TITLES = '.entry h2[data-astro-transition-scope]';
+const POST_TITLE = '.post-header h1[data-astro-transition-scope]';
+const TITLES = `${LIST_TITLES}, ${POST_TITLE}`;
+let titleMorphEnabled = true;
+
+/** 仅列表与文章互跳时配对标题；列表刷新、列表互跳和其他页面跳转都跟随整页动画。 */
+export function prepareTitleTransition(event: Event) {
+  const preparation = event as TransitionBeforePreparationEvent;
+  const loader = preparation.loader;
+  // after-preparation 不携带新文档；loader 完成时新文档已可读，旧图尚未截图。
+  preparation.loader = async () => {
+    await loader.call(preparation);
+    if (preparation.signal.aborted || preparation.defaultPrevented) return;
+    const { newDocument } = preparation;
+    titleMorphEnabled = Boolean(
+      (document.querySelector(LIST_TITLES) && newDocument.querySelector(POST_TITLE)) ||
+      (document.querySelector(POST_TITLE) && newDocument.querySelector(LIST_TITLES)),
+    );
+  };
+}
 
 /**
  * 只有两端都在视口里时标题才变形：在屏幕外的那一端摘掉过渡名，让它跟着整页淡出/淡入，
@@ -54,7 +73,7 @@ export function dropOffscreenTitles() {
   const modalOpen = !!document.querySelector('dialog:modal');
   for (const el of document.querySelectorAll<HTMLElement>(TITLES)) {
     const { top, bottom } = el.getBoundingClientRect();
-    el.style.viewTransitionName = modalOpen || bottom <= 0 || top >= innerHeight ? 'none' : '';
+    el.style.viewTransitionName = !titleMorphEnabled || modalOpen || bottom <= 0 || top >= innerHeight ? 'none' : '';
   }
 }
 

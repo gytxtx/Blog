@@ -11,6 +11,7 @@
     "build": "astro build && node scripts/pagefind-index.mjs",
     "preview": "astro preview",
     "check": "astro check",
+    "test": "node --test",
     "check-urls": "node scripts/check-urls.mjs",
     "astro": "astro"
   },
