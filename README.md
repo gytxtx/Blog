@@ -1,5 +1,7 @@
 # Blog
 
+项目仓库：[gytxtx/Blog_Astro](https://github.com/gytxtx/Blog_Astro)。
+
 基于 [Astro](https://astro.build/) 框架搭建的个人博客。由 Material for MkDocs 迁移而来，
 迁移评估与方案见旧仓库的 `MIGRATION-ASSESSMENT.md` / `MIGRATION-PLAN.md`。
 
