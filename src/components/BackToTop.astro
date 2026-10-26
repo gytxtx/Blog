@@ -1,0 +1,88 @@
+---
+import { Icon } from 'astro-icon/components';
+
+// 正文为主，返回顶部为次要操作；沿用主题色、44px 触控尺寸、6px 圆角和页面安全区。
+---
+
+<button class="ui-icon-button" id="back-to-top" type="button" aria-label="返回顶部" title="返回顶部" hidden>
+  <Icon name="lucide:arrow-up" size={20} aria-hidden="true" />
+</button>
+
+<style>
+  button {
+    position: fixed;
+    right: var(--page-inset-right);
+    bottom: max(var(--gutter), var(--safe-bottom));
+    z-index: 5;
+    border: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  button[hidden] {
+    display: none;
+  }
+
+  button:hover {
+    background: var(--bg-soft);
+    color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    button {
+      transition:
+        opacity var(--motion-enter) var(--ease-enter),
+        transform var(--motion-enter) var(--ease-enter),
+        background-color var(--motion-fast) var(--ease-ui),
+        color var(--motion-fast) var(--ease-ui),
+        display var(--motion-enter) allow-discrete;
+    }
+
+    button[hidden] {
+      opacity: 0;
+      transform: translateY(var(--motion-distance)) scale(0.95);
+    }
+
+    @starting-style {
+      button:not([hidden]) {
+        opacity: 0;
+        transform: translateY(var(--motion-distance)) scale(0.95);
+      }
+    }
+
+    button :global(svg) {
+      transition: transform var(--motion-fast) var(--ease-ui);
+    }
+
+    @media (hover: hover) {
+      button:hover :global(svg) {
+        transform: translateY(calc(-1 * var(--motion-nudge)));
+      }
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+  }
+</style>
+
+<script>
+  function updateVisibility() {
+    const button = document.getElementById('back-to-top');
+    if (button) button.hidden = window.scrollY <= 320;
+  }
+
+  window.addEventListener('scroll', updateVisibility, { passive: true });
+  document.addEventListener('astro:page-load', () => {
+    updateVisibility();
+    const button = document.getElementById('back-to-top');
+    if (!button) return;
+    button.onclick = () => {
+      // 按钮回到顶部后会隐藏，将焦点交回页首链接，方便键盘用户继续导航。
+      document.querySelector<HTMLAnchorElement>('.brand')?.focus({ preventScroll: true });
+      window.scrollTo({
+        top: 0,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      });
+    };
+  });
+</script>

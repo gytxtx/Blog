@@ -6,6 +6,7 @@ import { THEMES, themeCss } from '../lib/theme';
 import { themeBootstrapScript } from '../lib/theme-bootstrap';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import BackToTop from '../components/BackToTop.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -107,6 +108,7 @@ const ogImageAbs = new URL(ogImage, import.meta.env.DEV ? Astro.url.origin : Ast
       <slot />
     </main>
     <Footer />
+    <BackToTop />
     <script>
       import '../lib/navigation';
     </script>

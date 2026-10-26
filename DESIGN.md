@@ -22,6 +22,13 @@
 
 ## 动效
 
+| 用途 | 令牌 | 时长 |
+| --- | --- | --- |
+| 悬停、颜色、箭头、目录指示 | `--motion-fast` | 180ms |
+| 菜单、搜索弹窗、主题、返回顶部、折叠目录 | `--motion-enter` | 250ms |
+| 分页与共享文章标题 | `--motion-page` | 320ms |
+| 页面退出 | `--motion-exit` / `--motion-fade` | 220ms / 120ms |
+
 进入使用 `--ease-enter`，退出使用 `--ease-exit`，颜色变化使用 `--ease-ui`。普通进入位移为 `--motion-distance`（8px），分页为 `--motion-page-distance`（32px）。保留已有翻页方向、共享标题变形和延迟进度条机制。
 
 标题淡变交接使用 `--motion-handoff`（100ms），排版一致的缩小过渡使用 `--motion-handoff-late`（80ms），开始时间由总时长减去交接时长计算。进度条扫光使用 `--motion-sweep`（500ms），脚本读取实际 CSS 动画时长后再淡出，避免变量调整造成截断。

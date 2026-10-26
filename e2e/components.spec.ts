@@ -14,6 +14,94 @@ const FIRST = '/article/2025/03/first-article/';
 const LONG = '/article/2026/08/pixel-5-volte-troubleshooting/';
 const IMAGES = '/article/2026/05/monthly-summary/';
 
+test('返回顶部在桌面和手机滚动后显示，适配明暗主题并支持键盘', async ({ page }, info) => {
+  for (const width of [1280, 375]) {
+    await page.setViewportSize({ width, height: 812 });
+    await page.goto(LONG);
+    const button = page.getByRole('button', { name: '返回顶部' });
+    await expect(button).toBeHidden();
+    await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
+    await expect(button).toBeVisible();
+    await capture(page, info, `back-to-top-${width}.png`);
+    const box = await button.boundingBox();
+    expect(box!.width).toBe(44);
+    expect(box!.height).toBe(44);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(width);
+    expect(box!.y + box!.height).toBeLessThanOrEqual(812);
+    await page.evaluate(() => window.__setTheme!('dark'));
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+    await expect.poll(() => button.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe('rgb(18, 20, 18)');
+    await capture(page, info, `back-to-top-dark-${width}.png`);
+    await button.focus();
+    await page.keyboard.press('Enter');
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+    await expect(button).toBeHidden();
+    await expect(page.locator('.brand')).toBeFocused();
+    await page.evaluate(() => window.__setTheme!('light'));
+  }
+});
+
+test('返回顶部支持进出场、悬停和按压动画，减少动效时关闭', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto(LONG);
+  const button = page.locator('#back-to-top');
+  await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
+  await expect(button).not.toHaveAttribute('hidden');
+  const properties = await button.evaluate((element) => getComputedStyle(element).transitionProperty);
+  expect(properties).toContain('opacity');
+  expect(properties).toContain('transform');
+  expect(properties).toContain('display');
+  await button.evaluate(async (element) => {
+    await Promise.all(element.getAnimations().map((animation) => animation.finished));
+  });
+  await button.hover();
+  await expect.poll(() => button.locator('svg').evaluate((element) => getComputedStyle(element).transform)).toBe('matrix(1, 0, 0, 1, 0, -2)');
+  await page.mouse.down();
+  try {
+    await expect.poll(() => button.evaluate((element) => getComputedStyle(element).transform)).toBe('matrix(0.95, 0, 0, 0.95, 0, 0)');
+    // 在按下状态下移开，避免释放鼠标时触发返回顶部。
+    await page.mouse.move(0, 0);
+  } finally {
+    await page.mouse.up();
+  }
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await expect(button).toHaveAttribute('hidden');
+  await expect(button).toBeHidden();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
+  await expect(button).toBeVisible();
+  await button.hover();
+  expect(await button.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
+  expect(await button.locator('svg').evaluate((element) => getComputedStyle(element).transform)).toBe('none');
+});
+
+test('返回顶部在站内跳转和后退后仍可用，减少动效时立即返回', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/links/');
+  await expect(page.getByRole('button', { name: '返回顶部' })).toBeHidden();
+  await page.locator('.brand').click();
+  await expect(page.locator('.intro h1')).toBeVisible();
+  await page.locator(`.entry h2 a[href="${IMAGES}"]`).click();
+  await expect(page).toHaveURL(IMAGES);
+  const button = page.getByRole('button', { name: '返回顶部' });
+  await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
+  await expect(button).toBeVisible();
+  expect(await button.evaluate((element: HTMLButtonElement) => {
+    element.click();
+    return window.scrollY;
+  })).toBe(0);
+  await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
+  await expect(button).toBeVisible();
+  await page.locator('.brand').click();
+  await expect(page.locator('.intro h1')).toBeVisible();
+  await expect(button).toBeHidden();
+  await page.goBack();
+  await expect(page).toHaveURL(IMAGES);
+  await expect(button).toBeVisible();
+  await button.click();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+});
+
 test('桌面和手机滚动后顶栏持续可用，目录锚点不会被遮挡', async ({ page }, info) => {
   for (const width of [1280, 375]) {
     await page.setViewportSize({ width, height: 900 });
