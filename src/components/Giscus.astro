@@ -1,6 +1,10 @@
 ---
-// Giscus 评论：参数与 Material overrides/partials/comments.html 完全一致，
-// pathname 映射保证 URL 冻结后既有评论不丢失。
+// 用旧版 pathname 对应的搜索词固定评论标识，文章地址移除日期中的日后仍匹配同一讨论。
+// giscus 的 pathname 映射会去掉开头的 /，所以传入的 term 也不带开头的 /。
+interface Props {
+  term: string;
+}
+const { term } = Astro.props;
 ---
 
 <section class="giscus-wrap">
@@ -12,7 +16,8 @@
     data-repo-id="R_kgDOO28D8g"
     data-category="General"
     data-category-id="DIC_kwDOO28D8s4CrGKY"
-    data-mapping="pathname"
+    data-mapping="specific"
+    data-term={term}
     data-strict="0"
     data-reactions-enabled="1"
     data-emit-metadata="0"

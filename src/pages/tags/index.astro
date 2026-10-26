@@ -1,7 +1,7 @@
 ---
-import Base from '../../../layouts/Base.astro';
-import PostList from '../../../components/PostList.astro';
-import { getPosts } from '../../../lib/posts';
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/posts';
 
 const posts = await getPosts();
 const tagMap = new Map<string, typeof posts>();

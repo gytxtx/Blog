@@ -8,10 +8,10 @@ import { getPosts } from '../lib/posts';
 const latestYear = (await getPosts())[0]?.data.pubDate.getUTCFullYear();
 const nav = [
   { href: '/', label: '首页' },
-  { href: '/blog/tags/', label: '标签' },
-  { href: `/blog/archive/${latestYear}/`, label: '归档', match: '/blog/archive/' },
-  { href: '/blog/about/', label: '关于' },
-  { href: '/blog/links/', label: '友链' },
+  { href: '/tags/', label: '标签' },
+  { href: `/archive/${latestYear}/`, label: '归档', match: '/archive/' },
+  { href: '/about/', label: '关于' },
+  { href: '/links/', label: '友链' },
   { href: 'https://www.travellings.cn/go.html', label: '开往', external: true },
 ];
 const current = Astro.url.pathname;

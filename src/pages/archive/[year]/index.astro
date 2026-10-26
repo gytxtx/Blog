@@ -1,9 +1,9 @@
 ---
-import Base from '../../../../layouts/Base.astro';
-import Pager from '../../../../components/Pager.astro';
-import PostList from '../../../../components/PostList.astro';
-import ArchiveHead from '../../../../components/ArchiveHead.astro';
-import { getPosts, PAGE_SIZE } from '../../../../lib/posts';
+import Base from '../../../layouts/Base.astro';
+import Pager from '../../../components/Pager.astro';
+import PostList from '../../../components/PostList.astro';
+import ArchiveHead from '../../../components/ArchiveHead.astro';
+import { getPosts, PAGE_SIZE } from '../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -24,6 +24,6 @@ const pagePosts = posts.slice(0, PAGE_SIZE);
     <ArchiveHead year={year} />
     <h2 class="group-head">{year}<span>{posts.length} 篇</span></h2>
     <PostList posts={pagePosts} />
-    <Pager current={1} total={totalPages} base={`/blog/archive/${year}`} />
+    <Pager current={1} total={totalPages} base={`/archive/${year}`} />
   </div>
 </Base>

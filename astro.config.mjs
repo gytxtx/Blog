@@ -10,11 +10,18 @@ import serifSubset from './src/integrations/serif-subset.mjs';
 
 export default defineConfig({
   site: 'https://blog-gytxtx.pages.dev',
-  // 站点结构调整（2026-10-25）：首页即文章列表。旧博客索引 /blog/ 与其分页
-  // 是 URL 基线成员（外链在用），静态重定向到新位置，URL 冻结承诺不破。
+  // 页面地址统一使用末尾斜杠，动态旧地址直接跳到规范地址。
+  trailingSlash: 'always',
+  // 保留旧导航页地址，文章旧地址由 pages/blog/[...slug].astro 统一跳转。
   redirects: {
     '/blog': '/',
-    '/blog/page/2': '/page/2',
+    '/blog/page/2': '/page/2/',
+    '/blog/tags': '/tags/',
+    '/blog/about': '/about/',
+    '/blog/links': '/links/',
+    '/blog/category/[category]': '/category/[category]',
+    '/blog/archive/[year]': '/archive/[year]',
+    '/blog/archive/[year]/page/[page]': '/archive/[year]/page/[page]',
   },
   integrations: [
     expressiveCode({
@@ -23,7 +30,10 @@ export default defineConfig({
       themeCssSelector: (theme) =>
         `[data-theme="${theme.name.toLowerCase().replace(/\s+/g, '-')}"]`,
     }),
-    sitemap(),
+    sitemap({
+      // /blog/ 下只保留旧地址跳转，站点地图不再发布这些地址。
+      filter: (page) => !new URL(page).pathname.startsWith('/blog/'),
+    }),
     // 图标：Lucide 图标集（@iconify-json/lucide），用法 <Icon name="lucide:sun" />；
     // 本地 SVG 放 src/icons/ 后用 <Icon name="文件名" />
     icon(),

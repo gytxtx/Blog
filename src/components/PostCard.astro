@@ -18,7 +18,7 @@ const url = postUrl(post);
   <div class="meta">
     {post.data.pin && <span class="pin">置顶</span>}
     <FormattedDate date={post.data.pubDate} />
-    {post.data.categories.map((c) => <a href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
+    {post.data.categories.map((c) => <a href={`/category/${categorySlug(c)}/`}>{c}</a>)}
   </div>
   <h2 transition:name={titleTransitionName(post.data.slug)} transition:animate={titleMorph}><a href={url}>{post.data.title}</a></h2>
   <p>{excerpt(post)}</p>

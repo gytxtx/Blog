@@ -1,5 +1,5 @@
 ---
-layout: ../../layouts/Prose.astro
+layout: ../layouts/Prose.astro
 title: 关于
 ---
 

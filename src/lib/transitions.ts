@@ -16,15 +16,16 @@ export const titleTransitionName = (slug: string) => `post-title-${slug}`;
  * 改成按字号比例缩放截图（global.css 的 vt-title-grow-*，比例在 --vt-title-scale），
  * 两张图任何时刻视觉字号一致，像同一行字在连续变大或变小。
  * 截图被放大会糊，所以交叉淡变（vt-title-fade-*）要让被缩小、清晰的那张撑满全程：
- * 变大时（列表 → 文章）一开始就交给新图；变小时（文章 → 列表）旧图撑到最后 80ms 才交给新图，
+ * 变大时（列表 → 文章）一开始就交给新图；排版一致的变小时（文章 → 列表）旧图撑到最后 80ms 才交给新图，
  * 早交接会剩一张放大的新图慢慢缩回原尺寸，整个收尾都是糊的，最后一刻才突然对上焦。
  * 旧图缩到终点后和原生小字几乎一样（前提是 --vt-title-dy 把两者文字中心对齐），晚交接看不出换图。
- * 交接时刻和时长在 --vt-title-fade-*，由 setTitleScale 按方向设置。
+ * 位图无法重新换行，两端行数或按字号缩放后的行宽不一致时，两个方向都在前 100ms 内交接。
+ * 交接时刻和时长在 --vt-title-fade-*，由 setTitleScale 按排版和方向设置。
  * Astro 把多段动画拼成逗号分隔的长属性，各段属性要写全，否则短的那列会循环错位
  */
 const MORPH = { duration: '320ms', easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', delay: '0ms', fillMode: 'both' };
 const FADE = {
-  duration: 'var(--vt-title-fade-duration, 112ms)',
+  duration: 'var(--vt-title-fade-duration, 100ms)',
   easing: 'ease',
   delay: 'var(--vt-title-fade-delay, 0ms)',
   fillMode: 'both',
@@ -49,25 +50,45 @@ const TITLES = '.entry h2[data-astro-transition-scope], .post-header h1[data-ast
  * 旧页在截图前、新页在换完 DOM 并恢复滚动后各调用一次。
  */
 export function dropOffscreenTitles() {
+  // 模态框后的标题即使在视口内也不可见，不能提升到过渡顶层。
+  const modalOpen = !!document.querySelector('dialog:modal');
   for (const el of document.querySelectorAll<HTMLElement>(TITLES)) {
     const { top, bottom } = el.getBoundingClientRect();
-    el.style.viewTransitionName = bottom <= 0 || top >= innerHeight ? 'none' : '';
+    el.style.viewTransitionName = modalOpen || bottom <= 0 || top >= innerHeight ? 'none' : '';
   }
 }
 
-type TitleBox = { size: number; mid: number };
+type TitleBox = { size: number; mid: number; lineWidths: number[] };
 const oldTitles = new Map<string, TitleBox>();
 
-/** 视口内带过渡名的标题：字号，和第一行文字竖直中心离盒子顶端多远 */
+/** 视口内带过渡名的标题：字号、第一行文字中心的竖直偏移，以及各行实际文字宽度 */
 const titleBoxes = () =>
   [...document.querySelectorAll<HTMLElement>(TITLES)].flatMap((el) => {
     const cs = getComputedStyle(el);
     if (cs.viewTransitionName === 'none') return [];
+    const lines: { top: number; bottom: number; left: number; right: number }[] = [];
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     const range = document.createRange();
-    range.selectNodeContents(el);
-    const line = range.getClientRects()[0];
+    // 按文本节点测量，避免 h2 内的链接盒子混入矩形，或把多行文本当成一整行。
+    while (walker.nextNode()) {
+      range.selectNodeContents(walker.currentNode);
+      for (const rect of range.getClientRects()) {
+        if (!rect.width || !rect.height) continue;
+        const line = lines.find((line) => Math.abs(line.top - rect.top) < 1);
+        if (line) {
+          line.bottom = Math.max(line.bottom, rect.bottom);
+          line.left = Math.min(line.left, rect.left);
+          line.right = Math.max(line.right, rect.right);
+        } else {
+          lines.push({ top: rect.top, bottom: rect.bottom, left: rect.left, right: rect.right });
+        }
+      }
+    }
+    lines.sort((a, b) => a.top - b.top);
+    const line = lines[0];
     const mid = line ? (line.top + line.bottom) / 2 - el.getBoundingClientRect().top : 0;
-    return [[cs.viewTransitionName, { size: parseFloat(cs.fontSize), mid }] as const];
+    const lineWidths = lines.map((line) => line.right - line.left);
+    return [[cs.viewTransitionName, { size: parseFloat(cs.fontSize), mid, lineWidths }] as const];
   });
 
 /** 旧页截图前记下标题字号和文字位置（在 dropOffscreenTitles 之后调用） */
@@ -86,12 +107,17 @@ export function setTitleScale() {
   const old = pair && oldTitles.get(pair[0])!;
   const scale = pair && old ? pair[1].size / old.size : 1;
   const dy = pair && old ? pair[1].mid - old.mid * scale : 0;
+  const sameLines = pair && old && old.lineWidths.length > 0 &&
+    old.lineWidths.length === pair[1].lineWidths.length &&
+    old.lineWidths.every((width, i) => Math.abs(width * scale - pair[1].lineWidths[i]) <= 1);
   const root = document.documentElement.style;
   root.setProperty('--vt-title-scale', String(scale));
   root.setProperty('--vt-title-dy', `${dy}px`);
-  // 320ms 的变形：变大在 0–112ms 交接；变小在 240–320ms 交接，新图此时只比原尺寸大 1% 左右
-  root.setProperty('--vt-title-fade-delay', scale < 1 ? '240ms' : '0ms');
-  root.setProperty('--vt-title-fade-duration', scale < 1 ? '80ms' : '112ms');
+  // 只有排版一致的缩小过渡才延后交接；换行变化时尽早淡出错位的旧图。
+  const lateHandoff = sameLines && scale < 1;
+  root.setProperty('--vt-title-fade-delay', lateHandoff ? '240ms' : '0ms');
+  root.setProperty('--vt-title-fade-duration', lateHandoff ? '80ms' : '100ms');
+  oldTitles.clear();
 }
 
 const pageOf = (url: URL) => {

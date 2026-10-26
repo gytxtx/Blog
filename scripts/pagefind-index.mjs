@@ -27,6 +27,8 @@ if (!index) throw new Error(errors.join('\n'));
 
 for await (const rel of glob('**/*.html', { cwd: site })) {
   const html = await readFile(path.join(site, rel), 'utf8');
+  // 旧地址的跳转页不进搜索结果，避免同一篇文章出现两套地址。
+  if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(html)) continue;
   // 只处理标签之间的文本，属性和标签名不碰
   const content = html.replace(/>([^<]+)</g, (m, text) => (HAS_CJK.test(text) ? `>${segment(text)}<` : m));
   const res = await index.addHTMLFile({ sourcePath: rel, content });

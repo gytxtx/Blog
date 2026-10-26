@@ -21,7 +21,7 @@ const { posts, fullDate = false } = Astro.props;
         </a>
         <span class="cat">
           {p.data.categories.map((c) => (
-            <a href={`/blog/category/${categorySlug(c)}/`}>{c}</a>
+            <a href={`/category/${categorySlug(c)}/`}>{c}</a>
           ))}
         </span>
       </li>

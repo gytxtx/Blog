@@ -9,7 +9,7 @@ categories:
 readtime: 6
 comments: true
 ---
-去年我写过一篇 [Google Pixel 5 开启 VoLTE 实录](https://blog.gytxtx.top/blog/2025/10/18/Google-Pixel-5-VoLTE/)，记录了自己给 Pixel 5 开启国内 VoLTE 的过程。
+去年我写过一篇 [Google Pixel 5 开启 VoLTE 实录](/article/2025/10/google-pixel-5-volte/)，记录了自己给 Pixel 5 开启国内 VoLTE 的过程。
 
 最近重置手机之后，我又重新配置了一遍 Root 环境。
 

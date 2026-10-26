@@ -20,12 +20,12 @@
 | `src/components/PostCard.astro` | 列表卡片 |
 | `src/components/Pager.astro` | 分页控件 |
 | `src/components/Giscus.astro` | 评论组件 |
-| `src/pages/*.astro` 与 `src/pages/blog/**` 的 **markup 部分** | 各页面呈现 |
+| `src/pages/*.astro`、`src/pages/article/**`、`src/pages/archive/**`、`src/pages/category/**`、`src/pages/tags/**` 的 **markup 部分** | 各页面呈现 |
 
 ### 基础设施（重写时不要动；动了必须说明理由）
 
 - `src/content.config.ts`（zod schema = 内容契约）
-- `src/lib/posts.ts`（URL 规则、排序、摘要——URL 冻结承诺的实现）
+- `src/lib/posts.ts`（URL 规则、排序、摘要——年月地址与旧地址兼容的实现）
 - `src/pages/**` 的 **frontmatter 路由逻辑**：`getStaticPaths`、`params` 生成、`postUrl()` 调用。
   ⚠️ 这是唯一一层"表现与基础设施物理混居"的地方：路由逻辑逐字保留，下面的 markup 随便改。
 - `src/pages/og/[...slug].png.ts`、`src/pages/rss.xml.js`、`scripts/**`、`astro.config.mjs`
@@ -34,7 +34,8 @@
 
 ```ts
 PAGE_SIZE = 10
-postUrl(post): string          // "/blog/2025/03/29/First-Article/"
+postUrl(post): string          // "/article/2025/03/first-article/"（正文 slug 统一小写）
+legacyPostUrl(post): string    // "/blog/2025/03/29/First-Article/"（旧链接、评论标识）
 postOgPath(post): string       // "2025/03/29/First-Article"（og 图去前缀路径）
 getPosts(): Promise<Post[]>    // 非草稿，日期倒序
 getPostsForIndex(): Promise<Post[]>  // 置顶在前，其余日期倒序
@@ -66,12 +67,13 @@ readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
 2. **主题引导脚本**（Base.astro inline）：必须早于首帧执行、localStorage key `theme`
    取值 `auto|light|dark`、`astro:after-swap` 时重放、切换时 `document.dispatchEvent(new CustomEvent('themechange'))`
    （Giscus 靠这个事件同步主题）。
-3. **Pagefind**：head 引 `/pagefind/pagefind-ui.css|js`（构建后产物，dev 下 404 属正常）；
+3. **Pagefind**：生产构建的 head 引 `/pagefind/pagefind-ui.css|js`；dev 下不加载，弹窗显示预览提示。
    弹窗内保留 `#pagefind-search` 容器挂 PagefindUI。中文翻译对象可随意改文案。
 4. **OG 图约定**：`ogImage` 指向 `/og/{postOgPath(post)}.png`，非文章页用 `/og/default.png`。
    端点是基础设施，你只管传对路径。
-5. **Giscus**：`data-repo / data-repo-id / data-category / data-category-id /
-   data-mapping="pathname"` 逐字保留——评论按 pathname 绑定，动一个丢一片。
+5. **Giscus**：`data-repo / data-repo-id / data-category / data-category-id` 逐字保留。
+   `data-mapping="specific"` 的 `data-term` 使用 `legacyPostUrl(post).slice(1)`，
+   与旧版 pathname 的搜索词一致；不要改成新的年月地址，否则匹配不到既有评论。
 6. **GA**：gtag 片段（G-29NRC21SS3）保留在 head。
 7. **`.prose`**：Markdown 渲染的正文样式挂钩。已知内容事实：单换行会渲染为 `<br>`
    （remark-breaks）；admonition 已转成 `> **标题**` 引用块；脚注是 GFM 原生。
@@ -115,3 +117,7 @@ npm run dev          # 视觉走查
   （置顶在前），分页迁至 `/page/N/`；基线 URL `/blog/` 与 `/blog/page/2/` 以静态重定向
   （meta refresh + noindex）接到新位置，URL 门保持绿色。`/blog/` 前缀下的文章、归档、
   分类、标签、about、links 一概不动。标签入口移入主导航。
+- **2026-10-26 · 去掉导航页前缀，文章按年月归类**：标签、归档、分类、关于、友链移到根路径；
+  正式文章地址改为 `/article/YYYY/MM/slug/`。`/blog/` 下只保留旧地址的直接跳转，
+  不进入搜索或站点地图。评论标识和 OG 图片继续使用迁移前的日级路径。
+  正文 slug 统一转为小写，原大小写地址保留 301；不生成仅大小写不同的两份 HTML，避免 Windows 路径覆盖。

@@ -899,12 +899,32 @@ html[data-theme] .prose .expressive-code {
 }
 
 .footer-inner {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   gap: 1rem;
-  flex-wrap: wrap;
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.footer-primary,
+.footer-secondary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+}
+
+.footer-inner p {
+  margin: 0;
+}
+
+.footer-copyright {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.footer-secondary {
+  font-size: var(--fs-meta);
 }
 
 .footer-links {
@@ -913,12 +933,26 @@ html[data-theme] .prose .expressive-code {
   flex-wrap: wrap;
 }
 
-.footer-links a {
+.site-footer a {
   color: var(--muted);
 }
 
-.footer-links a:hover {
+.site-footer a:hover {
   color: var(--text);
+}
+
+.footer-secondary a {
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 0.25em;
+}
+
+.footer-secondary a:hover {
+  text-decoration-color: currentColor;
+}
+
+.footer-secondary a[rel~='license'] {
+  white-space: nowrap;
 }
 
 /* ===== 动效 ===== */
@@ -1023,15 +1057,21 @@ html[data-theme-switching] * {
   }
 }
 
-/* 列表标题 → 文章大标题的共享元素过渡稍放慢，看得出是同一个标题在变形 */
-::view-transition-group(*) {
+.entry h2[data-astro-transition-scope],
+.post-header h1[data-astro-transition-scope] {
+  view-transition-class: title;
+}
+
+/* 仅标题的共享元素过渡稍放慢，不影响顶栏 */
+::view-transition-group(*.title) {
   animation-duration: 320ms;
   animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* 截图从左上角缩放，跟标题文字的起点对齐；整页和顶栏的动画只有平移，不受影响 */
-::view-transition-old(*),
-::view-transition-new(*) {
+/* 保持截图原始宽度，避免容器宽度变化再次缩放字号；文字从左上角对齐 */
+::view-transition-old(*.title),
+::view-transition-new(*.title) {
+  inline-size: auto;
   transform-origin: 0 0;
 }
 
@@ -1296,7 +1336,13 @@ html[data-theme-switching] * {
     margin-top: 3rem;
   }
 
-  .footer-inner {
+  .footer-primary,
+  .footer-secondary {
     flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-primary {
+    gap: 1rem;
   }
 }

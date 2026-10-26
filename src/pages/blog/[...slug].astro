@@ -1,25 +1,18 @@
 ---
-import { render } from 'astro:content';
-import { getPosts, postUrl, readingTime } from '../../lib/posts';
-import Post from '../../layouts/Post.astro';
+import { getPosts, postUrl, legacyPostUrl } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
-  return posts.map((post, i) => ({
-    params: { slug: postUrl(post).replace(/^\/blog\//, '').replace(/\/$/, '') },
-    props: {
-      post,
-      prev: posts[i + 1] ?? null, // 更早一篇
-      next: posts[i - 1] ?? null, // 更新一篇
-    },
-  }));
+  return posts.flatMap((post) => {
+    const legacy = legacyPostUrl(post);
+    const monthly = legacy.replace(/^(\/blog\/\d{4}\/\d{2})\/\d{2}\//, '$1/');
+    // 日级旧地址和曾使用的 /blog/ 年月地址都直接到最终文章地址，避免连续跳转。
+    return [legacy, monthly].map((url) => ({
+      params: { slug: url.replace(/^\/blog\//, '').replace(/\/$/, '') },
+      props: { destination: postUrl(post) },
+    }));
+  });
 }
 
-const { post, prev, next } = Astro.props;
-const { Content, headings } = await render(post);
-const readtime = await readingTime(post);
+return Astro.redirect(Astro.props.destination, 301);
 ---
-
-<Post post={post} prev={prev} next={next} readtime={readtime} headings={headings}>
-  <Content />
-</Post>

@@ -8,7 +8,7 @@ import { authors } from '../data/authors';
 import { Image } from 'astro:assets';
 import FormattedDate from '../components/FormattedDate.astro';
 import { titleMorph, titleTransitionName } from '../lib/transitions';
-import { postUrl, postOgPath, categorySlug, excerpt, wordCount, formatWords, type Post } from '../lib/posts';
+import { postUrl, legacyPostUrl, postOgPath, categorySlug, excerpt, wordCount, formatWords, type Post } from '../lib/posts';
 
 interface Props {
   post: Post;
@@ -58,7 +58,7 @@ const jsonLd = {
     <header class="post-header" data-pagefind-body>
       <div class="meta" data-pagefind-ignore>
         <FormattedDate date={post.data.pubDate} />
-        {post.data.categories.map((c) => <a href={`/blog/category/${categorySlug(c)}/`}>{c}</a>)}
+        {post.data.categories.map((c) => <a href={`/category/${categorySlug(c)}/`}>{c}</a>)}
         <span>{formatWords(words)}</span>
         <span>{readtime} 分钟</span>
       </div>
@@ -112,7 +112,7 @@ const jsonLd = {
         }
       </nav>
 
-      {post.data.comments && <Giscus />}
+      {post.data.comments && <Giscus term={legacyPostUrl(post).slice(1)} />}
     </div>
 
     <aside class="post-side">

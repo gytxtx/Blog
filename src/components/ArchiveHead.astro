@@ -14,7 +14,7 @@ const years = [...new Set((await getPosts()).map((p) => p.data.pubDate.getUTCFul
   <nav class="years" aria-label="按年份">
     {
       years.map((y) => (
-        <a href={`/blog/archive/${y}/`} aria-current={y === year ? 'page' : undefined}>
+        <a href={`/archive/${y}/`} aria-current={y === year ? 'page' : undefined}>
           {y}
         </a>
       ))

@@ -1,10 +1,10 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import Base from '../../../../../layouts/Base.astro';
-import Pager from '../../../../../components/Pager.astro';
-import PostList from '../../../../../components/PostList.astro';
-import ArchiveHead from '../../../../../components/ArchiveHead.astro';
-import { getPosts, PAGE_SIZE } from '../../../../../lib/posts';
+import Base from '../../../../layouts/Base.astro';
+import Pager from '../../../../components/Pager.astro';
+import PostList from '../../../../components/PostList.astro';
+import ArchiveHead from '../../../../components/ArchiveHead.astro';
+import { getPosts, PAGE_SIZE } from '../../../../lib/posts';
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getPosts();
@@ -27,6 +27,6 @@ const { year } = Astro.params;
     <ArchiveHead year={Number(year)} />
     <h2 class="group-head">{year}<span>{page.total} 篇</span></h2>
     <PostList posts={page.data} />
-    <Pager current={page.currentPage} total={page.lastPage} base={`/blog/archive/${year}`} />
+    <Pager current={page.currentPage} total={page.lastPage} base={`/archive/${year}`} />
   </div>
 </Base>

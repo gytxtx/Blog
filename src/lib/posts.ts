@@ -4,8 +4,16 @@ export type Post = CollectionEntry<'blog'>;
 
 export const PAGE_SIZE = 10;
 
-/** 与线上 Material 站点一致的 URL 规则：日期取 front matter 的 date.created */
+/** 文章地址按年、月分层，slug 统一小写；日期取 front matter 的 pubDate（UTC）。 */
 export function postUrl(post: Post): string {
+  const d = post.data.pubDate;
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  return `/article/${y}/${m}/${post.data.slug.toLowerCase()}/`;
+}
+
+/** 迁移前的日级地址：用于旧链接跳转、既有评论标识和分享图地址。 */
+export function legacyPostUrl(post: Post): string {
   const d = post.data.pubDate;
   const y = d.getUTCFullYear();
   const m = String(d.getUTCMonth() + 1).padStart(2, '0');
@@ -14,7 +22,7 @@ export function postUrl(post: Post): string {
 }
 
 export function postOgPath(post: Post): string {
-  return postUrl(post).replace('/blog/', '').replace(/\/$/, '');
+  return legacyPostUrl(post).replace('/blog/', '').replace(/\/$/, '');
 }
 
 const byDateDesc = (a: Post, b: Post) =>
@@ -22,6 +30,13 @@ const byDateDesc = (a: Post, b: Post) =>
 
 export async function getPosts(): Promise<Post[]> {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const urls = new Map<string, string>();
+  for (const post of posts) {
+    const url = postUrl(post);
+    const previous = urls.get(url);
+    if (previous) throw new Error(`文章 URL 冲突：${url}（${previous} 与 ${post.id}）`);
+    urls.set(url, post.id);
+  }
   return posts.sort(byDateDesc);
 }
 
