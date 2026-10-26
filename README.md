@@ -23,9 +23,48 @@
 :::
 ```
 
+## GitHub 仓库卡片
+
+普通 `.md` 文章中，将带 `github-card` 标记的链接独占一段即可，前后留空行：
+
+```markdown
+[gytxtx/OpenJBD](https://github.com/gytxtx/OpenJBD "github-card")
+```
+
 链接文字为 `owner/repo` 时，简介自动获取；换成其他文字可作为自定义简介：
 
+```markdown
+[通过蓝牙连接 JBD 智能 BMS 的 Android 应用](https://github.com/gytxtx/OpenJBD "github-card")
+```
+
+### 多列仓库卡片
+
+使用 `:::github-cards` 将仓库链接组成网格，`columns` 设置列数：
+
+```markdown
+:::github-cards{columns=2}
+- [gytxtx/OpenJBD](https://github.com/gytxtx/OpenJBD)
+- [为 AI Agent 提供 Windows 桌面观察与交互能力](https://github.com/gytxtx/kagami-desktop)
+:::
+```
+
 容器外的普通链接、行内链接和代码块不转换。Astro 页面可直接使用同一组件：
+
+```astro
+---
+import GitHubRepoCard from '../components/GitHubRepoCard.astro';
+---
+
+<GitHubRepoCard repo="gytxtx/OpenJBD" />
+<GitHubRepoCard
+  repo="gytxtx/OpenJBD"
+  description="通过蓝牙连接 JBD 智能 BMS 的 Android 应用"
+  language="Kotlin"
+  stars={0}
+  forks={0}
+  fetchMetadata={false}
+/>
+```
 
 卡片的仓库名和链接在 HTML 中直接输出，无 JavaScript 时仍可访问。进入视口后获取公开 GitHub
 信息，补全简介、语言、Stars 和 Forks；同一仓库请求去重，成功结果在会话内缓存 30 分钟。

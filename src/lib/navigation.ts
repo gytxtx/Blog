@@ -6,6 +6,12 @@ document.addEventListener('astro:after-preparation', dropOffscreenTitles);
 document.addEventListener('astro:after-preparation', recordTitleSizes);
 document.addEventListener('astro:after-swap', dropOffscreenTitles);
 document.addEventListener('astro:after-swap', setTitleScale);
+// 普通 Markdown 的仓库卡片按需加载；自定义元素自动接管后续站内跳转的新实例。
+document.addEventListener('astro:page-load', () => {
+  if (document.querySelector('github-repo-card')) {
+    void import('./github-repo-card-client');
+  }
+});
 
 // ===== 站内跳转进度条 =====
 // 200ms 内完成的跳转不显示，避免每次点链接都闪一下。

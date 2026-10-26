@@ -1,0 +1,22 @@
+---
+import { renderGitHubRepoCard } from '../lib/github-repo-card.mjs';
+import '../styles/cards.css';
+import '../styles/github-repo-card.css';
+
+// 层级：仓库名为主、简介为辅、统计为补充；使用现有 text/muted/border/accent 令牌。
+// 单一整卡链接；1.25rem 内边距、0.75rem 组间距，不叠加阴影或新的配色系统。
+interface Props {
+  repo: string;
+  description?: string;
+  language?: string;
+  stars?: number;
+  forks?: number;
+  fetchMetadata?: boolean;
+}
+---
+
+<Fragment set:html={renderGitHubRepoCard(Astro.props)} />
+
+<script>
+  import '../lib/github-repo-card-client';
+</script>
