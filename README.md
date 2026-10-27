@@ -19,7 +19,7 @@ npm test              # 内容转换、目录、请求恢复等单元回归
 npm run test:browser  # 构建后运行 Chromium 浏览器回归
 npm run preview       # 预览构建产物
 npm run preview:worker # 构建后在本地 Workers 运行时预览
-npm run deploy        # 构建并部署到 Cloudflare Workers
+npm run deploy        # 先过发布门（check + 单测 + URL 门），再构建并部署到 Cloudflare Workers
 npm run check-urls    # URL 验收门：构建产物 vs 线上基线 diff
 ```
 
@@ -45,7 +45,9 @@ npm run check-urls    # URL 验收门：构建产物 vs 线上基线 diff
 ## 部署（Cloudflare Workers）
 
 站点以 Workers 静态资源方式托管：`wrangler.toml` 的 `assets.directory` 指向 `dist`，
-`npm run deploy` 会先构建再上传（首次使用先执行 `npx wrangler login`）。
+`npm run deploy` 会先跑 `predeploy`（`check` + `npm test` + `check-urls`）再构建上传
+（首次使用先执行 `npx wrangler login`）。浏览器回归 `npm run test:browser` 不挂在发布门上，
+改动动效或交互后单独跑。仓库暂不配置 CI 工作流：本站单人本地部署，重复一遍门禁只增加维护面。
 
 Cloudflare 自动拉取仓库构建时，构建命令使用 `npm run build`，部署命令使用
 `npx wrangler deploy`。`prebuild` 会检查 Git 历史：浅克隆自动执行

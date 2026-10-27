@@ -64,10 +64,10 @@ const href = (n: number) => (n === 1 ? `${root}/` : `${root}/page/${n}/`);
     min-height: var(--control-size);
   }
 
-  /* 禁用项：比正文淡，但仍看得清（约 3:1） */
+  /* 禁用项：与背景混合后的实色，浅色约 2.5:1、深色约 3.3:1；
+     WCAG 1.4.3 豁免不可交互组件，这里只保证「看得出是禁用」，不追求可读阈值。 */
 
   .pager .off {
-    color: var(--muted);
-    opacity: 0.6;
+    color: color-mix(in srgb, var(--muted) 60%, var(--bg));
   }
 </style>

@@ -39,3 +39,16 @@
 | 猫 | `2026-09-26_Cat.md` | `2026-09-26T20:37:30+08:00` | `48154cc` |
 
 其中《本站域名已更改》的 `289f4fe` 是文件重命名，《使用 Cloudflare DNS 轻松实现域名重定向》的 `4a5c654` 是文章和图片存储位置调整。两者保留旧仓库最后修订时间，未改写为本次迁移或构建时间。
+
+## 与 Astro 仓库提交历史的关系
+
+本文件的日期只来自 MkDocs 仓库；Astro 侧的「更新于」由 `src/lib/content-dates.mjs` 按已提交的内容签名历史计算，
+本文件作为迁移前的基线注入。因此本仓库的提交历史一旦重写（`git filter-repo`、squash、regroup 都算），
+两个后果必须当场复核：
+
+1. `scripts/ensure-git-history.mjs`（`prebuild` 门）能否取到完整历史——浅克隆或部分历史会让内容日期静默缺失；
+2. `src/data/content-date-baselines.json` 里的路径与 slug 是否仍与当前文章一一对应——重命名后地址公式
+   （`src/lib/post-url.mjs`）变了，基线键不匹配同样静默丢 `lastmod`，由 `e2e/metadata.spec.ts` 的站点地图断言兜住。
+
+`.git/` 内 2026-10-27 的两份重写对照记录（`history-rewrite-20261027.md`、`history-regroup-20261027-205549/`）属于当时的一次性产物，
+其中写的「新 HEAD」已不再是当前 HEAD 的祖先，只作过程留痕，不要当作基线依据。

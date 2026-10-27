@@ -16,6 +16,14 @@
   --fs-meta: 0.8125rem;
   --measure: 40rem;
   --wrap: 68rem;
+  /* 断点名册：媒体查询不能消费 var()，这组令牌只负责把断点命名集中在一处。
+     改一个断点要同步三处：本文件下方各 @media 的字面值、src/lib/breakpoints.ts（脚本侧）、
+     e2e/responsive.spec.ts 的视口清单。前两者的对应关系由 tests/breakpoints.test.mjs 核对。 */
+  --bp-mini: 480px;    /* 窄手机：标题与列表再收一档 */
+  --bp-compact: 640px; /* 手机：留白、字号与卡片改纵向 */
+  --bp-menu: 960px;    /* 导航折叠为菜单，横屏高度规则共用 */
+  --bp-measure: 1024px; /* 阅读宽度扩到 48rem */
+  --bp-toc: 1279px;    /* 侧栏目录让位给目录面板 */
   /* §1.5 / §3.2：空间只从这组尺度取值，语义令牌负责响应式变化。 */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -42,6 +50,8 @@
   --control-size: 2.75rem;
   --focus-width: 2px;
   --focus-offset: 4px;
+  /* 返回顶部按钮的出现位置；BackToTop 组件读取它，不再自带像素阈值。 */
+  --scroll-trigger: 320px;
   /* §3.2 / §3.6：列表内外间距分层，卡片内部统一节奏，紧凑列表保留较小行距。 */
   --entry-padding: var(--space-8);
   --entry-gap: var(--space-3);
@@ -63,6 +73,10 @@
   --motion-sweep: 500ms;
   --motion-handoff: 100ms;
   --motion-handoff-late: 80ms;
+  /* 站内跳转进度条的节奏；navigation.ts 读取这三个令牌，不再自带毫秒。 */
+  --motion-progress-delay: 200ms; /* 这么快完成的跳转不闪进度条 */
+  --motion-progress-step: 260ms;  /* 首段增长时长，其后每段加 --motion-progress-ramp */
+  --motion-progress-ramp: 90ms;
   --motion-distance: 8px;
   --motion-page-distance: 32px;
   --motion-nudge: 2px;

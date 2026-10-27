@@ -1,0 +1,621 @@
+{
+  "schemaVersion": 1,
+  "auditDate": "2026-10-27",
+  "mode": "full",
+  "commit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+  "previousBaseline": "0194993741c5172095c5305c05ef98661f2a7147",
+  "initialBaseline": "0194993741c5172095c5305c05ef98661f2a7147",
+  "findings": [
+    {
+      "id": "AUD-A11Y-001",
+      "title": "图片灯箱缺少可访问名称，焦点管理不完整",
+      "category": "accessibility",
+      "severity": "Medium",
+      "confidence": 99,
+      "status": "resolved",
+      "disposition": "Fix",
+      "locations": [
+        "src/lib/lightbox.ts:47",
+        "src/lib/lightbox.ts:59",
+        "src/lib/lightbox.ts:62"
+      ],
+      "evidence": "生产预览 Chromium 中入口和 dialog 无名称，打开后焦点仍在背景，Tab 后 Esc 关闭使 activeElement 为 BODY。",
+      "impact": "读屏难以识别用途，键盘阅读焦点丢失。",
+      "recommendation": "补图片和弹窗名称、初始焦点与正常关闭焦点恢复；导航销毁避免聚焦旧节点。",
+      "recommendationValidation": "Experimentally Verified",
+      "suggestedGuard": "浏览器断言入口/对话框名称和打开、关闭、换页焦点。",
+      "resolvedDate": "2026-10-27",
+      "resolvedIn": "working-tree",
+      "resolution": {
+        "summary": "为13张截图补alt，入口和dialog命名；初始焦点、双向Tab、inert及关闭/导航焦点清理。",
+        "verification": "57项浏览器回归含普通/减少动效灯箱测试及导航清理通过；Workers实际浏览器冒烟通过。",
+        "guard": "e2e/components.spec.ts：两项灯箱名称、焦点和双向Tab回归"
+      },
+      "lastVerifiedDate": "2026-10-27",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "reverification": "本轮运行时复验：dialog 名称「图片预览」、aria-modal=true、初始焦点 BUTTON.gclose、Esc 后焦点回到 A.glightbox、body overflow 还原。"
+    },
+    {
+      "id": "AUD-LIC-001",
+      "title": "分发字体子集时没有随附 OFL 许可证",
+      "category": "third-party-assets",
+      "severity": "Low",
+      "confidence": 98,
+      "status": "resolved",
+      "disposition": "Fix",
+      "locations": [
+        "scripts/subset-font.mjs:47",
+        "src/integrations/serif-subset.mjs:50",
+        "src/assets/fonts/"
+      ],
+      "evidence": "字体 name 表无许可字段，仓库和 public 无字体 OFL 文本；已核对上游 Sans/Serif OFL 条款2。",
+      "impact": "字体分发缺少随附许可材料。",
+      "recommendation": "保留原版权及 OFL 全文，放入随站点发布的 public/fonts。",
+      "recommendationValidation": "Experimentally Verified",
+      "suggestedGuard": "检查构建字体与许可文件同时存在。",
+      "resolvedDate": "2026-10-27",
+      "resolvedIn": "working-tree",
+      "resolution": {
+        "summary": "public/fonts发布两款字体原版权和OFL全文；文档说明许可归属。",
+        "verification": "官方许可全文比对、产物HTTP验收及Workers许可200检查通过。",
+        "guard": "e2e/metadata.spec.ts：字体及原版权/OFL随产物发布"
+      },
+      "lastVerifiedDate": "2026-10-27",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "reverification": "本轮两份 OFL 全文与字体说明仍在仓库，e2e/metadata.spec.ts 在 3 次全套中持续通过。"
+    },
+    {
+      "id": "AUD-DEP-001",
+      "title": "开发工具链锁定受公告影响的 undici",
+      "category": "dependencies",
+      "severity": "Low",
+      "confidence": 100,
+      "status": "resolved",
+      "disposition": "Fix",
+      "locations": [
+        "package-lock.json:8715",
+        "package-lock.json:6470",
+        "package-lock.json:6479"
+      ],
+      "evidence": "Wrangler→Miniflare 锁定 undici 7.29.1，命中 GHSA-xjj6-f33q-929c；npm audit --omit=dev 为0。",
+      "impact": "开发工具链存在已知可用性风险，未发现当前静态线上站点可利用链。",
+      "recommendation": "更新 Wrangler 及锁文件至包含 undici 7.30.1 或更高修复版的依赖链，再验证构建与 Workers 预览。",
+      "recommendationValidation": "Experimentally Verified",
+      "suggestedGuard": "定期扫描并按实际运行调用链评估依赖公告。",
+      "resolvedDate": "2026-10-27",
+      "resolvedIn": "working-tree",
+      "resolution": {
+        "summary": "Wrangler 4.153.0 → Miniflare 5.20261023.0-beta → undici 7.30.1。",
+        "verification": "npm ls、audit高危归零、生产audit为0、构建、dry-run和Workers实际本地运行通过。",
+        "guard": null
+      },
+      "lastVerifiedDate": "2026-10-27",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "reverification": "本轮 npm audit 输出 0 high / 0 critical，undici 告警已消失。"
+    },
+    {
+      "id": "AUD-SEO-001",
+      "title": "猫的页面与分享描述为空",
+      "category": "seo",
+      "severity": "Low",
+      "confidence": 100,
+      "status": "resolved",
+      "disposition": "Fix",
+      "locations": [
+        "src/layouts/Post.astro:32",
+        "src/content/blog/2026-09-26_Cat.md:12"
+      ],
+      "evidence": "正文首行 more 标记使 excerpt 返回空串，产物 description、og:description 和 JSON-LD description 为空。",
+      "impact": "缺少站方提供的搜索/分享摘要。",
+      "recommendation": "补显式 description 或为 SEO 单独回退空摘要，保留列表 more 语义。",
+      "recommendationValidation": "Experimentally Verified",
+      "suggestedGuard": "对公开文章最终 SEO 描述验收非空。",
+      "resolvedDate": "2026-10-27",
+      "resolvedIn": "working-tree",
+      "resolution": {
+        "summary": "猫补显式description，保留more列表语义。",
+        "verification": "所有公开文章SEO/OG/JSON-LD描述非空一致；猫首页无摘要的回归通过。",
+        "guard": "e2e/metadata.spec.ts：公开文章描述一致性与猫列表摘要语义"
+      },
+      "lastVerifiedDate": "2026-10-27",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "reverification": "本轮 metadata.spec.ts 的 sitemap 描述一致性断言持续通过。"
+    },
+    {
+      "id": "AUD-TOOL-002",
+      "title": "发布路径绕过仓库自带的全部检查",
+      "category": "testing",
+      "severity": "Medium",
+      "confidence": 95,
+      "status": "open",
+      "disposition": "Add Guard",
+      "firstSeenCommit": "0194993741c5172095c5305c05ef98661f2a7147",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "recurrence": true,
+      "locations": [
+        "package.json:12",
+        "package.json:14"
+      ],
+      "evidence": "\"deploy\": \"npm run build && wrangler deploy\"；check / test / check-urls / test:browser 均不在该链路；仓库无 .github 或其它 CI 目录。上一轮审计已提出同一建议，本轮仍未落地。",
+      "impact": "任何一次未经 check/test/URL 门的手工 deploy 都可能把破坏旧地址跳转、草稿泄漏或交互回归直接发布给读者。",
+      "recommendation": "最小改动：\"predeploy\": \"npm run check && npm test && npm run check-urls\"；如需覆盖浏览器回归再单独跑 test:browser。可选加一个 npm ci + check + test + build + check-urls 的 CI 工作流。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "predeploy 钩子或 CI 工作流；Playwright 可先只跑 Chromium。"
+    },
+    {
+      "id": "AUD-TYPE-001",
+      "title": "构建核心逻辑所在的 .mjs/.js 完全未纳入类型检查",
+      "category": "maintainability",
+      "severity": "Medium",
+      "confidence": 95,
+      "status": "open",
+      "disposition": "Fix",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "tsconfig.json:2",
+        "src/lib/content-dates.mjs",
+        "src/pages/rss.xml.js",
+        "src/lib/remark-*.mjs"
+      ],
+      "evidence": "tsconfig 仅 extends astro/tsconfigs/strict，其链上 allowJs:true 且从未设 checkJs；grep -rln \"@ts-check\" src scripts 返回 NONE。仓库共 14 个 .mjs/.js，其中 content-dates.mjs 262 行负责 Git 历史快照与更新时间签名，rss.xml.js 为公开端点。npm run check 报告「86 files / 0 errors」并不覆盖这些文件的函数体。",
+      "impact": "最关键且最复杂的构建期逻辑没有任何静态保障；改 posts.ts 的类型无法阻止 content-dates.mjs 里 URL/字段名漂移。",
+      "recommendation": "先给 src/lib/*.mjs、src/integrations/serif-subset.mjs 与 src/pages/rss.xml.js 逐文件加 // @ts-check（可增量、不必一次性开全局 checkJs），或直接把 rss.xml.js 改名为 rss.xml.ts。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "npm run check 即成为守卫；可再加一条 grep 断言这些文件首行含 @ts-check。"
+    },
+    {
+      "id": "AUD-ARCH-001",
+      "title": "文章 URL 公式存在两份实现且无一致性守卫",
+      "category": "architecture",
+      "severity": "Medium",
+      "confidence": 90,
+      "status": "open",
+      "disposition": "Fix",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "src/lib/posts.ts:10",
+        "src/lib/content-dates.mjs:248",
+        "scripts/migrate-content.mjs:140"
+      ],
+      "evidence": "posts.ts:10-16 postUrl 与 content-dates.mjs:248 各自拼接 `/article/${y}/${mm}/${slug.toLowerCase()}/`；astro.config.mjs 的 sitemap lastmod 用 getPageDates(url) 查表，键不匹配时静默返回 undefined 而非报错。",
+      "impact": "改 URL 规则只需漏改一处，站点仍可构建成功，但 sitemap lastmod 与「更新于」会静默丢失，属难发现的隐藏耦合。",
+      "recommendation": "让 content-dates.mjs 复用同一份 URL 规则（把纯函数提取到无 Astro 依赖的 .ts 模块），或至少补一条断言两个实现输出逐条相等的测试。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "tests/ 增加 postUrl 与 content-dates.all() 键集合一致性断言。"
+    },
+    {
+      "id": "AUD-STY-001",
+      "title": "断点既无令牌又在 CSS 与 JS 双写，与 DESIGN.md 承诺冲突",
+      "category": "maintainability",
+      "severity": "Medium",
+      "confidence": 92,
+      "status": "open",
+      "disposition": "Document",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "DESIGN.md:41",
+        "src/lib/header.ts:21",
+        "src/lib/header.ts:94",
+        "src/styles/tokens.css"
+      ],
+      "evidence": "DESIGN.md:41 写明「断点只修改令牌」，但 tokens.css 无任何断点令牌；实测 src/styles + 组件 + 布局共 17 处媒体查询、5 种裸值（640px×6、960px×4、1279px×4、480px×2、1024px×1），且 1279px 与 960px 在 src/lib/header.ts:21、:94 再各写一遍。",
+      "impact": "调整目录断点需同步 4 个文件；CSS 与 JS 断点一旦漂移，窄屏目录入口与侧栏会互相矛盾，而文档给出的解法（改令牌）实际不可执行。",
+      "recommendation": "CSS 媒体查询无法消费 var()，因此二选一：在 tokens.css 顶部建立断点登记表并在 DESIGN.md 把规则改写为「改断点须同步登记表中列出的 CSS 与 JS 位置」；或让 header.ts 从一条自定义属性读取断点，使 JS 只有一个来源。",
+      "recommendationValidation": "Needs Architecture Decision",
+      "suggestedGuard": "e2e 已有跨断点用例；可加一条 grep 断言 1279/960 只出现在登记位置。"
+    },
+    {
+      "id": "AUD-A11Y-002",
+      "title": "无跳转正文链接，SPA 换页后焦点落回 body",
+      "category": "accessibility",
+      "severity": "Medium",
+      "confidence": 95,
+      "status": "open",
+      "disposition": "Fix",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "src/layouts/Base.astro:107"
+      ],
+      "evidence": "实测生产预览：从首页点击文章卡片完成客户端换页后 document.activeElement === BODY；<main> 无 id 也无 tabindex；grep src/layouts src/components/Header.astro 无 skip-link。顶栏导航块在每页重复。",
+      "impact": "键盘与读屏用户无法跳过重复导航（WCAG 2.4.1 A 级），换页后也得不到新页面标题播报。",
+      "recommendation": "给 <main> 加 id 与 tabindex=\"-1\"，在 astro:after-swap 后把焦点交给它，并在 Header 之前补一条跳转正文链接。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "e2e 断言换页后 activeElement 为 main、首个 Tab 目标为 skip link。"
+    },
+    {
+      "id": "AUD-A11Y-003",
+      "title": "桌面目录侧栏不随章节跟踪自滚，高亮项跑出可见区",
+      "category": "ux",
+      "severity": "Medium",
+      "confidence": 95,
+      "status": "open",
+      "disposition": "Fix",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "src/lib/toc-tracking.ts:9",
+        "src/styles/toc.css:5",
+        "src/lib/header.ts:41"
+      ],
+      "evidence": "实测 1280×420 打开长文并滚到 75%：.toc 可视区 top=97 / height=291 / scrollHeight=453，带 aria-current 的活动项 top=432（已在侧栏下方），而 .toc.scrollTop 仍为 0。窄屏面板有居中逻辑（header.ts:41-43），宽屏侧栏没有。",
+      "impact": "长文阅读时目录高亮不可见，桌面端目录的核心价值（知道读到哪、可一键跳转）失效。",
+      "recommendation": "在 update() 里对活动项执行 scrollIntoView({ block: 'nearest' })，reduced-motion 时 behavior 用 auto；与窄屏面板共用同一实现避免二次漂移。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "e2e 在矮视口长文断言活动项位于 .toc 可视矩形内。"
+    },
+    {
+      "id": "AUD-UX-001",
+      "title": "禁用 JS 时移动端顶栏只剩一个可见但失效的汉堡按钮",
+      "category": "ux",
+      "severity": "Medium",
+      "confidence": 90,
+      "status": "open",
+      "disposition": "Fix",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "src/styles/header.css:209",
+        "src/styles/header.css:226",
+        "src/lib/header.ts:9"
+      ],
+      "evidence": "实测 375×812 且 JS 关闭：#site-nav 计算 display:none（仅 .site-header[data-nav-open] .nav 才 flex，而该属性只由 header.ts 写入），#nav-btn 仍存在且宽 44px；.site-header 内 6 个链接全部不可达，导航只剩页脚外链。",
+      "impact": "脚本被扩展或网络策略拦截时，手机用户面对一个点了没反应的控件，站内导航完全不可用；桌面端不受影响（导航直接可见）。",
+      "recommendation": "用 <details>/<summary> 或 :target 做无 JS 回退，或在无 JS 时隐藏按钮并保留 <noscript> 内的链接列表；不要保留可见但失效的控件。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "e2e 以 javaScriptEnabled:false 断言手机视口下五个导航目标可达。"
+    },
+    {
+      "id": "AUD-PERF-001",
+      "title": "GLightbox 打进全部文章页脚本，实际只有 4/16 篇需要",
+      "category": "performance",
+      "severity": "Medium",
+      "confidence": 90,
+      "status": "open",
+      "disposition": "Fix",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "src/lib/lightbox.ts:3",
+        "src/lib/article-behaviors.ts:2",
+        "src/layouts/Post.astro:15"
+      ],
+      "evidence": "lightbox.ts:3 静态 import GLightbox，经 article-behaviors.ts:2 进入 Post 脚本：实测 dist/_astro/Post.astro_..._-jU_FAOy.js = 58,472 B（gzip 16,333 B），占文章页 JS 总量约 88 KB 的三分之二；无正文图的《猫》等 12 篇 HTML 同样引用该文件。逐篇统计正文含图文章仅 4 篇。",
+      "impact": "四分之三的文章页多下载约 16 KB gzip 与一次解析；模块脚本为 defer，不阻塞首屏，代价集中在移动网络带宽与 INP。",
+      "recommendation": "把 GLightbox 改为在确认 links.length 之后 await import('glightbox')；灯箱 CSS 同理随 Post 保留即可。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "e2e 断言无图文章页不请求灯箱 chunk；构建后按体积阈值告警。"
+    },
+    {
+      "id": "AUD-TOOL-001",
+      "title": "预览服务在跑时 npm run test:browser 必然失败",
+      "category": "testing",
+      "severity": "Medium",
+      "confidence": 98,
+      "status": "open",
+      "disposition": "Fix",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "playwright.config.ts:19",
+        "playwright.config.ts:22"
+      ],
+      "evidence": "真实输出：npx playwright test → \"Error: http://127.0.0.1:4322 is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer.\"；reuseExistingServer 硬编码 false，无 process.env.CI 分支。上一轮审计正是因此改用系统临时外挂配置绕过。",
+      "impact": "验收清单里的 test:browser 在有后台预览（本仓库的常规工作状态）时不可用，容易被跳过或用旧产物代跑。",
+      "recommendation": "reuseExistingServer: !process.env.CI，并把端口做成可配置项以免本地预览与测试产物混用；同时确认复用的服务确实指向最新 dist。",
+      "recommendationValidation": "Experimentally Verified",
+      "suggestedGuard": "在 webServer 前加一次 dist 新鲜度校验，避免对着旧构建测绿。"
+    },
+    {
+      "id": "AUD-CFG-001",
+      "title": "构建期依赖被归入 devDependencies，使 --omit=dev 的安全结论失真",
+      "category": "dependencies",
+      "severity": "Low",
+      "confidence": 90,
+      "status": "open",
+      "disposition": "Fix",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "package.json:29",
+        "src/lib/content-dates.mjs:8",
+        "src/pages/og/[...slug].png.ts:4",
+        "src/integrations/serif-subset.mjs:13"
+      ],
+      "evidence": "content-dates.mjs:8-9 引入 js-yaml 与 typescript，og 端点:4-5 引入 satori 与 @resvg/resvg-js，serif-subset.mjs:13 引入 subset-font 且被 astro.config.mjs:13 消费——五者全部位于 devDependencies。因此 npm audit --omit=dev 报 0 漏洞并不代表构建链路干净：本轮 npm audit 的 2 条 moderate 正是构建期实际执行的 satori→fflate。",
+      "impact": "npm ci --omit=dev 后 astro build 直接失败；更关键的是上一轮把 --omit=dev=0 当作发布面干净的证据。",
+      "recommendation": "把这五个构建期依赖上移到 dependencies，或在 README/验收清单明确构建必须安装 dev 依赖，并改用 npm audit 全量结论评估构建供应链。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "CI 用 npm ci（含 dev）+ 全量 npm audit 作为一条检查项。"
+    },
+    {
+      "id": "AUD-MOTION-001",
+      "title": "动效与交互阈值以魔法数绕过令牌入口",
+      "category": "motion",
+      "severity": "Low",
+      "confidence": 85,
+      "status": "open",
+      "disposition": "Refactor",
+      "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "src/lib/navigation.ts:19",
+        "src/lib/navigation.ts:75",
+        "src/components/BackToTop.astro:71",
+        "src/lib/toc-tracking.ts:9"
+      ],
+      "evidence": "navigation.ts:19-20 硬编码 PROGRESS_DELAY=200 与 8 级步进，:75/:77 用 260+i*90 与 (i+1)*320 毫秒；BackToTop.astro:71 阈值 320；toc-tracking.ts:9 判定阈值 120，而实测 --header-height 为 65px、base.css:8 的 scroll-padding-top 为 81px，高亮比视觉锚点晚约 39px。同文件 navigation.ts:99 已经示范用 getComputedStyle 读真实时长。",
+      "impact": "调 --motion-page 或顶栏高度后，进度条节奏与目录高亮位置不再与视觉一致，属可预见的下一次返工。",
+      "recommendation": "沿用 navigation.ts:99 的做法，从 getComputedStyle 读取令牌值；目录阈值改用 scroll-padding 的实际数值。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "e2e/motion-tokens.spec.ts 已读令牌，可扩展为断言 JS 使用的时长与令牌一致。"
+    },
+    {
+      "id": "AUD-STY-002",
+      "title": "卡片列数令牌名与实际消费者不符",
+      "category": "maintainability",
+      "severity": "Low",
+      "confidence": 85,
+      "status": "open",
+      "disposition": "Fix",
+      "locations": [
+        "src/styles/cards.css:7",
+        "src/lib/remark-github-repo-card.mjs:52"
+      ],
+      "evidence": "cards.css:7 让 .content-cards / .github-repo-cards / .friend-grid 三种卡片共用 var(--github-card-columns, 2)，而该变量只由 remark-github-repo-card.mjs:52 注入。",
+      "impact": "在另两种卡片上想改列数会去找一个不存在的注入点。",
+      "recommendation": "更名 --card-columns 并在 remark 插件同步。",
+      "recommendationValidation": "Verified",
+      "suggestedGuard": "无"
+    },
+    {
+      "id": "AUD-STY-003",
+      "title": "分页禁用态注释声称约 3:1，实际约 2.6:1",
+      "category": "accessibility",
+      "severity": "Low",
+      "confidence": 80,
+      "status": "open",
+      "disposition": "Fix",
+      "locations": [
+        "src/components/Pager.astro:67"
+      ],
+      "evidence": "Pager.astro:67 注释「禁用项：比正文淡，但仍看得清（约 3:1）」，:70-71 实为 color: var(--muted) + opacity: .6；浅色下 --muted 为 #5f645c（实测对 #fbfaf7 为 5.81:1），按 60% 合成后约 2.6:1。",
+      "impact": "禁用控件本身豁免 1.4.3，问题在于注释给出的结论与实现不符，会误导后续调色的判断。",
+      "recommendation": "改用 color-mix(in srgb, var(--muted), var(--bg) 35%) 之类不依赖透明度的写法，并把注释改成实测值。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "无"
+    },
+    {
+      "id": "AUD-STY-004",
+      "title": "焦点环规则重复定义",
+      "category": "maintainability",
+      "severity": "Informational",
+      "confidence": 80,
+      "status": "open",
+      "disposition": "Fix",
+      "locations": [
+        "src/styles/cards.css:38",
+        "src/styles/base.css:101"
+      ],
+      "evidence": "base.css:101 的 :where(a, button, ...):focus-visible 已覆盖 a.custom-card，cards.css:38-41 又写了一条 outline/outline-offset 完全相同的规则。",
+      "impact": "改焦点样式需改两处，否则只有卡片跟着变。",
+      "recommendation": "删除 cards.css 中的重复规则。",
+      "recommendationValidation": "Verified",
+      "suggestedGuard": "无"
+    },
+    {
+      "id": "AUD-ARCH-002",
+      "title": "返回顶部未走统一页面生命周期协议",
+      "category": "architecture",
+      "severity": "Low",
+      "confidence": 75,
+      "status": "open",
+      "disposition": "Refactor",
+      "locations": [
+        "src/components/BackToTop.astro:75",
+        "THEME-GUIDE.md:114"
+      ],
+      "evidence": "BackToTop.astro:75 直接 document.addEventListener('astro:page-load')，而 THEME-GUIDE.md:114 规定普通页面功能经 page-lifecycle.ts 的 onPageLoad 注册；Toc.astro:37 为正例。实测未发现监听器泄漏。",
+      "impact": "协议漂移使「加一个每页功能该怎么做」失去唯一答案，后续组件容易照错模板。",
+      "recommendation": "改为 onPageLoad(mount) 并返回清理函数。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "tests/page-lifecycle.test.mjs 已覆盖协议；可加一条 grep 断言组件内不出现裸 astro:page-load（灯箱与导航等特例除外）。"
+    },
+    {
+      "id": "AUD-ARCH-003",
+      "title": "卡片样式同时从全局入口与组件导入",
+      "category": "maintainability",
+      "severity": "Low",
+      "confidence": 80,
+      "status": "open",
+      "disposition": "Document",
+      "locations": [
+        "src/styles/global.css:15",
+        "src/components/GitHubRepoCard.astro:3"
+      ],
+      "evidence": "global.css:15-16 已导入 cards.css 与 github-repo-card.css，GitHubRepoCard.astro:3-4 又各导入一次。Vite 去重后产物无重复字节，但「单一维护入口」的表述与实际不符。",
+      "impact": "维护者难以判断该改哪条路径，删除任一处都可能改变加载顺序。",
+      "recommendation": "二选一保留，并在 THEME-GUIDE.md 的样式归属表里写清约定。",
+      "recommendationValidation": "Needs Architecture Decision",
+      "suggestedGuard": "无"
+    },
+    {
+      "id": "AUD-A11Y-004",
+      "title": "深色主题未声明 color-scheme，原生控件仍按浅色渲染",
+      "category": "accessibility",
+      "severity": "Low",
+      "confidence": 90,
+      "status": "open",
+      "disposition": "Fix",
+      "locations": [
+        "src/lib/theme.ts:35",
+        "src/styles/base.css:6"
+      ],
+      "evidence": "grep -rn color-scheme src/ 只命中 theme-bootstrap.ts:16 的 prefers-color-scheme 查询；实测深色下 getComputedStyle(html).colorScheme === \"normal\"。站点常驻横向滚动条（代码块）与 Pagefind 输入框、任务列表复选框因此仍取 UA 浅色配色。",
+      "impact": "Windows 深色页面旁出现近白滚动条槽；表单原生控件与页面色调不一致。",
+      "recommendation": "在 theme.ts 生成的变量旁按 data-theme 输出 color-scheme: light|dark。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "e2e 断言两种主题下 html 的 color-scheme 计算值。"
+    },
+    {
+      "id": "AUD-SEO-002",
+      "title": "站点地图收录纯分页地址",
+      "category": "seo",
+      "severity": "Low",
+      "confidence": 80,
+      "status": "open",
+      "disposition": "Product Decision",
+      "locations": [
+        "astro.config.mjs:42",
+        "dist/sitemap-0.xml"
+      ],
+      "evidence": "实测 dist/sitemap-0.xml 含 https://blog.gytxtx.top/page/2/ 与 /archive/2025/page/2/；两页 canonical 自指且无 noindex。",
+      "impact": "分页页对爬虫无独立价值，稀释抓取预算；影响很小。",
+      "recommendation": "在 sitemap filter 中排除 /page/N/，或保留并接受。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "e2e/metadata.spec.ts 增加 sitemap 不含分页 URL 的断言。"
+    },
+    {
+      "id": "AUD-TEST-001",
+      "title": "公开产物端点零测试覆盖",
+      "category": "testing",
+      "severity": "Low",
+      "confidence": 90,
+      "status": "open",
+      "disposition": "Add Guard",
+      "locations": [
+        "src/pages/rss.xml.js",
+        "src/pages/og/[...slug].png.ts",
+        "src/pages/robots.txt.ts",
+        "src/pages/site.webmanifest.ts",
+        "src/middleware.ts"
+      ],
+      "evidence": "grep 全部 tests/ 与 e2e/ 未出现对 /rss.xml 内容、/og/ 产物、robots、manifest 或中间件的断言；metadata.spec.ts 只校验 sitemap 与 meta 一致性。这些端点同时属于 AUD-TYPE-001 的无类型检查范围。",
+      "impact": "RSS 全文、OG 分享图、爬虫规则可静默损坏而全套测试仍绿。",
+      "recommendation": "补两条低成本 e2e：/rss.xml 断言 content:encoded 含正文文本；/og/<某篇>.png 断言 PNG 魔数（可照搬 metadata.spec.ts 已有的 wOF2 检查写法）。",
+      "recommendationValidation": "Experimentally Verified",
+      "suggestedGuard": "上述两条 e2e。"
+    },
+    {
+      "id": "AUD-CFG-002",
+      "title": "Workers compatibility_date 停留在 15 个月前",
+      "category": "configuration",
+      "severity": "Low",
+      "confidence": 85,
+      "status": "open",
+      "disposition": "Investigate",
+      "locations": [
+        "wrangler.toml:2"
+      ],
+      "evidence": "compatibility_date = \"2025-07-31\"，本机 Wrangler 为 4.153.0 / workerd 2026-10-23。",
+      "impact": "静态资源模式下影响有限，但新语义（响应处理、URL 解析等）不会生效，日后加 Function 时容易踩旧行为。",
+      "recommendation": "前滚到近期日期并用 npm run preview:worker 验证重定向与响应头。",
+      "recommendationValidation": "Plausible",
+      "suggestedGuard": "无"
+    },
+    {
+      "id": "AUD-GIT-001",
+      "title": "历史重写残留与失效记录仍留在 .git",
+      "category": "repository-hygiene",
+      "severity": "Low",
+      "confidence": 85,
+      "status": "open",
+      "disposition": "Document",
+      "locations": [
+        ".git/history-regroup-20261027-205549/",
+        ".git/history-rewrite-20261027.md"
+      ],
+      "evidence": "重写记录第 4 行写「新 HEAD：f7ec288…」，但 git merge-base --is-ancestor f7ec288 HEAD 判定非祖先（其后又做过一次 regroup）；文档所称备份分支 codex/main-before-rewrite-20261027 已不存在，仅剩 codex/theme-before-squash-20261026。仓库体积指标健康：git count-objects -vH → size-pack 11.03 MiB、garbage 0，.git 共 14M。",
+      "impact": "不影响构建与发布，但下一位（含 AI）维护者会读到已失效的 HEAD 指引；由于内容更新时间来自 commit 元数据，重写与基线文件的关系值得一次正式记录。",
+      "recommendation": "清理 .git 内残留脚本与失效说明，在 CONTENT-DATE-BASELINES.md 补一条「历史重写后须重新校验基线」的说明。",
+      "recommendationValidation": "Verified",
+      "suggestedGuard": "e2e/content-dates.spec.ts 已覆盖日期呈现。"
+    },
+    {
+      "id": "AUD-MAINT-001",
+      "title": "一次性迁移脚本仍留在仓库",
+      "category": "maintainability",
+      "severity": "Low",
+      "confidence": 80,
+      "status": "open",
+      "disposition": "Document",
+      "locations": [
+        "scripts/migrate-content.mjs"
+      ],
+      "evidence": "脚本头部自述为一次性内容迁移，迁移已于 2026-10-26 完成（THEME-GUIDE.md:152 记录），仓库内无调用方、无测试。",
+      "impact": "审计与新人会把它当作仍在使用的入口；其 URL 拼接是 AUD-ARCH-001 的第三份副本。",
+      "recommendation": "移入 scripts/archive/ 并在 README 标注已停用，或删除。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "无"
+    },
+    {
+      "id": "AUD-DEP-002",
+      "title": "构建期 satori→fflate moderate 公告仍在（延续项）",
+      "category": "dependencies",
+      "severity": "Informational",
+      "confidence": 90,
+      "status": "accepted-risk",
+      "disposition": "Accept Risk",
+      "firstSeenCommit": "0194993741c5172095c5305c05ef98661f2a7147",
+      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "locations": [
+        "package.json:32"
+      ],
+      "evidence": "本轮 npm audit → 2 moderate（fflate 0.7.0-0.7.4，GHSA-px8p-9vwx-vf98，唯一路径 node_modules/fflate ← satori）；npm audit --omit=dev → 0。公告针对 unzipSync()，Satori 走 inflateSync()，未发现可达路径。audit fix --force 会降级到 satori@0.32.0，不应执行。",
+      "impact": "仅构建期使用本地可信字体/图标资源，无外部 ZIP 输入面。",
+      "recommendation": "保持现状，等 satori 上游升级；与 AUD-CFG-001 一并记录，避免再用 --omit=dev=0 代表构建链路干净。",
+      "recommendationValidation": "Verified",
+      "suggestedGuard": "CI 全量 npm audit 报告，不阻断。"
+    },
+    {
+      "id": "AUD-PERF-002",
+      "title": "pagefind-ui.css 作为全站 head 阻塞样式",
+      "category": "performance",
+      "severity": "Low",
+      "confidence": 85,
+      "status": "architecture-decision",
+      "disposition": "Architecture Decision",
+      "locations": [
+        "src/layouts/Base.astro:88",
+        "THEME-GUIDE.md:92",
+        "src/lib/search-control.ts"
+      ],
+      "evidence": "实测每个页面的 CSS 请求列表首项均为 pagefind-ui.css（14,482 B / gzip 2,610 B，72 条规则），而 Pagefind 的 JS 与结果 UI 按 THEME-GUIDE.md:92 约定在首次打开搜索时才加载。文档明确要求 head 保留该样式，属已知取舍。",
+      "impact": "多数会话从不打开搜索，仍付出一条渲染阻塞请求。",
+      "recommendation": "维持现约定，或在 search-control.ts 首次打开时注入该样式并同步修订 THEME-GUIDE.md 第 3 节；两种选择都需要一次明确决定。",
+      "recommendationValidation": "Needs Architecture Decision",
+      "suggestedGuard": "若改为按需注入，e2e 断言首次打开搜索后样式已生效且无未样式化弹窗。"
+    }
+  ],
+  "rejectedCandidates": [
+    {
+      "title": "e2e/components.spec.ts:280 目录跨断点用例确定性失败（子代理报 High/88）",
+      "verdict": "未复现",
+      "evidence": "隔离运行该用例 1/1 通过；以仓库真实并行度（fullyParallel:true、workers:2）连跑全套 3 次均 57/57 通过；components.spec 再连跑 5 次均 20/20 通过。产物新鲜度已核对：dist 构建时间晚于 src/lib/header.ts 与 Toc.astro 的修改时间。",
+      "note": "推测子代理的临时外挂配置指向了另一端口上的旧产物。HEAD 提交信息「57 项通过」与本轮实测一致。"
+    },
+    {
+      "title": "灯箱关闭动画期间换页可能永久挂死导航（子代理报 Medium/60）",
+      "verdict": "不成立",
+      "evidence": "读 node_modules/glightbox close()（第 2972 行 if (this.closing) return）与 src/lib/lightbox.ts:99-107：关闭动画结束仍会派发 close 事件并调用 resolveClose，destroyLightbox 的 await 因此会解除。实测 Esc 关闭后 body overflow 正常还原。"
+    },
+    {
+      "title": "ensure-git-history.mjs 浅克隆时硬失败属风险（子代理报 Medium/75）",
+      "verdict": "属故意的正确设计",
+      "evidence": "提交 0194993「修复浅克隆导致的历史记录丢失问题」即为引入该硬失败；构建不可复现时中止优于用残缺历史算出错误日期。若引入 CI，只需在流水线配 fetch-depth: 0，属文档项。"
+    },
+    {
+      "title": "全局 ~/.npmrc 的 allow-scripts 阻断 esbuild/workerd postinstall",
+      "verdict": "环境相关，非仓库缺陷",
+      "evidence": "仓库内无 .npmrc；该告警来自用户全局配置，默认 npm 环境不受影响。"
+    },
+    {
+      "title": "无 JS 时深色系统偏好得到浅色主题、正文图片单尺寸 WebP、GitHub 卡片失败静默保留原卡片、32.9 KB 全局 CSS 包",
+      "verdict": "合理取舍",
+      "evidence": "全局 CSS 实测 gzip 6.9 KB；正文图片均带 width/height 与 loading=lazy，实测 CLS 为 0；GitHub 卡片降级行为在 README 有说明。"
+    }
+  ]
+}

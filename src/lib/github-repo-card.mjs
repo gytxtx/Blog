@@ -1,6 +1,8 @@
+// @ts-check
 import { createRequire } from 'node:module';
 
 /** 接受 owner/repo 或 GitHub 仓库首页 URL；不接受其他站点、子页面或查询参数。 */
+/** @param {unknown} value */
 export function parseGitHubRepo(value) {
   let repo = String(value).trim();
   if (/^https:\/\//i.test(repo)) {
@@ -17,13 +19,16 @@ export function parseGitHubRepo(value) {
   return { owner, name, fullName: repo, url: `https://github.com/${repo}` };
 }
 
-const escape = (value) => String(value).replace(/[&<>"']/g, (ch) => ({
-  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-})[ch]);
+/** @type {Record<string, string>} */
+const escaped = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+/** @param {unknown} value */
+const escape = (value) => String(value).replace(/[&<>"']/g, (ch) => escaped[ch]);
 
 // 复用现有 Lucide 包生成静态 SVG，不把图标库发送给浏览器。
 const icons = createRequire(import.meta.url)('@iconify-json/lucide/icons.json').icons;
+/** @type {Record<'repo' | 'star' | 'fork' | 'arrow', string>} */
 const names = { repo: 'book-marked', star: 'star', fork: 'git-fork', arrow: 'arrow-up-right' };
+/** @param {'repo' | 'star' | 'fork' | 'arrow'} name */
 const icon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true">${icons[names[name]].body}</svg>`;
 
 /**
@@ -31,9 +36,10 @@ const icon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true">${icons[name
  */
 export function renderGitHubRepoCard({ repo, description, language, stars, forks, fetchMetadata = true }) {
   const data = parseGitHubRepo(repo);
+  /** @param {'star' | 'fork'} kind @param {number | undefined} value @param {string} label */
   const count = (kind, value, label) => {
-    const valid = Number.isSafeInteger(value) && value >= 0;
-    return `<span class="github-repo-card__metric" data-metric="${kind}"${valid ? '' : ' hidden'} aria-label="${valid ? value : ''} ${label}">${icon(kind)}<span data-value>${valid ? value.toLocaleString('en-US') : ''}</span></span>`;
+    const num = value !== undefined && Number.isSafeInteger(value) && value >= 0 ? value : undefined;
+    return `<span class="github-repo-card__metric" data-metric="${kind}"${num === undefined ? ' hidden' : ''} aria-label="${num ?? ''} ${label}">${icon(kind)}<span data-value>${num === undefined ? '' : num.toLocaleString('en-US')}</span></span>`;
   };
   return `<github-repo-card class="github-repo-card" data-repo="${escape(data.fullName)}" data-fetch="${fetchMetadata}"${description !== undefined ? ' data-custom-description' : ''}>
   <a class="github-repo-card__link custom-card" href="${escape(data.url)}" target="_blank" rel="noopener noreferrer" aria-label="在 GitHub 上查看 ${escape(data.fullName)}">

@@ -1,47 +1,80 @@
 {
   "schemaVersion": 1,
   "lastFullAuditDate": "2026-10-27",
-  "lastFullAuditCommit": "0194993741c5172095c5305c05ef98661f2a7147",
-  "lastAuditCommit": "0194993741c5172095c5305c05ef98661f2a7147",
-  "mode": "delta",
+  "lastFullAuditCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+  "lastAuditCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+  "previousFullAuditCommit": "0194993741c5172095c5305c05ef98661f2a7147",
+  "lastFixRound": {
+    "dates": "2026-10-27 → 2026-10-28",
+    "state": "working-tree（未提交）",
+    "report": "CODEBASE_AUDIT.md",
+    "priorReport": ".repository-audit/history/2026-10-27-full.md",
+    "priorLedger": ".repository-audit/history/2026-10-28-pre-fix-findings.json"
+  },
+  "mode": "full",
   "report": "CODEBASE_AUDIT.md",
+  "ledger": ".repository-audit/findings.json",
   "counts": {
     "Critical": 0,
     "High": 0,
     "Medium": 0,
-    "Low": 0
+    "Low": 1,
+    "Informational": 0
   },
+  "nonOpenStates": {
+    "resolved": 25,
+    "accepted-risk": 2
+  },
+  "recurrence": [],
   "checks": {
-    "typecheck": "passed:86 files",
-    "unitTests": "48/48",
-    "build": "passed",
-    "urlGate": "passed",
-    "browserTests": "57/57",
-    "productionAudit": "0 vulnerabilities",
-    "fullAudit": "0 high/critical; 2 moderate package records (fflate/satori)",
-    "workersDryRun": "passed",
-    "workersLocalSmoke": "passed"
+    "typecheck": "passed: 91 files, 0 errors/warnings/hints（src/lib|integrations + scripts 的 .mjs 已加 // @ts-check，见 AUD-TYPE-001）",
+    "unitTests": "50/50（新增 breakpoints.test.mjs 2 项）",
+    "browserTests": "65/65（新增 accessibility 4、metadata 2、motion-tokens 1；本机常驻预览下直接跑，见 AUD-TOOL-001）",
+    "build": "64 页；serif-subset 410 字符 / 85 KB；pagefind 索引生成",
+    "urlGate": "62 条旧地址跳转 + URL diff 0；sitemap 29 条地址、16 篇文章均带可解析 lastmod",
+    "productionAudit": "0 high / 0 critical；2 moderate（satori→fflate，见 AUD-DEP-002）",
+    "workerRuntime": "npx wrangler dev 4.153.0（workerd 2026-10-23）起服无告警：_redirects 124 条、_headers 5 条；/fonts 与 /og 响应头实测生效",
+    "gitHygiene": "工作树含本轮改动未提交；dist/.astro/.wrangler 已忽略；.git 14MiB、garbage 0"
   },
-  "browserExecution": "Reused 127.0.0.1:4322 production preview via temporary config without webServer; current test sources, including four added regressions.",
-  "sourceChanges": true,
-  "guardsAdded": [
-    "e2e/components.spec.ts：两项灯箱名称、焦点和双向Tab回归",
-    "e2e/metadata.spec.ts：字体及原版权/OFL随产物发布",
-    "e2e/metadata.spec.ts：公开文章描述一致性与猫列表摘要语义"
+  "runtimeEvidence": {
+    "server": "127.0.0.1:4322 生产预览（每轮改动后重新 npm run build）",
+    "viewports": "375×812 / 768×1024 / 1280×900 / 1440×560 / 1280×420",
+    "scenarios": "明暗与 color-scheme、减少动效、禁用 JS 导航、换页焦点与 skip link、矮视口目录可见、进度条令牌跟随、RSS 与 OG 产物、灯箱键盘（按需加载改造后复跑）",
+    "measurements": "文章页脚本块 58,472B → 2,926B（gzip 1,493B）；glightbox 独立 chunk 55,910B，文章 HTML 引用 0 次；分页禁用态对比度浅色 2.54:1 / 深色 3.30:1；pagefind-ui.css 14,482B（gzip 2,610B）"
+  },
+  "guardsPresent": [
+    "predeploy（check + npm test + check-urls）挂在 npm run deploy 之前",
+    "npm run check（91 文件，含 .mjs）",
+    "npm test（node --test 50 项，含 breakpoints 一致性）",
+    "prebuild ensure-git-history（浅克隆硬失败）",
+    "npm run build",
+    "npm run check-urls（URL 门）",
+    "npm run test:browser（Playwright 65 项）",
+    "e2e/metadata.spec.ts（SEO 描述 + sitemap lastmod + RSS 全文与绝对地址 + og:image 产物 + 字体与许可）",
+    "e2e/accessibility.spec.ts（skip link 与换页焦点、目录可见、color-scheme、禁用 JS 导航）",
+    "e2e/motion-tokens.spec.ts（进度条时长跟随令牌）",
+    "e2e/components.spec.ts（灯箱名称/焦点/Tab、顶栏目录、卡片外观）",
+    "e2e/content-dates.spec.ts（内容日期）"
+  ],
+  "guardsMissing": [
+    "Workers 层实际 301 与响应头无自动化断言（wrangler dev 不复现 _redirects，只靠首次部署抽查）",
+    "无 CI：门禁只在本地 npm run deploy 路径上生效"
+  ],
+  "decisionsRequired": [
+    "AUD-GIT-001：是否删除 .git 内的历史重写残留说明与备份目录（不可逆，未代为执行）"
   ],
   "limitations": [
-    "Chromium only",
-    "third-party services mocked in deterministic browser tests",
-    "Cloudflare account/DNS/CI settings not inspected",
-    "no controlled Core Web Vitals measurement"
+    "性能数字为本机回环测量，不代表真实网络的 LCP/INP；未运行 Lighthouse",
+    "Chromium only，未覆盖 Firefox/WebKit/Safari 真实渲染差异",
+    "未执行部署：新 compatibility_date 的线上行为与 126 条 301 只做了本地解析与响应头验证",
+    "对比度由脚本按 WCAG 相对亮度公式计算，未经第三方审计器复核",
+    "本轮改动全部未提交；验收针对工作树重新构建的产物"
   ],
-  "lastVerificationDate": "2026-10-27",
-  "worktreeChanges": true,
-  "resolvedFindingIds": [
-    "AUD-A11Y-001",
-    "AUD-LIC-001",
-    "AUD-DEP-001",
-    "AUD-SEO-001"
+  "history": [
+    { "date": "2026-10-27", "mode": "full", "commit": "0194993741c5172095c5305c05ef98661f2a7147", "report": ".repository-audit/history/2026-10-27-initial.md", "ledger": ".repository-audit/history/2026-10-27-initial-findings.json" },
+    { "date": "2026-10-27", "mode": "delta", "commit": "0194993741c5172095c5305c05ef98661f2a7147", "report": ".repository-audit/history/2026-10-27-fix-acceptance.md" },
+    { "date": "2026-10-27", "mode": "full", "commit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39", "report": ".repository-audit/history/2026-10-27-full.md", "ledger": ".repository-audit/history/2026-10-28-pre-fix-findings.json" },
+    { "date": "2026-10-28", "mode": "fix-round", "commit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39（工作树）", "report": "CODEBASE_AUDIT.md", "ledger": ".repository-audit/findings.json" }
   ],
-  "initialReport": ".repository-audit/history/2026-10-27-initial.md"
+  "repositoryMapVersion": 3
 }

@@ -1,5 +1,6 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { formatContentDate } from './content-date-display.mjs';
+import { articleUrl } from './post-url.mjs';
 export { categorySlug } from './post-groups';
 
 export type Post = CollectionEntry<'blog'>;
@@ -8,12 +9,8 @@ export const PAGE_SIZE = 10;
 
 /** 文章地址按年、月分层，slug 统一小写；日期取 front matter 的 pubDate（UTC）。 */
 export function postUrl(post: Post): string {
-  const d = post.data.pubDate;
-  const y = d.getUTCFullYear();
-  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
-  return `/article/${y}/${m}/${post.data.slug.toLowerCase()}/`;
+  return articleUrl(post.data.pubDate, post.data.slug);
 }
-
 /** 迁移前的日级地址：用于旧链接跳转、既有评论标识和分享图地址。 */
 export function legacyPostUrl(post: Post): string {
   const d = post.data.pubDate;

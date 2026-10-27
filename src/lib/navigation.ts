@@ -6,6 +6,10 @@ document.addEventListener('astro:after-preparation', dropOffscreenTitles);
 document.addEventListener('astro:after-preparation', recordTitleSizes);
 document.addEventListener('astro:after-swap', dropOffscreenTitles);
 document.addEventListener('astro:after-swap', setTitleScale);
+// 换页后把焦点交给正文容器：读屏得以播报新标题，跳转正文链接也有了落点。
+document.addEventListener('astro:after-swap', () => {
+  document.getElementById('main')?.focus({ preventScroll: true });
+});
 // 普通 Markdown 的仓库卡片按需加载；自定义元素自动接管后续站内跳转的新实例。
 document.addEventListener('astro:page-load', () => {
   if (document.querySelector('github-repo-card')) {
@@ -16,13 +20,19 @@ document.addEventListener('astro:page-load', () => {
 // ===== 站内跳转进度条 =====
 // 200ms 内完成的跳转不显示，避免每次点链接都闪一下。
 // 增长用缓出曲线配递减增量，先快后慢；到达 100% 后整体淡出。
-const PROGRESS_DELAY = 200;
+// 节奏数值全部来自 tokens.css 的 --motion-progress-* 与 --motion-page。
 const PROGRESS_STEPS = [12, 26, 42, 58, 71, 81, 88, 92];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const progressBar = () => document.querySelector<HTMLElement>('.nav-progress');
 const progressDuration = (ms: number) => (reducedMotion.matches ? 0 : ms);
 // getComputedStyle 将 CSS 时长（包括变量与 calc）统一序列化成秒。
 const transitionTime = (el: HTMLElement) => parseFloat(getComputedStyle(el).transitionDuration) * 1000;
+// 自定义属性保留书写形式，不会归一化，所以单位要自己认。
+const tokenTime = (name: string) => {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const value = parseFloat(raw);
+  return Number.isFinite(value) ? (raw.endsWith('ms') ? value : value * 1000) : 0;
+};
 let progressTimers: number[] = [];
 let progressVisible = false;
 let progressSignal: AbortSignal | null = null;
@@ -60,6 +70,9 @@ function startProgress(event: Event) {
   };
   if (signal.aborted) return cancel();
   signal.addEventListener('abort', cancel, { once: true });
+  const page = tokenTime('--motion-page');
+  const step = tokenTime('--motion-progress-step');
+  const ramp = tokenTime('--motion-progress-ramp');
   progressTimers.push(
     window.setTimeout(() => {
       const el = progressBar();
@@ -72,13 +85,13 @@ function startProgress(event: Event) {
           window.setTimeout(
             () => {
               const current = progressBar();
-              if (current) setProgress(current, value, `${260 + i * 90}ms`);
+              if (current) setProgress(current, value, `${step + i * ramp}ms`);
             },
-            (i + 1) * 320,
+            (i + 1) * page,
           ),
         );
       });
-    }, PROGRESS_DELAY),
+    }, tokenTime('--motion-progress-delay')),
   );
 }
 

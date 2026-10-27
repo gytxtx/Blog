@@ -1,7 +1,11 @@
 /**
  * 一次性内容迁移脚本：Material for MkDocs → Astro Content Collections
  *
- * 用法：node scripts/migrate-content.mjs <src-posts-dir> <dest-dir>
+ * 已停用：迁移于 2026-10-26 完成（见 THEME-GUIDE.md 的结构决策记录），仓库里没有调用方。
+ * 留档是为了复现旧站 front matter 的映射规则；不要再接回构建链路，
+ * 文章地址规则也只认 src/lib/post-url.mjs 这一份。
+ *
+ * 用法：node scripts/archive/migrate-content.mjs <src-posts-dir> <dest-dir>
  *
  * 处理内容：
  *  - 拍平 Material 的嵌套日期（date.created → pubDate，date.updated → updatedDate）
@@ -17,7 +21,7 @@ import { load as yamlLoad } from 'js-yaml';
 
 const [srcArg, destArg] = process.argv.slice(2);
 if (!srcArg || !destArg) {
-  console.error('用法：node scripts/migrate-content.mjs <src> <dest>');
+  console.error('用法：node scripts/archive/migrate-content.mjs <src> <dest>');
   process.exit(1);
 }
 const SRC = path.resolve(srcArg);

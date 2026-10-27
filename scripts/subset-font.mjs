@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * OG 字体子集化（一次性）：生成 GB2312 全集 + ASCII + 常用标点的字符集文件，
  * 并调用 fontTools（pyftsubset）裁剪 Noto Sans SC Regular（元信息）与 Noto Serif SC Bold（标题）。

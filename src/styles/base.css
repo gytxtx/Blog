@@ -86,6 +86,25 @@ a:hover {
   white-space: nowrap;
 }
 
+/* 跳转正文：未聚焦时停在视口上方，不占位也不产生动画；聚焦后压在顶栏之上。 */
+
+.skip-link {
+  position: fixed;
+  top: var(--space-2);
+  left: 50%;
+  z-index: 30;
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-meta);
+  transform: translate(-50%, calc(-100% - var(--space-4)));
+}
+
+.skip-link:focus-visible {
+  transform: translate(-50%, 0);
+}
+
 /* 系统设置了减少动效：关掉平滑滚动与主题切换过渡 */
 
 @media (prefers-reduced-motion: reduce) {

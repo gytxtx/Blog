@@ -1,5 +1,5 @@
 name = "blog"
-compatibility_date = "2025-07-31"
+compatibility_date = "2026-10-01"
 # 保留 workers.dev 入口，便于验证与回退。
 workers_dev = true
 

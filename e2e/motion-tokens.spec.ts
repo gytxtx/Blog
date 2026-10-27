@@ -40,6 +40,37 @@ test('调整标题动效令牌后，放大与缩小的淡变交接跟随总时�
   ]));
 });
 
+test('进度条的起笔延迟与逐段时长都来自令牌，不在脚本里另写毫秒', async ({ page }) => {
+  await page.addInitScript(() => {
+    const apply = () => {
+      const root = document.documentElement.style;
+      root.setProperty('--motion-progress-delay', '400ms');
+      root.setProperty('--motion-progress-step', '700ms');
+      root.setProperty('--motion-progress-ramp', '111ms');
+      root.setProperty('--motion-page', '250ms');
+    };
+    document.addEventListener('DOMContentLoaded', apply);
+    document.addEventListener('astro:after-swap', apply);
+  });
+  await page.goto('/');
+  await page.locator('.nav-progress').evaluate((element) => {
+    const seen: string[] = [];
+    Object.assign(window, { progressTransitions: seen });
+    new MutationObserver(() => seen.push(element.style.transition)).observe(element, { attributes: true, attributeFilter: ['style'] });
+  });
+  await page.route('**/tags/', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    await route.continue();
+  });
+  await page.getByRole('navigation', { name: '主导航' }).getByRole('link', { name: '标签', exact: true }).click();
+  const seen = () => page.evaluate(() => (window as unknown as { progressTransitions: string[] }).progressTransitions.join('\n'));
+  // 700 → 811 → 922：首段时长加上每段增量，节奏间隔用 --motion-page。
+  await expect.poll(seen).toContain('transform 700ms');
+  await expect.poll(seen).toContain('transform 811ms');
+  await expect.poll(seen).toContain('transform 922ms');
+  await expect(page).toHaveURL('/tags/');
+});
+
 test('慢导航完成后，进度条等待自定义扫光时长结束才淡出', async ({ page }) => {
   await page.goto('/');
   await page.locator('.nav-progress').evaluate((element) => {

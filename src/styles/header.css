@@ -227,6 +227,37 @@ html[data-mode='dark'] #theme-btn .i-dark {
     display: flex;
   }
 
+  /* 首帧脚本会在 <html> 写 data-theme；没有它说明脚本没跑，data-nav-open 永远不会有。
+     搜索 / 目录 / 主题三个控件都只由脚本驱动，和汉堡按钮一起隐藏，
+     导航则直接展开成换行的链接，保证入口可达。 */
+
+  html:not([data-theme]) .site-header {
+    position: static;
+  }
+
+  html:not([data-theme]) .header-inner {
+    flex-wrap: wrap;
+  }
+
+  html:not([data-theme]) #nav-btn,
+  html:not([data-theme]) .header-actions {
+    display: none;
+  }
+
+  html:not([data-theme]) .site-header .nav {
+    position: static;
+    display: flex;
+    flex-basis: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0;
+    max-height: none;
+    padding: var(--space-1) 0 var(--space-2);
+    border-bottom: none;
+    opacity: 1;
+    transform: none;
+  }
+
   .nav a {
     display: flex;
     align-items: center;

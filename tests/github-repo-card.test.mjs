@@ -76,7 +76,7 @@ test('仓库卡片组支持正整数列数、默认两列以及自定义简介',
     const attributes = columns === undefined ? '' : `{columns=${columns}}`;
     const result = await renderer.render(`:::github-cards${attributes}\n- [gytxtx/OpenJBD](https://github.com/gytxtx/OpenJBD)\n- [**桌面**交互工具](https://github.com/gytxtx/kagami-desktop)\n:::`);
     assert.ok(result.code.includes(`class="github-repo-cards" data-columns="${columns ?? 2}"`));
-    assert.ok(result.code.includes(`--github-card-columns:${columns ?? 2}`));
+    assert.ok(result.code.includes(`--card-columns:${columns ?? 2}`));
     assert.equal((result.code.match(/<github-repo-card /g) ?? []).length, 2);
     assert.equal((result.code.match(/data-custom-description/g) ?? []).length, 1);
     assert.ok(result.code.includes('桌面交互工具'));

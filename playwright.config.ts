@@ -19,6 +19,7 @@ export default defineConfig({
   webServer: {
     command: 'npm run preview -- --host 127.0.0.1 --port 4322',
     url: 'http://127.0.0.1:4322',
-    reuseExistingServer: false,
+    // 本地常驻预览是常规工作状态；CI 上仍要求独占端口，避免对着旧 dist 测绿。
+    reuseExistingServer: !process.env.CI,
   },
 });

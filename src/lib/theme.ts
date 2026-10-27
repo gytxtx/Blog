@@ -34,5 +34,7 @@ export const THEME_LABELS = { auto: '跟随系统', light: '浅色', dark: '深�
 
 export const themeCss = Object.entries(THEMES).map(([mode, theme]) => {
   const selector = `${mode === 'light' ? ':root, ' : ''}[data-theme='${theme.name}']`;
-  return `${selector} { ${Object.entries(theme.colors).map(([key, value]) => `--${key}: ${value};`).join(' ')} }`;
+  // color-scheme 让滚动条、表单控件和 UA 默认底色跟着配色走
+  const vars = [`color-scheme: ${mode};`, ...Object.entries(theme.colors).map(([key, value]) => `--${key}: ${value};`)];
+  return `${selector} { ${vars.join(' ')} }`;
 }).join('\n');

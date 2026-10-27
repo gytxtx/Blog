@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * 标题衬线字体自托管：/fonts/NotoSerifSC-Bold.woff2
  *
@@ -23,11 +24,22 @@ const SERIF_TEXT = /<(h[1-4]|b)\b[^>]*>([\s\S]*?)<\/\1>|<a class="brand"[^>]*>([
 
 const ascii = () => Array.from({ length: 0x7f - 0x20 }, (_, i) => String.fromCharCode(0x20 + i)).join('');
 
+/**
+ * 只声明本插件用到的钩子入参，避免把 Astro / Vite 的内部类型拖进构建配置。
+ * @typedef {object} ServerSetupOptions
+ * @property {{ middlewares: { use: (handler: (req: { url?: string }, res: { setHeader(name: string, value: string): void; end(chunk: Uint8Array): void }, next: () => void) => Promise<void>) => void } }} server
+ * @typedef {object} BuildDoneOptions
+ * @property {URL} dir
+ * @property {{ info(message: string): void }} logger
+ */
+
 export default function serifSubset() {
   return {
     name: 'serif-subset',
+    /** @type {{ 'astro:server:setup': (options: ServerSetupOptions) => void; 'astro:build:done': (options: BuildDoneOptions) => Promise<void> }} */
     hooks: {
       'astro:server:setup': ({ server }) => {
+        /** @type {Promise<Uint8Array> | undefined} */
         let font;
         server.middlewares.use(async (req, res, next) => {
           if (req.url !== ROUTE) return next();

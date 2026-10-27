@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * Pagefind 建索引（替代 `pagefind --site dist`）。
  *
@@ -19,6 +20,7 @@ const segmenter = new Intl.Segmenter('zh', { granularity: 'word' });
 const CJK_RUN = /[\u3400-\u9fff]+/g;
 const HAS_CJK = /[\u3400-\u9fff]/;
 
+/** @param {string} text */
 const segment = (text) =>
   text.replace(CJK_RUN, (run) => [...segmenter.segment(run)].map((s) => s.segment).join('\u200b'));
 

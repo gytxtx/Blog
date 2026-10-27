@@ -1,3 +1,4 @@
+// @ts-check
 /** 内容日期依赖完整 Git 历史；Cloudflare 浅克隆在构建前补全，本地完整仓库无需联网。 */
 import { execFileSync } from 'node:child_process';
 

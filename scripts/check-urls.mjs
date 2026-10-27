@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * URL 验收门：对比构建产物（dist）与线上基线（urls-baseline-raw.xml）。
  * 规则：基线中的每个 URL 必须存在（旧地址保留跳转）；
@@ -30,6 +31,7 @@ const EXPLAINED_MISSING = new Set([
   '/blog/2025/12/26/Site-Announcement/',
 ]);
 
+/** @param {string} dir @returns {string[]} */
 function walk(dir) {
   const out = [];
   for (const name of fs.readdirSync(dir, { withFileTypes: true })) {

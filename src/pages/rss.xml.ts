@@ -12,11 +12,11 @@ async function getContainer() {
 }
 
 /** 阅读器不会拼接站点域名，正文里的站内地址要写成绝对地址 */
-function absolutize(html, site) {
-  const absolute = (url) => (url.startsWith('/') && !url.startsWith('//') ? new URL(url, site).href : url);
+function absolutize(html: string, site: string) {
+  const absolute = (url: string) => (url.startsWith('/') && !url.startsWith('//') ? new URL(url, site).href : url);
   return html
-    .replace(/\b(src|href|poster)="([^"]*)"/g, (_, attr, url) => `${attr}="${absolute(url)}"`)
-    .replace(/\bsrcset="([^"]*)"/g, (_, value) => {
+    .replace(/\b(src|href|poster)="([^"]*)"/g, (_match, attr: string, url: string) => `${attr}="${absolute(url)}"`)
+    .replace(/\bsrcset="([^"]*)"/g, (_match, value: string) => {
       const candidates = value.split(',').map((part) => {
         const [url, ...descriptor] = part.trim().split(/\s+/);
         return [absolute(url), ...descriptor].join(' ');
@@ -25,7 +25,7 @@ function absolutize(html, site) {
     });
 }
 
-export async function GET(context) {
+export async function GET() {
   const posts = await getPosts();
   const astroContainer = await getContainer();
   const items = await Promise.all(
@@ -37,7 +37,7 @@ export async function GET(context) {
         pubDate: post.data.pubDate,
         description: post.data.description ?? excerpt(post, 200),
         link: postUrl(post),
-        content: absolutize(html, context.site),
+        content: absolutize(html, SITE.url),
         categories: [...post.data.categories, ...post.data.tags],
       };
     }),
@@ -46,7 +46,7 @@ export async function GET(context) {
   return rss({
     title: SITE.title,
     description: SITE.description,
-    site: context.site,
+    site: new URL(SITE.url),
     items,
     customData: '<language>zh-CN</language>',
   });

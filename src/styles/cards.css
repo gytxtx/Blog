@@ -4,7 +4,7 @@
 .github-repo-cards,
 .friend-grid {
   display: grid;
-  grid-template-columns: repeat(var(--github-card-columns, 2), minmax(0, 1fr));
+  grid-template-columns: repeat(var(--card-columns, 2), minmax(0, 1fr));
   gap: var(--card-grid-gap);
   margin: var(--space-6) 0;
   padding: 0;
@@ -35,10 +35,7 @@ a.custom-card:hover {
   color: var(--text);
   text-decoration: none;
 }
-.custom-card:focus-visible {
-  outline: var(--focus-width) solid var(--accent);
-  outline-offset: var(--focus-offset);
-}
+/* 焦点环统一由 base.css 的 :focus-visible 规则提供，这里不再重复。 */
 @media (prefers-reduced-motion: no-preference) {
   a.custom-card { transition: border-color var(--motion-fast) var(--ease-ui); }
 }

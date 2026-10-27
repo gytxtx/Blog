@@ -1,6 +1,8 @@
 import { initSearch } from './search-control';
 import { initThemeButton } from './theme-control';
 import { onPageLoad } from './page-lifecycle';
+import { scrollTocItemIntoView } from './toc-tracking';
+import { BREAKPOINTS } from './breakpoints';
 
 const navOpen = () => !!document.querySelector('.site-header[data-nav-open]');
 function setNav(open: boolean) {
@@ -18,7 +20,7 @@ onPageLoad((root) => {
   const tocPanel = root.getElementById('header-toc');
   const controller = new AbortController();
   const options = { signal: controller.signal };
-  const narrow = window.matchMedia('(max-width: 1279px)');
+  const narrow = window.matchMedia(`(max-width: ${BREAKPOINTS.toc}px)`);
   const closeToc = (restoreFocus = false) => {
     if (!tocPanel || !tocButton) return;
     tocPanel.hidden = true;
@@ -37,10 +39,7 @@ onPageLoad((root) => {
       const current = tocPanel.querySelector<HTMLAnchorElement>('a[aria-current="location"]')
         ?? tocPanel.querySelector<HTMLAnchorElement>('a');
       current?.focus({ preventScroll: true });
-      if (current) {
-        const offset = current.getBoundingClientRect().top - tocPanel.getBoundingClientRect().top;
-        tocPanel.scrollTop += offset - (tocPanel.clientHeight - current.offsetHeight) / 2;
-      }
+      if (current) scrollTocItemIntoView(tocPanel, current);
     };
     tocPanel.onclick = (event) => {
       const link = (event.target as Element).closest<HTMLAnchorElement>('a');
@@ -91,7 +90,7 @@ document.addEventListener('click', (event) => {
   if (navOpen() && (!target.closest('.site-header') || target.closest('#search-btn'))) setNav(false);
 });
 // 横竖屏跨过折叠断点后，菜单从收起状态开始，避免返回窄屏时意外遮挡正文。
-window.matchMedia('(max-width: 960px)').addEventListener('change', () => setNav(false));
+window.matchMedia(`(max-width: ${BREAKPOINTS.menu}px)`).addEventListener('change', () => setNav(false));
 document.addEventListener('keydown', (event) => {
   if (event.key !== 'Escape' || !navOpen()) return;
   setNav(false);

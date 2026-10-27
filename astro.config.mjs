@@ -41,7 +41,12 @@ export default defineConfig({
     }),
     sitemap({
       // /blog/ 下只保留旧地址跳转，站点地图不再发布这些地址。
-      filter: (page) => !new URL(page).pathname.startsWith('/blog/'),
+      // 纯分页地址（/page/N/、/archive/YYYY/page/N/）也不发布：正文条目已由首页与
+      // 归档页的分页链路串通，抓取不依赖站点地图，收录这些近重复页只会摊薄抓取预算。
+      filter: (page) => {
+        const pathname = new URL(page).pathname;
+        return !pathname.startsWith('/blog/') && !/\/page\/\d+\/?$/.test(pathname);
+      },
       serialize(item) {
         const { modified } = getPageDates(new URL(item.url).pathname);
         return { ...item, lastmod: modified?.toISOString() };
@@ -57,13 +62,17 @@ export default defineConfig({
     // Astro 7 默认处理器是 Sätteri，remark 插件要挂在 unified() 处理器上。
     // remark-breaks 对应 Material 的 nl2br 扩展（单个换行渲染为 <br>）
     // remark-reading-stats 往 remarkPluginFrontmatter 写字数 words 与阅读时间 minutes
-    processor: unified({ remarkPlugins: [
-      remarkDirective,
-      remarkNoLegacyIcons,
-      remarkBreaks,
-      remarkReadingStats,
-      [remarkContentCards, { site }],
-      remarkGitHubRepoCard,
-    ] }),
+    // 本站插件按实际读取到的最小 AST 形状标注（src/lib/remark-mdast.mjs），
+    // 与 unified 的 Root/VFile 完整类型不互通，行为由 tests/*.test.mjs 覆盖。
+    processor: unified({
+      remarkPlugins: /** @type {any[]} */ ([
+        remarkDirective,
+        remarkNoLegacyIcons,
+        remarkBreaks,
+        remarkReadingStats,
+        [remarkContentCards, { site }],
+        remarkGitHubRepoCard,
+      ]),
+    }),
   },
 });

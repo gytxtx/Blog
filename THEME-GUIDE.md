@@ -38,12 +38,13 @@
 ### 内容与路由
 
 - `src/content.config.ts`（zod schema = 内容契约）
-- `src/lib/posts.ts`（URL 规则、排序、摘要——年月地址与旧地址兼容的实现）
+- `src/lib/post-url.mjs`（文章年月地址公式 `/article/YYYY/MM/slug/` 的唯一来源）
+- `src/lib/posts.ts`（排序、摘要；`postUrl` 转调 `post-url.mjs`——旧地址兼容仍在同一模块）
 - `src/lib/post-groups.ts` 提供按 UTC 年份、分类、标签分组的纯查询。保持组内输入顺序；
   分类用小写地址、首次显示名，标签保留大小写并按数量与名称排序。
 - `src/pages/**` 的 frontmatter 保留 `getStaticPaths`、`params` 和 Astro 分页调用；
   查询规则交给 `post-groups.ts`，归档呈现交给 `Archive.astro`。
-- `src/pages/og/[...slug].png.ts`、`src/pages/rss.xml.js`、`scripts/**`、`astro.config.mjs`
+- `src/pages/og/[...slug].png.ts`、`src/pages/rss.xml.ts`、`scripts/**`、`astro.config.mjs`
 
 站名和规范域名集中在 `src/consts.ts` 的 `SITE`；页面标题、Astro 构建配置、
 `site.webmanifest.ts` 和 `robots.txt.ts` 从这里读取。Manifest 与 OG 图片同时消费 `THEMES` 配色。
@@ -89,9 +90,13 @@ readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
 2. **主题引导脚本**（`theme-bootstrap.ts`，由 Base 输出为经典内联脚本）：必须早于首帧执行、localStorage key `theme`
    取值 `auto|light|dark`、`astro:before-swap` 时预先应用到新文档、切换时 `document.dispatchEvent(new CustomEvent('themechange'))`
    （Giscus 靠这个事件同步主题）。
+   每套主题同时输出 `color-scheme`，滚动条与原生控件随明暗切换；`<html>` 缺少 `data-theme`
+   因此等价于「脚本没跑」，header.css 靠这个判别给出无脚本导航回退，两者都不要拆。
 3. **Pagefind**：生产构建的 head 保留 `/pagefind/pagefind-ui.css`；JS 和 UI 由
    `src/lib/search-control.ts` 在首次打开搜索时加载，必须保留加载、失败重试和关闭焦点恢复。
    dev 弹窗显示预览提示；保留 `#pagefind-search` 容器挂 PagefindUI。
+   head 阻塞样式是明确取舍（2026-10-27 复核）：该文件 2.6 KB gzip、只描述搜索面板外观，
+   换来的是首次打开不出现无样式闪烁；不要改成打开时再注入。
 4. **OG 图约定**：`ogImage` 指向 `/og/{postOgPath(post)}.png`，非文章页用 `/og/default.png`。
    端点是基础设施，你只管传对路径。
 5. **Giscus**：`data-repo / data-repo-id / data-category / data-category-id` 逐字保留。
@@ -100,6 +105,10 @@ readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
 6. **GA**：gtag 片段（G-29NRC21SS3）保留在 head。
 7. **`.prose`**：Markdown 渲染的正文样式挂钩。已知内容事实：单换行会渲染为 `<br>`
    （remark-breaks）；admonition 已转成 `> **标题**` 引用块；脚注是 GFM 原生。
+8. **键盘入口**：Base 在顶栏之前输出 `.skip-link`（`href="#main"`），`<main id="main" tabindex="-1">`；
+   `navigation.ts` 在 `astro:after-swap` 后把焦点交给 `#main`，读屏才会播报新页标题。
+   桌面目录的活动项用 `scrollIntoView({ block: 'nearest' })` 留在可见区，判定线读 `html` 的
+   `scroll-padding-top`，不再自带像素。三项都由 `e2e/accessibility.spec.ts` 守着。
 8. **图标**：`astro-icon` 已在 `astro.config.mjs` 注册，Lucide 全集可用。用法：
    `import { Icon } from 'astro-icon/components'` → `<Icon name="lucide:sun" size={24} />`，
    构建期内联为 SVG、继承 `currentColor`（明暗模式免处理）。本地自定义图标放
@@ -153,3 +162,13 @@ Giscus 通过自定义元素管理加载/销毁，保留原 repo/category/term �
   正式文章地址改为 `/article/YYYY/MM/slug/`。`/blog/` 下只保留旧地址的直接跳转，
   不进入搜索或站点地图。评论标识和 OG 图片继续使用迁移前的日级路径。
   正文 slug 统一转为小写，原大小写地址保留 301；不生成仅大小写不同的两份 HTML，避免 Windows 路径覆盖。
+- **2026-10-27 · 地址公式收进 `post-url.mjs`**：同一公式原本抄写在 `posts.ts`、`content-dates.mjs`
+  两处（站点地图经由前者），漏改一处仍能构建成功，只是 `lastmod` 与页面「更新于」静默丢失。
+  现在两处都转调 `articleUrl()`，守卫是 `e2e/metadata.spec.ts` 的站点地图 `lastmod` 可解析断言。
+- **2026-10-27 · 站点地图只发布稳定入口**：`astro.config.mjs` 的 sitemap filter 排除 `/blog/`
+  跳转页与纯分页地址（`/page/N/`、`/archive/YYYY/page/N/`）。分页条目已由首页和归档页的
+  分页链路串通，抓取不依赖站点地图；发布这些近重复页只会摊薄抓取预算。
+- **2026-10-27 · 构建脚本纳入类型检查**：`src/lib/*.mjs`、`src/integrations/*.mjs`、`scripts/*.mjs`
+  统一加 `// @ts-check`，由 `npm run check` 覆盖。remark 插件共用 `src/lib/remark-mdast.mjs`
+  声明的最小 AST 形状，因此 `astro.config.mjs` 注册处需要一次 `any[]` 收敛；
+  插件的实际输入输出仍以 `tests/*.test.mjs` 为准。

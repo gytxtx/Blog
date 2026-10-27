@@ -1,6 +1,5 @@
 // glightbox 图片灯箱：正文图片自动包一层链接（等价于 Material 的 glightbox 插件）
 import type { TransitionBeforePreparationEvent } from 'astro:transitions/client';
-import GLightbox from 'glightbox';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const lightboxEffects = () => ({
@@ -9,7 +8,7 @@ const lightboxEffects = () => ({
   slideEffect: reducedMotion.matches ? 'none' : 'slide',
 });
 // GLightbox 的类型声明漏掉了运行时提供的 settings。
-type Lightbox = ReturnType<typeof GLightbox> & { settings: ReturnType<typeof lightboxEffects> };
+type Lightbox = ReturnType<typeof import('glightbox')> & { settings: ReturnType<typeof lightboxEffects> };
 let lightbox: Lightbox | null = null;
 let lightboxClosed = Promise.resolve();
 let resolveClose: (() => void) | undefined;
@@ -41,7 +40,7 @@ reducedMotion.addEventListener('change', () => {
   if (lightbox) Object.assign(lightbox.settings, lightboxEffects());
 });
 
-document.addEventListener('astro:page-load', () => {
+document.addEventListener('astro:page-load', async () => {
   document.querySelectorAll<HTMLImageElement>('.post-main .prose > img, .post-main .prose p > img').forEach((img, index) => {
     if (img.closest('a')) return;
     const a = document.createElement('a');
@@ -57,6 +56,9 @@ document.addEventListener('astro:page-load', () => {
   });
   const links = [...document.querySelectorAll<HTMLAnchorElement>('.glightbox')];
   if (!links.length) return;
+  const { default: GLightbox } = await import('glightbox');
+  // 等模块期间可能已经换页；新文档会自己再执行一次，旧文档不再挂载。
+  if (!links[0]?.isConnected) return;
   const instance = GLightbox({
     selector: '.glightbox',
     ...lightboxEffects(),

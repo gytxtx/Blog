@@ -1,94 +1,86 @@
-# 站点审计与修复验收
+# 站点全面审计（UI/UX · 动效 · 架构 · 样式 · 可维护性）
 
-日期：2026-10-27（UTC+8）
+## 审计元数据
 
-基准提交：`0194993741c5172095c5305c05ef98661f2a7147`，修复位于当前未提交工作树。
+- 审计日期：2026-10-27（full 复审计，基准提交 `766e2a6`）
+- 修复轮次：2026-10-27 → 2026-10-28，按报告的「建议优先级」顺序执行
+- 当前状态：**全部改动留在工作树，尚未提交**；本轮验收针对工作树内容重新构建后测得
+- 上一轮完整报告：[.repository-audit/history/2026-10-27-full.md](.repository-audit/history/2026-10-27-full.md)（发现清单原样保留，含被驳回候选）
+- 完整台账：[.repository-audit/findings.json](.repository-audit/findings.json)　·　修复前线台账：[.repository-audit/history/2026-10-28-pre-fix-findings.json](.repository-audit/history/2026-10-28-pre-fix-findings.json)
 
-模式：针对上次 Full 审计四项问题的修复与 Delta 验收。
+## 执行摘要
 
-## 当前结论
+上一轮报出 22 项待处理（0 Critical / 0 High / 9 Medium / 12 Low / 1 Informational）。本轮之后：
 
-原审计四项问题均已修复并验证，当前台账 **0 项待处理问题**。
-原始报告和问题证据保存在 [.repository-audit/history/2026-10-27-initial.md](.repository-audit/history/2026-10-27-initial.md)，没有删除历史发现。
-本次未提交、未部署。现有 `127.0.0.1:4322` 预览服务继续保留，本次临时启动的 Workers 本地服务已关闭。
+| 状态 | 数量 | 说明 |
+| --- | --- | --- |
+| 已修复 | 21 | 全部经命令或浏览器实测验收，落点见下表 |
+| 接受风险 | 2 | AUD-DEP-002（satori→fflate，延续项）、AUD-PERF-002（搜索样式阻塞，本轮定为维持） |
+| 仍开放 | 1 | AUD-GIT-001 的 `.git` 残留删除需要你确认，不属可逆操作，未代为执行 |
 
-## 修复结果
+验收命令全绿：`npm run check` 91 文件 0 诊断 · `npm test` 50/50 · `npm run build` 64 页 · `npm run check-urls` 62 条旧地址跳转 + URL diff 0 · `npx playwright test` **65/65**（比上轮多 8 项新回归）· `npx wrangler dev` 本地启动，124 条跳转与 5 条响应头规则解析无告警。
 
-| 稳定 ID | 原级别 | 状态 | 修复及验证 |
-| --- | --- | --- | --- |
-| AUD-A11Y-001 | Medium | resolved | 灯箱入口及 dialog 有名称，图片描述传给大图；打开聚焦关闭按钮；Tab/Shift+Tab 双向循环、背景 inert；Esc/点击关闭恢复原入口焦点；导航销毁不恢复旧节点。普通及减少动效浏览器回归通过。 |
-| AUD-LIC-001 | Low | resolved | 两款字体的原版权及 OFL 全文加入 public/fonts；补字体来源和许可说明；HTTP 验收确认字体和两份许可一起发布。 |
-| AUD-DEP-001 | Low | resolved | Wrangler 4.153.0 → Miniflare 5.20261023.0-beta → undici 7.30.1；高危告警归零，依赖树、构建、dry-run 和实际 Workers 本地运行通过。 |
-| AUD-SEO-001 | Low | resolved | 《猫》补显式 description；全部公开文章的 SEO/OG/JSON-LD 描述非空且一致；首页仍保留 more 标记的隐藏摘要行为。 |
+三项「需要人做的决定」已给出结论，文档已同步（DESIGN.md 令牌表与动效表、THEME-GUIDE.md 第 3 节耦合点与第 6 节结构决策、README.md 部署与命令）。
 
-四项建议的验证状态均已更新为 **Experimentally Verified**。
+## 决定与结论
 
-### 灯箱与内容图片
+| 议题 | 结论 | 落地位置 |
+| --- | --- | --- |
+| 发布质量门（AUD-TOOL-002） | 选 A：只加 `predeploy`，不引入 CI 工作流 | `package.json` 的 `predeploy` = `check && test && check-urls`；README「部署」写明理由与「浏览器回归单独跑」的边界 |
+| `pagefind-ui.css` 全站 head 阻塞（AUD-PERF-002） | 维持现状：2.6 KB gzip 换首次打开搜索无样式闪烁，不做按需注入 | THEME-GUIDE.md 第 3 节第 3 条把它写成明确约定 |
+| 断点契约（AUD-STY-001） | 选 A 的加强版：登记表 + 脚本侧同名常量 + 双向核对测试 | `tokens.css` 的 `--bp-*`、`src/lib/breakpoints.ts`、`tests/breakpoints.test.mjs`；DESIGN.md 令牌表改写真实契约 |
+| 站点地图是否发布分页地址（AUD-SEO-002） | 排除 | `astro.config.mjs` 的 sitemap filter；重建后 29 条地址，无 `/page/N/` |
+| `.git` 历史重写残留（AUD-GIT-001） | 文档已补，删除留给你 | CONTENT-DATE-BASELINES.md 新增「与 Astro 仓库提交历史的关系」 |
 
-涉及 `src/lib/lightbox.ts` 和三篇含截图文章。为现有 13 张正文截图补充了有意义的 alt。
-自动生成链接使用“查看大图：图片描述”，通过 `data-alt` 将描述传给 GLightbox。
-弹窗以“图片预览”命名并设置 `aria-modal`，正常关闭后恢复最初触发链接，而不是浏览到的另一张图片。
-临时监听和背景 inert 状态在关闭时清理；沿用既有等待关闭动画再换页的协议。
+## 修复清单
 
-新增 `e2e/components.spec.ts` 中两项普通/减少动效回归，覆盖入口名称、大图 alt、初始焦点、双向 Tab 循环、方向键翻图、Esc、鼠标关闭和重复打开。
-既有“灯箱打开时后退”回归同时通过，验证遮罩、键盘监听和导航继续可用。
-方案依据：[WAI-ARIA 模态对话框模式](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)。
+Medium：
 
-### 字体许可与 SEO
+- **AUD-TOOL-002** — 发布门缺失 → `predeploy` 挂上 `npm run deploy`。
+- **AUD-TOOL-001** — [playwright.config.ts:23](playwright.config.ts#L23) `reuseExistingServer: !process.env.CI`；本机常驻预览下可直接跑全套。
+- **AUD-TYPE-001** — `src/lib/*.mjs`、`src/integrations/*.mjs`、`scripts/*.mjs` 全部加 `// @ts-check`，`astro check` 覆盖 91 文件；remark 插件的最小 AST 形状集中在 `src/lib/remark-mdast.mjs`，注册处保留一次 `any[]` 收敛。
+- **AUD-ARCH-001** — 文章年月地址公式收进 [src/lib/post-url.mjs](src/lib/post-url.mjs) 的 `articleUrl()`，`posts.ts` 与 `content-dates.mjs` 转调；守卫是 `e2e/metadata.spec.ts` 的 sitemap `lastmod` 可解析断言。
+- **AUD-A11Y-002** — [src/layouts/Base.astro:106](src/layouts/Base.astro#L106) 跳转正文链接 + `<main id="main" tabindex="-1">`；[src/lib/navigation.ts:10](src/lib/navigation.ts#L10) 在 `astro:after-swap` 后把焦点交给正文。
+- **AUD-A11Y-003** — [src/lib/toc-tracking.ts](src/lib/toc-tracking.ts)：活动项 `scrollIntoView({ block: 'nearest' })`，reduced-motion 用 `auto`；章节判定线改读 `html` 的实际 `scroll-padding-top`（+1px 容差）。
+- **AUD-UX-001** — [src/styles/header.css:234](src/styles/header.css#L234) 用 `html:not([data-theme])` 判别脚本未执行：隐藏汉堡与三个脚本控件，导航展开为换行链接，顶栏不再吸顶。
+- **AUD-PERF-001** — [src/lib/lightbox.ts](src/lib/lightbox.ts) 确认有含图链接后才 `await import('glightbox')`，并校验链接仍在新文档上。文章页脚本块 **58,472 B → 2,926 B（gzip 1,493 B）**；glightbox 独立成 55,910 B 的 chunk，被文章 HTML 引用 0 次。
 
-新增 `public/fonts/OFL-NotoSansSC.txt`、`OFL-NotoSerifSC.txt`，保留对应字体 name 表中的 Adobe 版权信息和上游完整许可。
-`src/assets/fonts/README.md` 及根 README 说明字体来源、子集生成和许可位置；字体二进制未改。
-许可正文已与官方 [Sans](https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/LICENSE)、[Serif](https://raw.githubusercontent.com/notofonts/noto-cjk/main/Serif/LICENSE) 原文比对。
+Low / Informational：
 
-《猫》的修复仅补 frontmatter description，不更改 `excerpt()` 或 `<!-- more -->` 的列表语义。
-新增 `e2e/metadata.spec.ts` 两项验收：遍历 sitemap 的全部公开文章检查描述一致性并确认《猫》首页无摘要；检查发布的 WOFF2 文件头及两份版权/OFL 全文。
+- **AUD-A11Y-004** — [src/lib/theme.ts:38](src/lib/theme.ts#L38) 每套主题同时输出 `color-scheme`。
+- **AUD-CFG-001** — 构建期依赖（js-yaml、typescript、satori、@resvg/resvg-js、subset-font、pagefind、sharp）上移到 `dependencies`；供应链结论改用全量 `npm audit` 表述。
+- **AUD-CFG-002** — `wrangler.toml` `compatibility_date` 前滚到 `2026-10-01`，本地 workerd 2026-10-23 起服无告警，`_headers` 实测生效（`/fonts/*` → `max-age=86400, must-revalidate`）。`_redirects` 的 301 在 `wrangler dev` 下新旧日期同样走 `not_found_handling` 返回 404，属本地 dev 限制；线上抽查留给首次部署后。
+- **AUD-ARCH-002** — [src/components/BackToTop.astro](src/components/BackToTop.astro) 改走 `onPageLoad` 并返回清理函数，阈值读 `--scroll-trigger`。
+- **AUD-ARCH-003** — 卡片样式单一入口收敛到 `global.css`，组件内重复导入删除。
+- **AUD-STY-001** — 断点三处对齐（`--bp-*` 名册 / `breakpoints.ts` / `@media` 字面值），对应关系由 `tests/breakpoints.test.mjs` 核对。
+- **AUD-STY-002** — 列数令牌更名 `--github-card-columns` → `--card-columns`，注入点同步。
+- **AUD-STY-003** — [src/components/Pager.astro:70](src/components/Pager.astro#L70) 禁用态注释改为实测值（浅色 2.54:1、深色 3.30:1），依据 WCAG 1.4.3 对不可交互组件的豁免。
+- **AUD-STY-004** — 焦点环去重，统一由 `base.css` 提供。
+- **AUD-MOTION-001** — 进度条分步时长、回顶阈值、目录判定线全部改由令牌驱动（`--motion-progress-delay/step/ramp`、`--scroll-trigger`、`scroll-padding-top`）；自定义属性不归一化，故新增 `tokenTime()` 自行识别 `ms`/`s`。
+- **AUD-TEST-001** — 两条产物端 e2e：`/rss.xml` 的 `<language>`、`content:encoded` 正文、条目内地址全绝对；从文章页 HTML 取 `og:image` 实际地址断言 PNG 魔数。
+- **AUD-MAINT-001** — 一次性迁移脚本 `git mv` 到 `scripts/archive/`，头部标注已停用。
+- **AUD-SEO-002** — 站点地图排除分页地址（见「决定与结论」）。
 
-### 工具链依赖
+## 本轮新增的守卫
 
-仅更新 Wrangler 直接依赖及其关联锁文件条目，没有批量升级其他直接依赖或执行 `npm audit fix --force`。
-已消除 [GHSA-xjj6-f33q-929c](https://github.com/nodejs/undici/security/advisories/GHSA-xjj6-f33q-929c) 对原 undici 7.29.1 的告警。
-`npm audit` 仍有 **2 条 moderate 包记录（Satori → fflate，同一根因）**，没有 high / critical；`npm audit --omit=dev` 为 0。
-原审计已核对该 [fflate 公告](https://github.com/advisories/GHSA-px8p-9vwx-vf98) 涉及 `unzipSync()`，本站 Satori 仅使用 `inflateSync()`，未发现可达路径；此项不属于本次四个待修问题，保留记录。
-
-## 检查与测试
-
-| 项目 | 结果 |
+| 守卫 | 覆盖 |
 | --- | --- |
-| `npm run check` | 86 个文件；0 errors / warnings / hints |
-| `npm test` | 48 / 48 通过 |
-| `npm run build` | 成功，包含图片、OG、字体子集及 Pagefind 索引 |
-| `npm run check-urls` | 16 篇文章、15 个导航页和 62 条旧地址跳转通过；未解释差异 0 |
-| Playwright 全套 | **57 / 57 通过**，包含新增 4 项回归；Chromium，桌面/手机/横屏/主题及减少动效 |
-| `npm ls wrangler miniflare undici` | 依赖树正常；Wrangler 4.153.0 / undici 7.30.1 |
-| `npm audit` | 0 high、0 critical；余下 2 moderate 包记录如上所述 |
-| `npm audit --omit=dev` | 0 漏洞 |
-| Wrangler `deploy --dry-run` | 静态资源打包验证成功；没有部署 |
-| `workerd --version` | 原生可执行，2026-10-23 |
-| `wrangler dev --local` 实际运行 | 成功解析 124 条重定向和 5 条响应头规则；下述 HTTP 及浏览器冒烟通过 |
-| `git diff --check` / 台账 JSON | 通过 |
+| `predeploy`（check + test + check-urls） | 发布路径本身 |
+| `tests/breakpoints.test.mjs` | 断点名册 ↔ 脚本常量 ↔ `@media` 字面值 |
+| `e2e/accessibility.spec.ts`（4 项） | skip link 与换页焦点、矮视口目录可见、`color-scheme`、禁用 JS 的导航可达 |
+| `e2e/motion-tokens.spec.ts` | 进度条分步时长跟随 `--motion-progress-*` 与 `--motion-page` |
+| `e2e/metadata.spec.ts`（新增 2 项） | RSS 全文与绝对地址、页面声明的 `og:image` 真实可取 |
+| sitemap `lastmod` 可解析断言 | 地址公式漂移导致更新时间静默丢失 |
 
-新增四项回归曾对旧产物运行，均能准确失败（图片描述空、页面描述空、许可 404）；修复后随全套转绿。
+## 已知限制与接受风险
 
-浏览器全套复用已有 `http://127.0.0.1:4322` 生产预览，以系统临时配置移除重复启动的 webServer；其余目录、浏览器、视口、并发和失败诊断设置与仓库配置一致。
-执行命令为 `npx playwright test --config "$env:TEMP\blog-astro-audit-playwright.config.mjs"`，使用本次构建后的 dist。
+- `reuseExistingServer` 复用的预览可能指向旧 `dist`；靠 `test:browser` 先 `npm run build` 约束，未加端口可配置与新鲜度校验。
+- AUD-DEP-002：satori→fflate 的 2 条 moderate（`unzipSync` 公告，Satori 走 `inflateSync`，未发现可达路径）；`audit fix --force` 会降级 satori，不应执行。
+- AUD-PERF-002：`pagefind-ui.css` 继续作为每页 head 阻塞样式，已写成约定。
+- AUD-GIT-001：`.git/history-rewrite-20261027.md` 与 `history-regroup-20261027-205549/` 仍在，记录的「新 HEAD」已非当前 HEAD 的祖先；文档已说明，删除待确认。
+- 性能数字均为本机回环测量，未跑 Lighthouse；浏览器仅 Chromium。
+- 未执行部署，未核验线上 Cloudflare 设置、真实 Giscus 与 GA。
 
-## Workers 本地冒烟及视觉证据
+## 复审计指引
 
-临时地址：`http://127.0.0.1:8788`，使用升级后的 Wrangler / workerd 实际运行。
-
-- 首页、《猫》、WOFF2 及两份许可文件均为 200。
-- 旧 `/blog/2026/09/26/Cat/` 和大小写兼容 `/article/2026/09/Cat/` 均为 301，直接指向 `/article/2026/09/cat/`。
-- 不存在的页面返回 404。
-- 灯箱实际键盘打开/关闭及焦点恢复成功；所测页面没有运行时 JS 错误。
-- 检查桌面 1280×900 和手机 375×812 深色灯箱截图；保留既有布局，关闭入口可见。
-
-系统临时目录 `C:/Users/gytxtx/AppData/Local/Temp/blog-astro-fix-evidence/` 保存 `workers-smoke.json` 和桌面/手机截图。
-
-## 限制与后续
-
-验证覆盖 Chromium 和本地 Workers；没有执行线上部署、真实登录评论、GA 统计配置核验或受控网络 Core Web Vitals 测量。
-确定性浏览器测试继续模拟第三方服务。当前会话没有 Browser 插件，使用仓库现有 Playwright。
-安装保留原有 npm 脚本权限策略；更新后的原生 workerd、dry-run 和本地运行均已验证。
-
-原审计提出的“将已有检查串成发布质量门”仍为自动化建议，不是本次四项已确认缺陷的一部分。
-新增防护为两项灯箱交互回归和两项元数据/许可发布回归，未引入新的 CI 或部署流程。
+下一轮只需核对：① `predeploy` 与新增 e2e 是否仍绿色；② 灯箱按需加载后文章页脚本块体积；③ `.git` 残留是否已清理；④ 首次以新 `compatibility_date` 部署后抽查一条旧文章 301。被驳回的候选与运行时取证方式见上一轮报告，不必重复取证。
