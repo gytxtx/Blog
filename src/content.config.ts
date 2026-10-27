@@ -17,6 +17,7 @@ const blog = defineCollection({
       title: z.string(),
       description: z.string().optional(),
       pubDate: z.coerce.date(),
+      // 保留旧站迁移字段；历史基线固定在 data/content-date-baselines.json，后续更新由 Git 判断。
       updatedDate: z.coerce.date().optional(),
       heroImage: z.optional(image()),
       slug: z.string(),

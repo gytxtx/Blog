@@ -13,6 +13,7 @@ import remarkGitHubRepoCard from './src/lib/remark-github-repo-card.mjs';
 import serifSubset from './src/integrations/serif-subset.mjs';
 import { SITE } from './src/consts.ts';
 import { THEMES } from './src/lib/theme.ts';
+import { getPageDates } from './src/lib/content-dates.mjs';
 
 const site = SITE.url;
 
@@ -41,6 +42,10 @@ export default defineConfig({
     sitemap({
       // /blog/ 下只保留旧地址跳转，站点地图不再发布这些地址。
       filter: (page) => !new URL(page).pathname.startsWith('/blog/'),
+      serialize(item) {
+        const { modified } = getPageDates(new URL(item.url).pathname);
+        return { ...item, lastmod: modified?.toISOString() };
+      },
     }),
     // 图标：Lucide 图标集（@iconify-json/lucide），用法 <Icon name="lucide:sun" />；
     // 本地 SVG 放 src/icons/ 后用 <Icon name="文件名" />

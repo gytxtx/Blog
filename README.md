@@ -144,3 +144,41 @@ import GitHubRepoCard from '../components/GitHubRepoCard.astro';
 `fetchMetadata={false}` 可关闭自动获取，完全使用手动填写的数据。构建不请求 GitHub API，无需 Token。
 
 ## 迁移要点（面向未来的自己）
+
+- **页面 URL**：标签 `/tags/`、归档 `/archive/YYYY/`、关于 `/about/`、友链 `/links/`、
+  分类 `/category/{slug}/`；文章为 `/article/YYYY/MM/{小写 slug}/`，年月取 `pubDate`（UTC）。
+  旧 `/blog/` 导航地址、`/blog/YYYY/MM/DD/{slug}/` 和 `/blog/YYYY/MM/{slug}/` 都直接跳转到最终地址。
+  `public/_redirects` 提供 Cloudflare Workers 301（含有、无末尾斜杠两种形式）。
+  `scripts/check-urls.mjs` 对比线上基线（`urls-baseline-raw.xml`），并验证新页面和旧地址跳转；
+  未解释差异必须为 0。
+  原始 front matter slug 保留，用于旧链接、评论和 OG 图片；`postUrl` 在生成正文地址时转小写。
+  既有大小写文章地址在开发模式由 middleware 跳转，部署到 Cloudflare Workers 后由 `_redirects` 301 跳转。
+  不为大小写变体重复输出 HTML，避免 Windows 文件系统覆盖正文页。
+- **文章元数据**：`title / description / pubDate / updatedDate / heroImage` 与 Astro 官方 blog 模板同名；
+  `updatedDate` 保留旧站迁移信息，后续不需要手填。既有文章的历史更新时间固定在
+  `src/data/content-date-baselines.json`；仅修改日期字段不会刷新页面更新时间。
+- **内容更新时间**：文章、关于页和友链页统一由 `src/lib/content-dates.mjs` 比较 Git 已提交快照，
+  首次入库只建立基线；文章沿用 `pubDate` 和旧站历史更新日期，顶层页以首次入库作为创建基线。
+  正文（包括错字、代码、链接与 Markdown 排版）、标题、摘要、题图、作者字段、分类、标签、阅读时间，
+  以及直接引用的本地图片变化都会算更新；友链还跟踪 `src/data/friends.ts` 的数据内容。
+  源文件重命名、日期/slug/发布控制字段、公共组件/样式、共享作者资料、远程资源内容不触发更新；
+  CRLF/LF 与文件首尾空白也忽略，正文内部换行、缩进和硬换行保留。
+  纯格式迁移若改变了正文或可见信息，仍按内容变化计算，不按 commit message 猜测是否应忽略。
+  Git 合并以第一父链上的合入提交时间为准，未提交修改不推进日期；页面、JSON-LD、文章 OG 元数据与
+  sitemap `lastmod` 使用同一结果。读者可见日期按 UTC+8，文章发布当天的更新隐藏提示，SEO 保留完整时间；
+  关于/友链的更新提示位于正文末尾。首页等聚合页及 404 不设置内容更新时间。
+  构建需提供 Git 和完整历史（CI 设置 `fetch-depth: 0`）。无 Git 或浅克隆会警告并回退到已知历史日期，
+  无可信日期则省略，不使用构建时间。URL 和归档分组仍按 `pubDate` 的 UTC 年月保持稳定。
+- **OG 社交卡片**：`src/pages/og/[...slug].png.ts` 用 satori 逐页生成；
+  分享图继续保留 `/og/YYYY/MM/DD/{slug}.png`，兼容既有分享记录。
+  中文字体为 GB2312 全集子集（`scripts/subset-font.mjs` 预生成、已入库，构建期零网络依赖）。
+  注意 satori 默认按 content-box 处理尺寸，样式里必须显式 `boxSizing: 'border-box'`。
+- **标题字体**：Noto Serif SC Bold 自托管，`src/integrations/serif-subset.mjs` 在构建结束时扫 `dist`
+  里的标题文字，从入库的 GB2312 子集再裁出 `/fonts/NotoSerifSC-Bold.woff2`（约 80 KB）；dev 下直接提供完整
+  GB2312 子集。不依赖 Google Fonts（国内不可达时会阻塞首屏）。缓存策略见 `public/_headers`。
+- **搜索**：Pagefind，`scripts/pagefind-index.mjs` 建索引（中文按 Intl.Segmenter 预切词，与查询端一致）；
+  只索引文章正文和关于/友链；UI 走官方 Default UI。
+- **评论**：Giscus 使用 `specific`，搜索词固定为旧版 pathname 去掉开头的 `/`，
+  因此文章地址移除日后仍查找原来的讨论。
+- `src/content/blog/2026-09-17_Fuck.md` 在源仓库中当前为草稿（`draft: true`），
+  因此不出现在站点中——这与旧站行为一致。

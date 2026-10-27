@@ -3,6 +3,8 @@ import Base from './Base.astro';
 import type { MarkdownHeading } from 'astro';
 import Toc from '../components/Toc.astro';
 import { SITE } from '../consts';
+import FormattedDate from '../components/FormattedDate.astro';
+import { getPageDates } from '../lib/content-dates.mjs';
 
 interface Props {
   frontmatter: { title: string };
@@ -11,12 +13,28 @@ interface Props {
 
 const { frontmatter, headings = [] } = Astro.props;
 const hasToc = headings.filter(({ depth }) => depth === 2 || depth === 3).length >= 3;
+const { created, modified, updated } = getPageDates(Astro.url.pathname);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: frontmatter.title,
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  datePublished: created?.toISOString(),
+  dateModified: modified?.toISOString(),
+  inLanguage: 'zh-CN',
+};
 ---
 
 <Base title={`${frontmatter.title} - ${SITE.title}`} tocHeadings={headings}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <div class:list={hasToc ? ['wrap', 'post-layout'] : []}>
     <article class:list={['prose', hasToc ? 'post-main prose-main' : 'content']} data-pagefind-body>
       <slot />
+      {updated && (
+        <p class="page-updated" data-pagefind-ignore>
+          更新于 <FormattedDate date={updated} />
+        </p>
+      )}
     </article>
     {hasToc && (
       <aside class="post-side prose-side">
@@ -27,6 +45,12 @@ const hasToc = headings.filter(({ depth }) => depth === 2 || depth === 3).length
 </Base>
 
 <style>
+  .page-updated {
+    margin-top: var(--space-10);
+    color: var(--muted);
+    font-size: var(--fs-caption);
+  }
+
   .prose-main {
     padding-bottom: var(--space-4);
   }

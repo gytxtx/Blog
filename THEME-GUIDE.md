@@ -51,10 +51,35 @@
 
 ## 2. 你消费的 API（`src/lib/posts.ts`）
 
+```ts
+PAGE_SIZE = 10
+postUrl(post): string          // "/article/2025/03/first-article/"（正文 slug 统一小写）
+legacyPostUrl(post): string    // "/blog/2025/03/29/First-Article/"（旧链接、评论标识）
+postOgPath(post): string       // "2025/03/29/First-Article"（og 图去前缀路径）
+getPosts(): Promise<Post[]>    // 日期倒序，生产排除草稿，开发包含草稿
+getPostsForIndex(): Promise<Post[]>  // 置顶在前，其余日期倒序
+categorySlug(c): string        // "GitHub" -> "github"，中文原样
+formatDate(d, withYear=true): string // "2025年3月29日" / "3月29日"（zh-CN，Asia/Shanghai）；组件 FormattedDate 包了一层 <time>
+excerpt(post, max=100): string // 以 <!-- more --> 为界的纯文本摘要
+readingTime(post): Promise<number>  // 分钟，front matter readtime 优先
+wordCount(post): Promise<number>    // 汉字 + 英文单词，不含代码块（src/lib/remark-reading-stats.mjs）
+formatWords(n): string             // "3,902 字"
+type Post = CollectionEntry<'blog'>
+```
+
 `Post.data`：`title, description?, pubDate, updatedDate?, heroImage?, slug, authors[], categories[], tags[],
 readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
 
 布局 props 现状（可重新设计，但数据来源就这些）：
+
+- `Base.astro` ← `{ title, description?, ogImage?, tocHeadings? }`；文章标题数据经 Base 传给 Header，供窄屏目录使用。
+- `Post.astro` ← `{ post, readtime, headings, prev, next }` + `<Content />` slot；`headings` 来自 `render(post)`，供 `Toc.astro` 生成目录；
+  "更新于"来自 `content-dates.mjs` 的已提交内容历史，基线为 `content-date-baselines.json` 中旧日期，发布同日隐藏；
+  `heroImage` 为可选题图（`astro:assets` 的 ImageMetadata）
+- `Prose.astro` ← `{ frontmatter: { title }, headings? }` + slot；Markdown 自动传入标题数据，满足门槛时复用文章目录布局与顶栏入口。
+  关于/友链共享内容日期规则，正文末尾显示更新日期，并输出 `WebPage` JSON-LD；公共样式变化不刷新日期。
+- `Archive.astro` ← `{ year, years, posts, total, current, totalPages }`，接收当页文章，不获取内容。
+- `ArchiveHead.astro` ← `{ year, years }`，只呈现年份导航，不自行查询内容。
 
 ## 3. 耦合点（重写时必须保持的协议）
 

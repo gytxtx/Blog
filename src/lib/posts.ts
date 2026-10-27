@@ -1,4 +1,5 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { formatContentDate } from './content-date-display.mjs';
 export { categorySlug } from './post-groups';
 
 export type Post = CollectionEntry<'blog'>;
@@ -48,14 +49,9 @@ export async function getPostsForIndex(): Promise<Post[]> {
   return [...posts.filter((p) => p.data.pin), ...posts.filter((p) => !p.data.pin)];
 }
 
-/** "2026年8月16日"，withYear=false 时为 "8月16日"。按 UTC 取日，与 postUrl 的日期一致 */
+/** "2026年8月16日"，withYear=false 时为 "8月16日"。读者可见日期统一按 UTC+8；URL 仍按 UTC。 */
 export function formatDate(d: Date, withYear = true): string {
-  return d.toLocaleDateString('zh-CN', {
-    year: withYear ? 'numeric' : undefined,
-    month: 'long',
-    day: 'numeric',
-    timeZone: 'UTC',
-  });
+  return formatContentDate(d, withYear);
 }
 
 /** 纯文本摘要：优先 `<!-- more -->` 之前的内容（Material 摘要语义） */

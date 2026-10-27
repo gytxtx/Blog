@@ -8,6 +8,8 @@ import { Icon } from 'astro-icon/components';
 import { authors } from '../data/authors';
 import { Image } from 'astro:assets';
 import FormattedDate from '../components/FormattedDate.astro';
+import { getPageDates } from '../lib/content-dates.mjs';
+import { shouldShowUpdated } from '../lib/content-date-display.mjs';
 import { titleMorph, titleTransitionName } from '../lib/transitions';
 import { postUrl, legacyPostUrl, postOgPath, categorySlug, excerpt, wordCount, formatWords, type Post } from '../lib/posts';
 import 'glightbox/dist/css/glightbox.min.css';
@@ -22,7 +24,11 @@ interface Props {
 
 const { post, readtime, headings, prev, next } = Astro.props;
 const author = authors[post.data.authors[0]] ?? { name: post.data.authors[0] };
-const { updatedDate, heroImage } = post.data;
+const { heroImage } = post.data;
+const dates = getPageDates(Astro.url.pathname);
+const modifiedDate = dates.modified ?? post.data.pubDate;
+const updatedDate = dates.updated;
+const showUpdated = shouldShowUpdated(post.data.pubDate, updatedDate);
 const description = post.data.description ?? excerpt(post, 160);
 const words = await wordCount(post);
 const ogImage = `/og/${postOgPath(post)}.png`;
@@ -33,7 +39,7 @@ const jsonLd = {
   headline: post.data.title,
   description,
   datePublished: post.data.pubDate.toISOString(),
-  dateModified: (updatedDate ?? post.data.pubDate).toISOString(),
+  dateModified: modifiedDate.toISOString(),
   url: new URL(postUrl(post), Astro.site).href,
   image: new URL(ogImage, Astro.site).href,
   author: { '@type': 'Person', name: author.name },
@@ -51,7 +57,7 @@ const jsonLd = {
   tocHeadings={headings}
   article={{
     publishedTime: post.data.pubDate,
-    modifiedTime: updatedDate,
+    modifiedTime: modifiedDate,
     section: post.data.categories[0],
     tags: post.data.tags,
   }}
@@ -70,7 +76,7 @@ const jsonLd = {
       <div class="byline" data-pagefind-ignore>
         {author.avatar && <Image src={author.avatar} alt="" width={24} height={24} densities={[1, 2]} />}
         <b>{author.name}</b>
-        {updatedDate && (
+        {showUpdated && updatedDate && (
           <span>
             更新于 <FormattedDate date={updatedDate} />
           </span>
