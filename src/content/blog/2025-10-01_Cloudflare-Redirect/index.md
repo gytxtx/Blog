@@ -26,19 +26,19 @@ comments: true
 进入 Cloudflare -> 点击需要重定向的主域名 -> DNS
 
 之后，为你的根域名 `@` 添加一条 A 记录，指向任意 dummy IP（比如 `192.0.2.1`），并确保开启 Proxy（代理）：
-![](./Image-1.png "就像这样")
+![Cloudflare 根域名 A 记录与代理状态设置](./Image-1.png "就像这样")
 
 ## 2. 创建重定向规则
 进入 Cloudflare -> 点击需要重定向的主域名 -> 规则 -> 创建规则 -> 重定向规则
   
 选择模板 **从根重定向到 WWW**：
-![](./Image-2.png "示意")
+![Cloudflare 从根域名重定向到 WWW 的规则模板](./Image-2.png "示意")
 
 当然，也可以这样：
-![](./Image-3.png "示意")
+![Cloudflare 重定向规则的另一种配置方式](./Image-3.png "示意")
 
 此时，模板应该是这个样子：
-![](./Image-4.png "模板示意")
+![配置完成的 Cloudflare 域名重定向模板](./Image-4.png "模板示意")
 
 > **提示**
 > 此处的 `gytxtx.xyz` 可替换为您自己的域名。

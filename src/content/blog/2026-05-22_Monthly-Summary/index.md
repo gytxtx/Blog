@@ -92,9 +92,9 @@ comments: true
 
 以下是优化前后的测速结果对比：
 
-![](./image_site-before.png)
+![Cloudflare IP 优选前的测速结果](./image_site-before.png)
 
-![](./image_site-after.png)
+![Cloudflare IP 优选后的测速结果](./image_site-after.png)
 
 虽然 ITDOG 最近部分检测节点因为攻击问题不可用，但整体趋势还是能明显看出优化效果。
 

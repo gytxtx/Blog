@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "auditDate": "2026-10-27",
+  "commit": "0194993741c5172095c5305c05ef98661f2a7147",
+  "findings": [
+    {
+      "id": "AUD-A11Y-001",
+      "title": "图片灯箱缺少可访问名称，焦点管理不完整",
+      "category": "accessibility",
+      "severity": "Medium",
+      "confidence": 99,
+      "status": "open",
+      "disposition": "Fix",
+      "locations": ["src/lib/lightbox.ts:47", "src/lib/lightbox.ts:59", "src/lib/lightbox.ts:62"],
+      "evidence": "生产预览 Chromium 中入口和 dialog 无名称，打开后焦点仍在背景，Tab 后 Esc 关闭使 activeElement 为 BODY。",
+      "impact": "读屏难以识别用途，键盘阅读焦点丢失。",
+      "recommendation": "补图片和弹窗名称、初始焦点与正常关闭焦点恢复；导航销毁避免聚焦旧节点。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "浏览器断言入口/对话框名称和打开、关闭、换页焦点。"
+    },
+    {
+      "id": "AUD-LIC-001",
+      "title": "分发字体子集时没有随附 OFL 许可证",
+      "category": "third-party-assets",
+      "severity": "Low",
+      "confidence": 98,
+      "status": "open",
+      "disposition": "Fix",
+      "locations": ["scripts/subset-font.mjs:47", "src/integrations/serif-subset.mjs:50", "src/assets/fonts/"],
+      "evidence": "字体 name 表无许可字段，仓库和 public 无字体 OFL 文本；已核对上游 Sans/Serif OFL 条款2。",
+      "impact": "字体分发缺少随附许可材料。",
+      "recommendation": "保留原版权及 OFL 全文，放入随站点发布的 public/fonts。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "检查构建字体与许可文件同时存在。"
+    },
+    {
+      "id": "AUD-DEP-001",
+      "title": "开发工具链锁定受公告影响的 undici",
+      "category": "dependencies",
+      "severity": "Low",
+      "confidence": 100,
+      "status": "open",
+      "disposition": "Fix",
+      "locations": ["package-lock.json:8715", "package-lock.json:6470", "package-lock.json:6479"],
+      "evidence": "Wrangler→Miniflare 锁定 undici 7.29.1，命中 GHSA-xjj6-f33q-929c；npm audit --omit=dev 为0。",
+      "impact": "开发工具链存在已知可用性风险，未发现当前静态线上站点可利用链。",
+      "recommendation": "更新 Wrangler 及锁文件至包含 undici 7.30.1 或更高修复版的依赖链，再验证构建与 Workers 预览。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "定期扫描并按实际运行调用链评估依赖公告。"
+    },
+    {
+      "id": "AUD-SEO-001",
+      "title": "猫的页面与分享描述为空",
+      "category": "seo",
+      "severity": "Low",
+      "confidence": 100,
+      "status": "open",
+      "disposition": "Fix",
+      "locations": ["src/layouts/Post.astro:32", "src/content/blog/2026-09-26_Cat.md:12"],
+      "evidence": "正文首行 more 标记使 excerpt 返回空串，产物 description、og:description 和 JSON-LD description 为空。",
+      "impact": "缺少站方提供的搜索/分享摘要。",
+      "recommendation": "补显式 description 或为 SEO 单独回退空摘要，保留列表 more 语义。",
+      "recommendationValidation": "Strongly Supported",
+      "suggestedGuard": "对公开文章最终 SEO 描述验收非空。"
+    }
+  ]
+}

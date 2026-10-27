@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "lastFullAuditDate": "2026-10-27",
+  "lastFullAuditCommit": "0194993741c5172095c5305c05ef98661f2a7147",
+  "lastAuditCommit": "0194993741c5172095c5305c05ef98661f2a7147",
+  "mode": "delta",
+  "report": "CODEBASE_AUDIT.md",
+  "counts": {
+    "Critical": 0,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0
+  },
+  "checks": {
+    "typecheck": "passed:86 files",
+    "unitTests": "48/48",
+    "build": "passed",
+    "urlGate": "passed",
+    "browserTests": "57/57",
+    "productionAudit": "0 vulnerabilities",
+    "fullAudit": "0 high/critical; 2 moderate package records (fflate/satori)",
+    "workersDryRun": "passed",
+    "workersLocalSmoke": "passed"
+  },
+  "browserExecution": "Reused 127.0.0.1:4322 production preview via temporary config without webServer; current test sources, including four added regressions.",
+  "sourceChanges": true,
+  "guardsAdded": [
+    "e2e/components.spec.ts：两项灯箱名称、焦点和双向Tab回归",
+    "e2e/metadata.spec.ts：字体及原版权/OFL随产物发布",
+    "e2e/metadata.spec.ts：公开文章描述一致性与猫列表摘要语义"
+  ],
+  "limitations": [
+    "Chromium only",
+    "third-party services mocked in deterministic browser tests",
+    "Cloudflare account/DNS/CI settings not inspected",
+    "no controlled Core Web Vitals measurement"
+  ],
+  "lastVerificationDate": "2026-10-27",
+  "worktreeChanges": true,
+  "resolvedFindingIds": [
+    "AUD-A11Y-001",
+    "AUD-LIC-001",
+    "AUD-DEP-001",
+    "AUD-SEO-001"
+  ],
+  "initialReport": ".repository-audit/history/2026-10-27-initial.md"
+}

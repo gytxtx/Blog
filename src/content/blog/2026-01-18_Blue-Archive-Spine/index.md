@@ -122,19 +122,19 @@ Mode                 LastWriteTime         Length Name
 
 点击 File > Load folder 选项：
 
-![](./image-1.png)
+![AssetStudio 中的 File 与 Load folder 菜单](./image-1.png)
 
 在弹出的文件选择窗口中，选择步骤 1 的文件夹，并点击“选择文件夹”按钮。
 
 此时，软件应该会自动解析这些 .bundle 文件，并将提取的资产显示在 Asset list 页面中：
 
-![](./image-2.png)
+![AssetStudio 解析 bundle 后的 Asset list 资产列表](./image-2.png)
 
 提取资产之后，接下来保存提取的资产文件 。
 
 选择 Export > All assets 选项，在弹出的文件选择窗口中选择一个文件夹，以保存提取的资产文件。
 
-![](./image-3.png)
+![AssetStudio 中的 Export 与 All assets 导出菜单](./image-3.png)
 
 等待导出完成后，第二步就完成了。
 
@@ -225,19 +225,19 @@ Mode                 LastWriteTime         Length Name
 
 点击“替换”选项卡，单击“选择放置替换项的文件夹”，并在弹出的对话框中允许开发者工具修改文件。
 
-![](./image-4.png)
+![Chrome DevTools 中选择本地替换文件夹并授予权限](./image-4.png)
 
 此时，跳转到“网络”页面，按 `Chrl + R` 重新加载页面后，找到 `.skel` 和 `.atlas` 文件。
 
-![](./image-5.png)
+![Chrome DevTools 网络面板中的 skel 与 atlas 请求](./image-5.png)
 
 分别右击这两个文件，选择“替换内容”选项。
 
-![](./image-6.png)
+![Chrome DevTools 请求右键菜单中的替换内容选项](./image-6.png)
 
 此时，在“源代码/来源”页面应该显示要被替换的文件：
 
-![](./image-7.png)
+![Chrome DevTools 来源面板中的本地替换文件](./image-7.png)
 
 将在之前步骤中提取出的 `.skel` 和 `.atlas` 文件放置到你在 DevTools 中替换的文件夹。
 

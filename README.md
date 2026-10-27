@@ -185,6 +185,9 @@ import GitHubRepoCard from '../components/GitHubRepoCard.astro';
 - **标题字体**：Noto Serif SC Bold 自托管，`src/integrations/serif-subset.mjs` 在构建结束时扫 `dist`
   里的标题文字，从入库的 GB2312 子集再裁出 `/fonts/NotoSerifSC-Bold.woff2`（约 80 KB）；dev 下直接提供完整
   GB2312 子集。不依赖 Google Fonts（国内不可达时会阻塞首屏）。缓存策略见 `public/_headers`。
+  Noto Sans/Serif SC 字体以 SIL OFL 1.1 分发，原版权与许可全文分别随站点发布为
+  `public/fonts/OFL-NotoSansSC.txt`、`public/fonts/OFL-NotoSerifSC.txt`；来源及重新生成注意事项见
+  [字体许可说明](src/assets/fonts/README.md)。项目 MIT 许可证不替代字体许可证。
 - **搜索**：Pagefind，`scripts/pagefind-index.mjs` 建索引（中文按 Intl.Segmenter 预切词，与查询端一致）；
   只索引文章正文和关于/友链；UI 走官方 Default UI。
 - **评论**：Giscus 使用 `specific`，搜索词固定为旧版 pathname 去掉开头的 `/`，

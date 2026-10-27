@@ -405,6 +405,42 @@ test('减少动效下箭头不位移，图片灯箱开关和离开文章均正�
   await expect(page.locator('.glightbox-container')).toHaveCount(0);
 });
 
+for (const reducedMotion of ['reduce', 'no-preference'] as const) {
+  test(`图片灯箱有明确名称，键盘焦点留在弹窗并在关闭后恢复（${reducedMotion}）`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion });
+    await page.goto(IMAGES);
+    const trigger = page.locator('.glightbox').first();
+    const description = await trigger.locator('img').getAttribute('alt');
+    expect(description?.trim()).toBeTruthy();
+    await expect(trigger).toHaveAccessibleName(`查看大图：${description}`);
+    await trigger.focus();
+    await page.keyboard.press('Enter');
+    const dialog = page.getByRole('dialog', { name: '图片预览', exact: true });
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveAttribute('aria-modal', 'true');
+    const close = dialog.locator('.gclose');
+    await expect(close).toBeFocused();
+    await expect(dialog.locator('.current .gslide-image img')).toHaveAttribute('alt', description!);
+    await expect(page.locator('main')).toHaveAttribute('inert', '');
+    // 第一个按钮向前、最后一个按钮向后循环；不能进入背景导航。
+    await page.keyboard.press('Shift+Tab');
+    await expect(dialog.locator('.gnext')).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(close).toBeFocused();
+    await page.keyboard.press('ArrowRight');
+    await expect(dialog.locator('.current .gslide-image img')).toHaveAttribute('alt', await page.locator('.glightbox').nth(1).locator('img').getAttribute('alt') as string);
+    await page.keyboard.press('Escape');
+    await expect(dialog).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+    await expect(page.locator('main')).not.toHaveAttribute('inert');
+    // 再次打开及点击关闭仍恢复最初入口，而不是上次预览到的图片。
+    await page.keyboard.press('Enter');
+    await close.click();
+    await expect(dialog).toHaveCount(0);
+    await expect(trigger).toBeFocused();
+  });
+}
+
 test('禁用存储时主题仍可切换，并在站内导航后保留', async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('Storage disabled', 'SecurityError'); } });
