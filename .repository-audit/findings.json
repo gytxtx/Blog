@@ -25,14 +25,14 @@
       "recommendationValidation": "Experimentally Verified",
       "suggestedGuard": "浏览器断言入口/对话框名称和打开、关闭、换页焦点。",
       "resolvedDate": "2026-10-27",
-      "resolvedIn": "working-tree",
+      "resolvedIn": "766e2a6",
       "resolution": {
         "summary": "为13张截图补alt，入口和dialog命名；初始焦点、双向Tab、inert及关闭/导航焦点清理。",
         "verification": "57项浏览器回归含普通/减少动效灯箱测试及导航清理通过；Workers实际浏览器冒烟通过。",
         "guard": "e2e/components.spec.ts：两项灯箱名称、焦点和双向Tab回归"
       },
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "reverification": "2026-10-28 复跑：灯箱按需加载改造后，components.spec.ts 的普通/减少动效用例与全套 65 项均通过。"
     },
     {
@@ -54,14 +54,14 @@
       "recommendationValidation": "Experimentally Verified",
       "suggestedGuard": "检查构建字体与许可文件同时存在。",
       "resolvedDate": "2026-10-27",
-      "resolvedIn": "working-tree",
+      "resolvedIn": "766e2a6",
       "resolution": {
         "summary": "public/fonts发布两款字体原版权和OFL全文；文档说明许可归属。",
         "verification": "官方许可全文比对、产物HTTP验收及Workers许可200检查通过。",
         "guard": "e2e/metadata.spec.ts：字体及原版权/OFL随产物发布"
       },
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "reverification": "2026-10-28 复跑：metadata.spec.ts 的 OFL 全文与字体断言持续通过。"
     },
     {
@@ -83,14 +83,14 @@
       "recommendationValidation": "Experimentally Verified",
       "suggestedGuard": "定期扫描并按实际运行调用链评估依赖公告。",
       "resolvedDate": "2026-10-27",
-      "resolvedIn": "working-tree",
+      "resolvedIn": "766e2a6",
       "resolution": {
         "summary": "Wrangler 4.153.0 → Miniflare 5.20261023.0-beta → undici 7.30.1。",
         "verification": "npm ls、audit高危归零、生产audit为0、构建、dry-run和Workers实际本地运行通过。",
         "guard": null
       },
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "reverification": "2026-10-28 复跑：构建依赖已上移 dependencies，供应链结论改用全量 npm audit 表述。"
     },
     {
@@ -111,14 +111,14 @@
       "recommendationValidation": "Experimentally Verified",
       "suggestedGuard": "对公开文章最终 SEO 描述验收非空。",
       "resolvedDate": "2026-10-27",
-      "resolvedIn": "working-tree",
+      "resolvedIn": "766e2a6",
       "resolution": {
         "summary": "猫补显式description，保留more列表语义。",
         "verification": "所有公开文章SEO/OG/JSON-LD描述非空一致；猫首页无摘要的回归通过。",
         "guard": "e2e/metadata.spec.ts：公开文章描述一致性与猫列表摘要语义"
       },
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "reverification": "2026-10-28 复跑：metadata.spec.ts 的描述一致性断言持续通过；站点地图新增分页地址排除不影响文章条目。"
     },
     {
@@ -130,7 +130,7 @@
       "status": "resolved",
       "disposition": "Add Guard",
       "firstSeenCommit": "0194993741c5172095c5305c05ef98661f2a7147",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "recurrence": true,
       "locations": [
         "package.json:12",
@@ -148,7 +148,7 @@
         "guard": "发布命令即门禁；动效/交互改动后单独跑 npm run test:browser（本轮 65 项全绿）。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-TYPE-001",
@@ -159,7 +159,7 @@
       "status": "resolved",
       "disposition": "Fix",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "tsconfig.json:2",
         "src/lib/content-dates.mjs",
@@ -178,7 +178,7 @@
         "guard": "npm run check 已进 predeploy；类型仍以 tests/*.test.mjs 的行为断言为准。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-ARCH-001",
@@ -189,7 +189,7 @@
       "status": "resolved",
       "disposition": "Fix",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "src/lib/posts.ts:10",
         "src/lib/content-dates.mjs:248",
@@ -207,7 +207,7 @@
         "guard": "e2e/metadata.spec.ts 的「站点地图每篇文章都带可解析的 lastmod」断言；结构决策记录见 THEME-GUIDE.md 第 6 节。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-STY-001",
@@ -218,7 +218,7 @@
       "status": "resolved",
       "disposition": "Document",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "DESIGN.md:41",
         "src/lib/header.ts:21",
@@ -237,7 +237,7 @@
         "guard": "tests/breakpoints.test.mjs（进 npm test，已在 predeploy 内）；DESIGN.md 令牌表新增断点行并说明改断点要同步的三处。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-A11Y-002",
@@ -248,7 +248,7 @@
       "status": "resolved",
       "disposition": "Fix",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "src/layouts/Base.astro:107"
       ],
@@ -264,7 +264,7 @@
         "guard": "e2e/accessibility.spec.ts 第 1 项；契约写入 THEME-GUIDE.md 第 3 节第 8 条。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-A11Y-003",
@@ -275,7 +275,7 @@
       "status": "resolved",
       "disposition": "Fix",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "src/lib/toc-tracking.ts:9",
         "src/styles/toc.css:5",
@@ -293,7 +293,7 @@
         "guard": "e2e/accessibility.spec.ts 第 2 项；DESIGN.md 动效一节记录判定线来源。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-UX-001",
@@ -304,7 +304,7 @@
       "status": "resolved",
       "disposition": "Fix",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "src/styles/header.css:209",
         "src/styles/header.css:226",
@@ -322,7 +322,7 @@
         "guard": "e2e/accessibility.spec.ts 第 4 项；契约写入 THEME-GUIDE.md 第 3 节第 2 条。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-PERF-001",
@@ -333,7 +333,7 @@
       "status": "resolved",
       "disposition": "Fix",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "src/lib/lightbox.ts:3",
         "src/lib/article-behaviors.ts:2",
@@ -351,7 +351,7 @@
         "guard": "e2e/components.spec.ts 灯箱回归；构建体积差异本轮以人工核对记录。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-TOOL-001",
@@ -362,7 +362,7 @@
       "status": "resolved",
       "disposition": "Fix",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "playwright.config.ts:19",
         "playwright.config.ts:22"
@@ -379,7 +379,7 @@
         "guard": "残留风险是复用的预览服务可能指向旧 dist；靠 test:browser 先 npm run build 约束，未做端口可配置与新鲜度校验（判定为不值得为此加一层）。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-CFG-001",
@@ -390,7 +390,7 @@
       "status": "resolved",
       "disposition": "Fix",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "package.json:29",
         "src/lib/content-dates.mjs:8",
@@ -409,7 +409,7 @@
         "guard": "无新增。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-MOTION-001",
@@ -420,7 +420,7 @@
       "status": "resolved",
       "disposition": "Refactor",
       "firstSeenCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "locations": [
         "src/lib/navigation.ts:19",
         "src/lib/navigation.ts:75",
@@ -439,7 +439,7 @@
         "guard": "e2e/motion-tokens.spec.ts；DESIGN.md 动效表新增 --motion-progress-* 与滚动阈值行。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-STY-002",
@@ -459,14 +459,14 @@
       "recommendationValidation": "Verified",
       "suggestedGuard": "无",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "列数令牌更名 --github-card-columns → --card-columns，cards.css 与 remark-github-repo-card.mjs 的注入点同步。",
         "verification": "grep 全仓只剩 --card-columns；构建绿色，components.spec.ts 的卡片用例通过。",
         "guard": "无新增。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-STY-003",
@@ -485,14 +485,14 @@
       "recommendationValidation": "Strongly Supported",
       "suggestedGuard": "无",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "分页禁用态保留 color-mix(in srgb, var(--muted) 60%, var(--bg))，注释改为实测值：浅色约 2.5:1、深色约 3.3:1，并写明依据是 WCAG 1.4.3 对不可交互组件的豁免。",
         "verification": "按 theme.ts 的 --muted/--bg 计算混合色与亮度比：浅色 #9da09a vs #fbfaf7 = 2.54，深色 #656961 vs #121412 = 3.30。",
         "guard": "无新增。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-STY-004",
@@ -512,14 +512,14 @@
       "recommendationValidation": "Verified",
       "suggestedGuard": "无",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "焦点环去重：cards.css 删除自定义 :focus-visible，统一由 base.css 的 :where(a, button, ...) 规则提供；skip-link 自身保留定位用的焦点样式。",
         "verification": "grep focus-visible 只剩 base.css 的两处（通用规则 + skip-link）与 cards.css 的说明注释；无障碍回归通过。",
         "guard": "无新增。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-ARCH-002",
@@ -539,14 +539,14 @@
       "recommendationValidation": "Strongly Supported",
       "suggestedGuard": "tests/page-lifecycle.test.mjs 已覆盖协议；可加一条 grep 断言组件内不出现裸 astro:page-load（灯箱与导航等特例除外）。",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "BackToTop.astro 改为 onPageLoad(mount) 并返回 scroll 监听清理函数，触发阈值改读 --scroll-trigger。",
         "verification": "全量浏览器回归通过；tests/page-lifecycle.test.mjs 覆盖协议。",
         "guard": "未加「组件内禁止裸 astro:page-load」的 grep 断言：灯箱与导航等特例本就要直接订阅换页事件，白名单维护成本高于收益。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-ARCH-003",
@@ -566,14 +566,14 @@
       "recommendationValidation": "Needs Architecture Decision",
       "suggestedGuard": "无",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "卡片样式的唯一入口收敛到 global.css（cards.css、github-repo-card.css 各导入一次），GitHubRepoCard.astro 的重复导入删除。",
         "verification": "grep src/ 下 cards.css / github-repo-card.css 只命中 global.css 与注释；构建产物无变化，仓库卡片与友链外观由 components.spec.ts 守着。",
         "guard": "无新增。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-A11Y-004",
@@ -593,14 +593,14 @@
       "recommendationValidation": "Strongly Supported",
       "suggestedGuard": "e2e 断言两种主题下 html 的 color-scheme 计算值。",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "theme.ts 每套主题同时输出 color-scheme: light|dark，滚动条、表单控件与 UA 底色随配色切换。",
         "verification": "e2e/accessibility.spec.ts 断言两次点击主题按钮后 getComputedStyle(documentElement).colorScheme 从 light 变 dark（主题循环为 auto→light→dark）。",
         "guard": "e2e/accessibility.spec.ts 第 3 项；THEME-GUIDE.md 第 3 节第 1/2 条同时说明 color-scheme 与「无 data-theme 即无脚本」的判别关系。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-SEO-002",
@@ -620,14 +620,14 @@
       "recommendationValidation": "Strongly Supported",
       "suggestedGuard": "e2e/metadata.spec.ts 增加 sitemap 不含分页 URL 的断言。",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "决定排除：astro.config.mjs 的 sitemap filter 同时排除 /blog/ 跳转页与纯分页地址（/page/N/、/archive/YYYY/page/N/）。分页条目已由首页和归档页的分页链路串通，抓取不依赖站点地图。",
         "verification": "重建后 dist/sitemap-0.xml 共 29 条地址，grep 无 /page/N/；16 篇文章地址与 lastmod 齐全，URL 门与 e2e 站点地图用例通过。",
         "guard": "e2e/metadata.spec.ts 的站点地图断言；约定写入 THEME-GUIDE.md 第 6 节结构决策记录。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-TEST-001",
@@ -650,14 +650,14 @@
       "recommendationValidation": "Experimentally Verified",
       "suggestedGuard": "上述两条 e2e。",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "补两条产物端 e2e：/rss.xml 断言 <language>、条目数、首篇正文出现在 content:encoded、条目内 src/href/poster 全部是补过域名的绝对地址；从文章页 HTML 取 og:image 实际地址请求分享图，断言 PNG 魔数与体积。",
         "verification": "npx playwright test e2e/metadata.spec.ts → 5/5。RSS 的 content-type 在 astro preview 是 text/xml、dev 是 application/xml，断言只约束到 xml 族；OG 图按页面声明的地址断言，避免把 postOgPath 的日级嵌套路径再抄一遍。",
         "guard": "e2e/metadata.spec.ts 第 3、4 项。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-CFG-002",
@@ -676,14 +676,14 @@
       "recommendationValidation": "Plausible",
       "suggestedGuard": "无",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "wrangler.toml 的 compatibility_date 由 2025-07-31 前滚到 2026-10-01。",
         "verification": "npx wrangler dev（wrangler 4.153.0 / workerd 2026-10-23）本地启动无告警：_redirects 解析 124 条、_headers 5 条；/fonts/NotoSerifSC-Bold.woff2 返回 font/woff2 + max-age=86400, must-revalidate，/og/default.png 返回 image/png + max-age=86400。_redirects 的 301 在 wrangler dev 下对 navigate 请求走 not_found_handling 直接 404，新旧 compatibility_date 表现一致，属本地 dev 限制而非行为回归；线上 301 已在上一轮抽样确认，首次以新日期部署后建议再抽查一条旧文章地址。",
         "guard": "check-urls 覆盖产物内链与跳转表内容，不覆盖 Workers 层实际响应。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-GIT-001",
@@ -723,14 +723,14 @@
       "recommendationValidation": "Strongly Supported",
       "suggestedGuard": "无",
       "lastVerifiedDate": "2026-10-28",
-      "lastVerifiedCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "lastVerifiedCommit": "6004fac",
       "resolution": {
         "summary": "一次性内容迁移脚本 git mv 到 scripts/archive/migrate-content.mjs，头部标注已停用与新的调用路径；仓库内无调用方，README 未引用，无需改动。",
         "verification": "ls scripts/ 只剩四个在用的脚本 + archive/；npm test、check、build 均不受影响。",
         "guard": "无新增。"
       },
       "resolvedDate": "2026-10-28",
-      "resolvedIn": "working-tree"
+      "resolvedIn": "6004fac"
     },
     {
       "id": "AUD-DEP-002",
@@ -808,8 +808,8 @@
   ],
   "fixRound": {
     "dates": "2026-10-27 → 2026-10-28",
-    "commit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-    "state": "working-tree（未提交）",
+    "commit": "6004fac",
+    "state": "已提交 6004fac",
     "gates": {
       "check": "91 文件 · 0 错误 0 警告 0 提示",
       "unit": "node --test 50/50",

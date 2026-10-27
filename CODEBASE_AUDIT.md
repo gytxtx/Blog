@@ -4,7 +4,7 @@
 
 - 审计日期：2026-10-27（full 复审计，基准提交 `766e2a6`）
 - 修复轮次：2026-10-27 → 2026-10-28，按报告的「建议优先级」顺序执行
-- 当前状态：**全部改动留在工作树，尚未提交**；本轮验收针对工作树内容重新构建后测得
+- 当前状态：修复轮次已提交为 `6004fac`；验收针对该提交的产物重新构建后测得
 - 上一轮完整报告：[.repository-audit/history/2026-10-27-full.md](.repository-audit/history/2026-10-27-full.md)（发现清单原样保留，含被驳回候选）
 - 完整台账：[.repository-audit/findings.json](.repository-audit/findings.json)　·　修复前线台账：[.repository-audit/history/2026-10-28-pre-fix-findings.json](.repository-audit/history/2026-10-28-pre-fix-findings.json)
 

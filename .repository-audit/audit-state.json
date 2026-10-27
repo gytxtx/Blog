@@ -2,14 +2,15 @@
   "schemaVersion": 1,
   "lastFullAuditDate": "2026-10-27",
   "lastFullAuditCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
-  "lastAuditCommit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+  "lastAuditCommit": "6004fac",
   "previousFullAuditCommit": "0194993741c5172095c5305c05ef98661f2a7147",
   "lastFixRound": {
     "dates": "2026-10-27 → 2026-10-28",
-    "state": "working-tree（未提交）",
+    "state": "已提交 6004fac",
     "report": "CODEBASE_AUDIT.md",
     "priorReport": ".repository-audit/history/2026-10-27-full.md",
-    "priorLedger": ".repository-audit/history/2026-10-28-pre-fix-findings.json"
+    "priorLedger": ".repository-audit/history/2026-10-28-pre-fix-findings.json",
+    "commit": "6004fac"
   },
   "mode": "full",
   "report": "CODEBASE_AUDIT.md",
@@ -34,7 +35,7 @@
     "urlGate": "62 条旧地址跳转 + URL diff 0；sitemap 29 条地址、16 篇文章均带可解析 lastmod",
     "productionAudit": "0 high / 0 critical；2 moderate（satori→fflate，见 AUD-DEP-002）",
     "workerRuntime": "npx wrangler dev 4.153.0（workerd 2026-10-23）起服无告警：_redirects 124 条、_headers 5 条；/fonts 与 /og 响应头实测生效",
-    "gitHygiene": "工作树含本轮改动未提交；dist/.astro/.wrangler 已忽略；.git 14MiB、garbage 0"
+    "gitHygiene": "工作树干净；origin/main 尚未包含 6004fac；dist/.astro/.wrangler 已忽略；.git 14MiB、garbage 0"
   },
   "runtimeEvidence": {
     "server": "127.0.0.1:4322 生产预览（每轮改动后重新 npm run build）",
@@ -68,13 +69,36 @@
     "Chromium only，未覆盖 Firefox/WebKit/Safari 真实渲染差异",
     "未执行部署：新 compatibility_date 的线上行为与 126 条 301 只做了本地解析与响应头验证",
     "对比度由脚本按 WCAG 相对亮度公式计算，未经第三方审计器复核",
-    "本轮改动全部未提交；验收针对工作树重新构建的产物"
+    "修复轮次已提交为 6004fac，验收针对该提交的产物"
   ],
   "history": [
-    { "date": "2026-10-27", "mode": "full", "commit": "0194993741c5172095c5305c05ef98661f2a7147", "report": ".repository-audit/history/2026-10-27-initial.md", "ledger": ".repository-audit/history/2026-10-27-initial-findings.json" },
-    { "date": "2026-10-27", "mode": "delta", "commit": "0194993741c5172095c5305c05ef98661f2a7147", "report": ".repository-audit/history/2026-10-27-fix-acceptance.md" },
-    { "date": "2026-10-27", "mode": "full", "commit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39", "report": ".repository-audit/history/2026-10-27-full.md", "ledger": ".repository-audit/history/2026-10-28-pre-fix-findings.json" },
-    { "date": "2026-10-28", "mode": "fix-round", "commit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39（工作树）", "report": "CODEBASE_AUDIT.md", "ledger": ".repository-audit/findings.json" }
+    {
+      "date": "2026-10-27",
+      "mode": "full",
+      "commit": "0194993741c5172095c5305c05ef98661f2a7147",
+      "report": ".repository-audit/history/2026-10-27-initial.md",
+      "ledger": ".repository-audit/history/2026-10-27-initial-findings.json"
+    },
+    {
+      "date": "2026-10-27",
+      "mode": "delta",
+      "commit": "0194993741c5172095c5305c05ef98661f2a7147",
+      "report": ".repository-audit/history/2026-10-27-fix-acceptance.md"
+    },
+    {
+      "date": "2026-10-27",
+      "mode": "full",
+      "commit": "766e2a6b1b4a1631f55733850dcffbbe2283cf39",
+      "report": ".repository-audit/history/2026-10-27-full.md",
+      "ledger": ".repository-audit/history/2026-10-28-pre-fix-findings.json"
+    },
+    {
+      "date": "2026-10-28",
+      "mode": "fix-round",
+      "commit": "6004fac",
+      "report": "CODEBASE_AUDIT.md",
+      "ledger": ".repository-audit/findings.json"
+    }
   ],
   "repositoryMapVersion": 3
 }

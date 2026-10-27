@@ -1,7 +1,7 @@
 # 仓库地图与风险画像
 
 - 日期：2026-10-28（审计 2026-10-27，随后完成修复轮次）
-- 基准：`766e2a6b1b4a1631f55733850dcffbbe2283cf39`（修复内容尚未提交）
+- 基准：`766e2a6b1b4a1631f55733850dcffbbe2283cf39`；修复轮次已提交为 `6004fac`
 - 类型：从 MkDocs 迁移的个人静态博客，16 篇公开文章，1 篇草稿。
 - 技术：Astro 7、TypeScript / JavaScript、Markdown、原生 CSS；Node >=22.23.4。
 - 环境：本地 Windows 开发，Cloudflare Workers 静态资源发布；主要浏览器。
