@@ -1,9 +1,16 @@
 ---
 import { Icon } from 'astro-icon/components';
+import type { MarkdownHeading } from 'astro';
 import { Image } from 'astro:assets';
 import logo from '../assets/logo.jpg';
 import { SITE } from '../consts';
 import { getPosts } from '../lib/posts';
+import Toc from './Toc.astro';
+
+interface Props { tocHeadings?: MarkdownHeading[] }
+const { tocHeadings = [] } = Astro.props;
+// 目录是辅助导航：复用 44px 图标控件、现有间距与主题色，正文保持视觉主层级。
+const hasToc = tocHeadings.filter(({ depth }) => depth === 2 || depth === 3).length >= 3;
 
 const latestYear = (await getPosts())[0]?.data.pubDate.getUTCFullYear();
 const nav = [
@@ -27,7 +34,7 @@ const isActive = (item: (typeof nav)[number]) =>
     </button>
     <a class="brand" href="/">
       <Image src={logo} alt="" width={28} height={28} densities={[1, 2]} loading="eager" />
-      {SITE.title}
+      <span class="brand-title">{SITE.title}</span>
     </a>
     <nav class="nav" id="site-nav" aria-label="主导航">
       {
@@ -49,6 +56,11 @@ const isActive = (item: (typeof nav)[number]) =>
       <button class="ui-icon-button" id="search-btn" type="button" aria-label="搜索" title="搜索（Ctrl+K / ⌘K）">
         <Icon name="lucide:search" size={20} />
       </button>
+      {hasToc && (
+        <button class="ui-icon-button" id="toc-btn" type="button" aria-label="打开目录" title="目录" aria-expanded="false" aria-controls="header-toc">
+          <Icon name="lucide:list-tree" size={20} aria-hidden="true" />
+        </button>
+      )}
       <button class="ui-icon-button" id="theme-btn" type="button" aria-label="切换主题" title="切换主题">
         <Icon class="i-auto" name="lucide:sun-moon" size={20} />
         <Icon class="i-light" name="lucide:sun" size={20} />
@@ -56,6 +68,7 @@ const isActive = (item: (typeof nav)[number]) =>
       </button>
     </div>
   </div>
+  <Toc headings={tocHeadings} variant="header" />
   <dialog id="search-dialog" aria-labelledby="search-title" data-search-enabled={import.meta.env.PROD}>
     <div class="search-heading">
       <h2 id="search-title">搜索本站</h2>

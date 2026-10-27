@@ -1,16 +1,38 @@
 ---
 import Base from './Base.astro';
+import type { MarkdownHeading } from 'astro';
+import Toc from '../components/Toc.astro';
 import { SITE } from '../consts';
 
 interface Props {
   frontmatter: { title: string };
+  headings?: MarkdownHeading[];
 }
 
-const { frontmatter } = Astro.props;
+const { frontmatter, headings = [] } = Astro.props;
+const hasToc = headings.filter(({ depth }) => depth === 2 || depth === 3).length >= 3;
 ---
 
-<Base title={`${frontmatter.title} - ${SITE.title}`}>
-  <article class="content prose" data-pagefind-body>
-    <slot />
-  </article>
+<Base title={`${frontmatter.title} - ${SITE.title}`} tocHeadings={headings}>
+  <div class:list={hasToc ? ['wrap', 'post-layout'] : []}>
+    <article class:list={['prose', hasToc ? 'post-main prose-main' : 'content']} data-pagefind-body>
+      <slot />
+    </article>
+    {hasToc && (
+      <aside class="post-side prose-side">
+        <Toc headings={headings} variant="side" />
+      </aside>
+    )}
+  </div>
 </Base>
+
+<style>
+  .prose-main {
+    padding-bottom: var(--space-4);
+  }
+
+  .prose-side {
+    grid-row: 1;
+    padding-top: var(--page-start);
+  }
+</style>

@@ -31,6 +31,46 @@ async function screenshot(page: Page, info: TestInfo, name: string) {
   await page.screenshot({ path: info.outputPath(name) });
 }
 
+for (const [width, height] of [[320, 568], [360, 800], [390, 844], [600, 960], [768, 1024], [820, 1180], [1024, 768], [1180, 820], [568, 320], [844, 390]]) {
+  test(`触屏 ${width}×${height}：导航和阅读区域不溢出，按钮不被压缩`, async ({ page }, info) => {
+    await page.setViewportSize({ width, height });
+    for (const path of ['/', '/tags/', ARTICLE]) {
+      await page.goto(path);
+      await expect(page.locator('main')).not.toBeEmpty();
+      await page.evaluate(() => document.fonts.ready);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+      for (const selector of width <= 960 ? ['#nav-btn', '#search-btn', '#theme-btn'] : ['#search-btn', '#theme-btn']) {
+        const button = page.locator(selector);
+        await expect(button).toBeVisible();
+        const box = await button.boundingBox();
+        expect(box!.width).toBeGreaterThanOrEqual(44);
+        expect(box!.height).toBeGreaterThanOrEqual(44);
+      }
+      if (path === ARTICLE) {
+        const tocButton = page.locator('#toc-btn');
+        await expect(tocButton).toBeVisible();
+        expect((await tocButton.boundingBox())!.width).toBe(44);
+        await tocButton.click();
+        const panel = page.locator('#header-toc');
+        await panel.evaluate((element) => Promise.all(element.getAnimations().map((animation) => animation.finished)));
+        const bounds = await panel.boundingBox();
+        const header = await page.locator('.site-header').boundingBox();
+        expect(bounds!.y).toBeGreaterThanOrEqual(header!.y + header!.height - 1);
+        expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(height);
+        const last = panel.locator('a').last();
+        await last.scrollIntoViewIfNeeded();
+        expect((await last.boundingBox())!.y + (await last.boundingBox())!.height).toBeLessThanOrEqual(height);
+        await tocButton.click();
+        await expect(panel).toBeHidden();
+      }
+      const title = await page.locator('.brand').boundingBox();
+      const actions = await page.locator('.header-actions').boundingBox();
+      expect(title!.x + title!.width).toBeLessThanOrEqual(actions!.x);
+    }
+    if ([320, 768, 844].includes(width)) await screenshot(page, info, `article-${width}.png`);
+  });
+}
+
 test('横屏搜索充分利用可见高度，输入和关闭入口始终可用', async ({ page }, info) => {
   for (const [width, height] of [[568, 320], [844, 390]]) {
     await page.setViewportSize({ width, height });

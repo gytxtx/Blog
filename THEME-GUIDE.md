@@ -7,6 +7,30 @@
 
 ### 呈现与样式
 
+| 文件 | 职责 |
+|---|---|
+| `src/styles/global.css` | 样式导入入口，决定功能样式的加载顺序 |
+| `src/styles/tokens.css` | 字体、字号、间距、阅读宽度、安全区和动效变量，包含卡片尺寸 |
+| `src/lib/theme.ts` | 明暗配色、主题模式和标签；生成 CSS 变量并供首帧脚本与代码高亮配置使用 |
+| `src/styles/base.css` / `shared.css` | 页面骨架、基础排版、元信息；公共按钮、共享箭头与状态标记 |
+| `src/styles/page.css` | 首页、归档、分类、标签、纯文页与文章的共享页首标题、留白和分隔线 |
+| `src/styles/header.css` / `search.css` | 顶栏与菜单；搜索弹窗、结果和重试，各自包含响应式与动效 |
+| `src/styles/post-list.css` / `archives.css` | 索引统计与紧凑列表；归档、分类、标签的分组和导航呈现 |
+| `src/styles/post.css` / `toc.css` / `comments.css` | 文章布局与上下篇；宽屏侧栏与窄屏顶栏目录；评论状态与备用入口 |
+| `src/styles/prose.css` | Markdown 正文及代码块；渲染节点不带 Astro 作用域，因此保持全局样式 |
+| `src/styles/transitions.css` / `lightbox.css` | 文档级过渡与进度条；灯箱减少动效规则 |
+| `src/styles/cards.css` | 正文、仓库、友链卡片的共享表面；各类型文件只管自身内容布局 |
+| `src/layouts/Base.astro` | HTML 骨架、SEO 元数据、字体、首帧主题脚本与 ClientRouter 挂载 |
+| `src/layouts/Post.astro` | 文章页布局（元信息、上下篇、评论挂载点） |
+| `src/layouts/Prose.astro` | about/links 等纯文页布局 |
+| `src/layouts/Archive.astro` | 归档首页与分页共用的标题、列表和分页呈现 |
+| `src/components/Header.astro` | 导航、搜索弹窗、文章目录入口与浮层、主题切换按钮 |
+| `src/components/Footer.astro` | 页脚与局部样式 |
+| `src/components/PostCard.astro` | 列表卡片与局部样式 |
+| `src/components/Pager.astro` | 分页控件与局部样式 |
+| `src/components/Giscus.astro` | 评论组件 |
+| `src/pages/*.astro`、`src/pages/article/**`、`src/pages/archive/**`、`src/pages/category/**`、`src/pages/tags/**` 的 **markup 部分** | 各页面呈现 |
+
 组件独占的样式优先放在组件内。同一功能的默认、窄屏、触屏和动效规则集中维护；
 跨布局、Markdown 输出、第三方输出和文档级伪元素的规则保留在功能 CSS 中。
 共享变量从 `tokens.css` 或 `theme.ts` 修改，功能例外留在所属模块；新增规则放进对应文件。
@@ -58,6 +82,18 @@ readtime?, draft, pin, comments`。作者资料在 `src/data/authors.ts`。
 
 ## 4. 客户端脚本的初始化与清理
 
+- `header.ts` 管理导航与窄屏目录，搜索和主题按钮分别由 `search-control.ts`、`theme-control.ts` 管理。
+  目录沿用至少 3 个 h2/h3 标题的门槛：1280px 起显示文章右侧目录，其余宽度在搜索按钮右侧显示目录图标。
+  顶栏目录与导航、搜索互斥；选择章节、点击外部或按 Esc 关闭，跨断点与换页时清理状态。
+- 普通页面功能使用 `page-lifecycle.ts` 的 `onPageLoad(mount)`：`mount(document)` 挂载当前页面，
+  返回清理函数。换页前或再次挂载前，旧实例只清理一次。监听器、定时器和待执行的动画帧在清理函数中释放。
+- `article-behaviors.ts` 接入文章图片灯箱；目录跟踪在 `toc-tracking.ts`，由 `Toc.astro` 统一挂载，文章与独立 Markdown 页面共用；图片灯箱在 `lightbox.ts`。
+  灯箱包装导航 loader，等待关闭动画清理键盘监听后才交换文档，保留独立的异步卸载协议。
+- `giscus.ts`、`github-repo-card-client.ts` 使用自定义元素的 connected/disconnected 生命周期。
+- 全站监听由模块注册一次；不要把每页 DOM 或状态放进无法清理的全局闭包。
+- `theme-bootstrap.ts` 的内联函数必须自包含，运行时配置全部经参数传入。模块作用域变量不会随
+  函数源码一同进入 HTML；调整后同时跑单元测试和生产浏览器回归。
+
 ## 5. 验收清单
 
 ```bash
@@ -73,6 +109,11 @@ npm run dev -- --background # 开发走查；用 astro dev stop/status/logs 管�
 标题动效通过项目自有的 `data-post-title="list|post"` 定位，保留该标记与 transition:name。
 导航进度位于 `src/lib/navigation.ts`。
 Giscus 通过自定义元素管理加载/销毁，保留原 repo/category/term 协议及讨论区备用入口。
+
+维护任务的验收：改搜索留白能在 `search.css` 看全相关状态；改卡片间距只需改变量或卡片模块；
+改归档展示只改 `Archive.astro`；改目录算法无需打开灯箱实现；改站名只改 `SITE.title`。
+重构以当前工作树为外观基准，先记录截图，再检查桌面/手机、明暗主题及搜索展开状态。
+文章列表间距测试包含 1680/1280/768/640/375px 和触屏点击区域，保留既有调整。
 
 ## 6. 结构决策记录
 

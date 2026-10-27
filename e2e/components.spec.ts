@@ -14,6 +14,46 @@ const FIRST = '/article/2025/03/first-article/';
 const LONG = '/article/2026/08/pixel-5-volte-troubleshooting/';
 const IMAGES = '/article/2026/05/monthly-summary/';
 
+test('桌面和手机滚动后顶栏持续可用，目录锚点不会被遮挡', async ({ page }, info) => {
+  for (const width of [1280, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(LONG);
+    if (width === 375) await page.locator('#toc-btn').click();
+    const link = page.locator(width === 375 ? '.toc-panel a' : '.toc a').nth(3);
+    const href = await link.getAttribute('href');
+    const heading = page.locator(`[id="${decodeURIComponent(href!.slice(1))}"]`);
+    await link.click();
+    const header = page.locator('.site-header');
+    const surface = await header.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { background: style.backgroundColor, blur: style.backdropFilter };
+    });
+    expect(surface.background).toContain('0.82');
+    expect(surface.blur).toBe('blur(10px)');
+    await expect.poll(() => heading.evaluate((element) => Math.round(element.getBoundingClientRect().top))).toBe(81);
+    expect(await header.evaluate((element) => element.getBoundingClientRect().top)).toBe(0);
+    if (width === 1280) {
+      const headerBottom = await header.evaluate((element) => element.getBoundingClientRect().bottom);
+      expect(await page.locator('.toc').evaluate((element) => element.getBoundingClientRect().top)).toBeGreaterThan(headerBottom);
+    } else {
+      await page.getByRole('button', { name: '打开导航' }).click();
+      await expect(page.getByRole('navigation', { name: '主导航' })).toBeVisible();
+      await page.getByRole('button', { name: '关闭导航' }).click();
+    }
+    await page.locator('#search-btn').click();
+    await expect(page.getByRole('dialog', { name: '搜索本站' })).toBeVisible();
+    await expect(page.getByPlaceholder('搜索文章')).toBeFocused();
+    await page.getByRole('button', { name: '关闭搜索' }).click();
+    await capture(page, info, `sticky-header-${width}.png`);
+    if (width === 1280) {
+      await page.locator('#theme-btn').click();
+      await page.locator('#theme-btn').click();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+      await capture(page, info, 'sticky-header-dark-1280.png');
+    }
+  }
+});
+
 test.beforeEach(async ({ page }) => {
   const errors: string[] = [];
   runtimeErrors.set(page, errors);
@@ -74,6 +114,146 @@ test('搜索脚本失败显示重试，恢复后可搜索', async ({ page }) => 
   await page.getByRole('button', { name: '重新加载搜索' }).click();
   await expect(page.getByPlaceholder('搜索文章')).toBeFocused();
   expect(requests).toBe(2);
+});
+
+test('手机目录保留层级、旧锚点及明确的展开入口', async ({ page }, info) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(FIRST);
+  await page.locator('#toc-btn').click();
+  await expect(page.locator('.toc-panel > ol > li')).toHaveCount(4);
+  await expect(page.locator('.toc-panel ol ol > li')).toHaveCount(3);
+  await expect(page.locator('.toc-panel-title')).toContainText('4 个主章节');
+  await expect(page.locator('main')).not.toContainText(':simple-');
+  await expect(page.locator('main')).not.toContainText(':material-');
+  await expect(page.locator('[id="感谢-simple-materialformkdocs-material-for-mkdocs"]')).toHaveCount(1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await capture(page, info, 'mobile-toc.png');
+  await page.locator('.toc-panel a').filter({ hasText: '2. 低代码高定制' }).click();
+  await expect(page).toHaveURL(/#2-/);
+  await expect(page.locator('.toc-panel')).toBeHidden();
+  await expect(page.locator('.toc-panel a[aria-current="location"]')).toContainText('低代码');
+});
+
+test('顶栏目录支持键盘、外部关闭，并与导航和搜索互斥', async ({ page }, info) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(LONG);
+  const button = page.locator('#toc-btn');
+  const panel = page.locator('#header-toc');
+  await expect(page.locator('#search-btn + #toc-btn')).toHaveCount(1);
+  await expect(button).toHaveText('');
+  await expect(page.locator('.toc-inline')).toHaveCount(0);
+  await page.locator('#nav-btn').click();
+  await button.click();
+  await expect(page.locator('#site-nav')).toBeHidden();
+  await expect(button).toHaveAttribute('aria-expanded', 'true');
+  await expect(panel.locator('a').first()).toBeFocused();
+  await capture(page, info, 'header-toc-mobile.png');
+  await page.keyboard.press('Escape');
+  await expect(panel).toBeHidden();
+  await expect(button).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(panel).toBeVisible();
+  await page.locator('#nav-btn').click();
+  await expect(panel).toBeHidden();
+  await expect(page.locator('#site-nav')).toBeVisible();
+  await button.click();
+  await page.keyboard.press('Control+k');
+  await expect(panel).toBeHidden();
+  await expect(page.locator('#search-dialog')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await button.click();
+  await page.locator('#theme-btn').click();
+  await expect(panel).toBeHidden();
+  await button.click();
+  await page.mouse.click(2, 2);
+  await expect(panel).toBeHidden();
+  await button.click();
+  await page.evaluate(() => window.__setTheme!('dark'));
+  await expect.poll(() => panel.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe('rgb(18, 20, 18)');
+  await capture(page, info, 'header-toc-mobile-dark.png');
+  expect(await panel.evaluate((element) => getComputedStyle(element).animationName)).toBe('none');
+  await button.click();
+  await expect(panel).toBeHidden();
+});
+
+test('目录跨断点、站内导航和后退后重置，短文章不显示入口', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1279, height: 900 });
+  await page.goto(LONG);
+  const button = page.locator('#toc-btn');
+  const panel = page.locator('#header-toc');
+  await button.click();
+  await expect(panel).toBeVisible();
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await expect(button).toBeHidden();
+  await expect(panel).toBeHidden();
+  await expect(page.locator('.toc')).toBeVisible();
+  await expect(page.locator('.toc a').first()).toBeFocused();
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+  await expect(panel).toBeHidden();
+  await button.click();
+  await page.locator('.brand').click();
+  await expect(page).toHaveURL('/');
+  await expect(button).toHaveCount(0);
+  await page.goBack();
+  await expect(page).toHaveURL(LONG);
+  await button.click();
+  await expect(panel).toBeVisible();
+  await page.goto('/article/2026/09/cat/');
+  await expect(button).toHaveCount(0);
+  await expect(panel).toHaveCount(0);
+});
+
+test('关于页在桌面和手机显示目录，站内进入后仍可跳转并跟踪章节', async ({ page }, info) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const width of [1280, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/links/');
+    if (width === 375) await page.locator('#nav-btn').click();
+    await page.locator('#site-nav').getByRole('link', { name: '关于', exact: true }).click();
+    await expect(page).toHaveURL('/about/');
+    const panel = page.locator(width === 375 ? '#header-toc' : '.toc');
+    if (width === 375) {
+      await expect(page.locator('#search-btn + #toc-btn')).toBeVisible();
+      await page.locator('#toc-btn').click();
+    }
+    await expect(panel).toBeVisible();
+    await expect(panel.locator(':scope > ol > li')).toHaveCount(6);
+    await expect(panel.locator('ol ol > li')).toHaveCount(3);
+    await capture(page, info, `about-toc-${width}.png`);
+    const link = panel.getByRole('link', { name: '技术栈', exact: true });
+    await link.click();
+    await expect(page).toHaveURL(/#技术栈$|#%E6%8A%80%E6%9C%AF%E6%A0%88$/);
+    await expect.poll(() => page.locator('#技术栈').evaluate((element) => Math.round(element.getBoundingClientRect().top))).toBe(81);
+    await expect(panel.locator('a[aria-current="location"]')).toHaveText('技术栈');
+    if (width === 375) await expect(panel).toBeHidden();
+    else {
+      const article = await page.locator('article.prose').boundingBox();
+      const sidebar = await panel.boundingBox();
+      expect(sidebar!.x).toBeGreaterThanOrEqual(article!.x + article!.width);
+    }
+    await page.goto('/links/');
+    await expect(page.locator('#toc-btn')).toHaveCount(0);
+    await expect(page.locator('.toc')).toHaveCount(0);
+  }
+});
+
+test('桌面目录宽度足够，主题跨文章跳转保持正确', async ({ page }, info) => {
+  await page.goto(LONG);
+  const width = await page.locator('.toc').evaluate((element) => element.getBoundingClientRect().width);
+  expect(width).toBeGreaterThanOrEqual(200);
+  await page.locator('#theme-btn').click();
+  await expect(page.locator('html')).toHaveAttribute('data-mode', 'light');
+  await page.locator('#theme-btn').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+  await capture(page, info, 'desktop-article-dark.png');
+  await page.locator('.post-pn a').first().click();
+  await expect(page).toHaveURL(/android-root/);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'github-dark');
+  await page.goBack();
+  await expect(page.locator('h1')).toContainText('IMS 故障排查记录');
 });
 
 test('卡片共享表面、字级与手机单列规则，切换页面后仍一致', async ({ page }, info) => {

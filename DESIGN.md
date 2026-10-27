@@ -4,6 +4,20 @@
 
 ## 公共规则
 
+| 内容 | 来源 | 约定 |
+| --- | --- | --- |
+| 字体与字号 | `src/styles/tokens.css` | 标题 `--serif`，界面与正文 `--sans`，代码 `--mono`；标题、正文、辅助信息使用对应 `--fs-*` |
+| 空间尺度 | `src/styles/tokens.css` | `--space-*` 对应 4、8、12、16、20、24、32、40、48、64px |
+| 内容宽度 | `--measure` / `--wrap` | 阅读栏沿用 40rem，桌面 48rem；顶栏与页脚使用 68rem 外框；文章目录位于阅读栏外 |
+| 页首 | `src/styles/page.css` | 首页、归档、分类、标签、独立内容页及文章统一起始留白、标题样式、分隔线和底部间距 |
+| 页面留白 | `--page-start` | 桌面 64px、手机 40px、矮横屏 24px |
+| 分组间距 | `--section-gap` | 桌面 48px、手机 40px；组内使用较小空间令牌 |
+| 卡片 | `src/styles/cards.css` | 表面、边框、内边距、网格间距和圆角统一；内容与仓库卡片、友链共享 `--card-*` |
+| 控件 | `src/styles/shared.css` | 图标按钮使用 `.ui-icon-button`，操作／重试使用 `.ui-button`，主操作增加 `.ui-button--primary` |
+| 圆角 | `--radius-sm/md/lg` | 标记／行内代码 3px，控件／卡片／图片 6px，弹窗 8px |
+| 交互尺寸 | `--control-size` | 独立控件至少 44px；正文行内链接保持自然排版 |
+| 焦点 | `src/styles/base.css` | `:focus-visible` 统一 2px 强调色轮廓、4px 偏移；保留键盘可见状态 |
+
 手机的正文统一为 16px；较大的页面使用 17px。正文行高为 1.85，界面控件为 1.6，页首标题为 1.3。首页文章条目保留 32px／手机 24px 的对称留白与 12px 内部间距；紧凑文章列表保留 12px 行留白。
 
 ## 动效

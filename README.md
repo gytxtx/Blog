@@ -10,6 +10,20 @@
 
 ## 常用命令
 
+首次运行浏览器回归前执行 `npx playwright install chromium`。测试会启动并关闭
+`127.0.0.1:4322` 的生产预览，截图和失败轨迹保存在系统临时目录
+`blog-astro-playwright`，不会写入站点源码。第三方服务使用确定性模拟；真实搜索使用本次构建的索引。
+
+样式入口为 `src/styles/global.css`，按功能导入 CSS；全站尺寸与字体变量在 `tokens.css`，
+明暗配色在 `src/lib/theme.ts`。文章卡片、分页和页脚使用组件局部样式。
+正文、友链、GitHub 卡片的公共外观统一在 `src/styles/cards.css`，尺寸变量仍集中在 `tokens.css`。
+各类卡片仅保留自己的内容布局。归档首页与分页共用 `src/layouts/Archive.astro`，
+年份、分类和标签分组统一由 `src/lib/post-groups.ts` 提供。
+导航、搜索、主题和文章交互分别维护在 `src/lib/header.ts`、`search-control.ts`、
+`theme-control.ts`、`navigation.ts`、`article-behaviors.ts`；目录和灯箱分别在 `toc-tracking.ts`、
+`lightbox.ts`。普通页面功能通过 `page-lifecycle.ts` 注册挂载与清理；首帧主题引导由
+`theme-bootstrap.ts` 生成，仍在 Base 内联执行。
+
 响应式规则：960px 及以下使用折叠导航，跨断点切换后重置菜单状态；640px 及以下卡片单列，
 480px 及以下完整日期独占一行并缩小卡片留白。导航、标签和阅读全文等触屏入口至少高 44px。
 顶栏、正文和页脚使用安全区留白，搜索弹窗监听 VisualViewport，在横屏和软键盘弹出时

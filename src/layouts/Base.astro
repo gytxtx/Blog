@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import type { MarkdownHeading } from 'astro';
 import { SITE } from '../consts';
 import { THEMES, themeCss } from '../lib/theme';
 import { themeBootstrapScript } from '../lib/theme-bootstrap';
@@ -11,6 +12,7 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  tocHeadings?: MarkdownHeading[];
   /** 文章页传入：og:type 变为 article，并输出 article:* 元数据 */
   article?: {
     publishedTime: Date;
@@ -20,7 +22,7 @@ interface Props {
   };
 }
 
-const { title, description = SITE.description, ogImage = '/og/default.png', article } = Astro.props;
+const { title, description = SITE.description, ogImage = '/og/default.png', article, tocHeadings } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 // 开发时分享图使用本地端点，避免内容脚本读取尚未部署的线上图片。
 const ogImageAbs = new URL(ogImage, import.meta.env.DEV ? Astro.url.origin : Astro.site);
@@ -100,7 +102,7 @@ const ogImageAbs = new URL(ogImage, import.meta.env.DEV ? Astro.url.origin : Ast
   <body>
     <!-- 站内跳转进度条：persist 让它在换页时保留当前进度，而不是从 0 重来 -->
     <div class="nav-progress" transition:persist="nav-progress" aria-hidden="true"></div>
-    <Header />
+    <Header tocHeadings={tocHeadings} />
     <main>
       <slot />
     </main>

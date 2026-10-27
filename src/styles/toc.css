@@ -1,0 +1,128 @@
+/* 桌面侧栏与顶栏目录的呈现；当前章节跟踪见 lib/toc-tracking.ts。 */
+.toc {
+  position: sticky;
+  top: calc(var(--header-height) + 2rem);
+  max-height: calc(100dvh - var(--header-height) - 4rem);
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+  font-size: var(--fs-caption);
+  line-height: 1.6;
+}
+
+.toc-title {
+  margin: 0 0 var(--space-3);
+  padding-left: var(--space-4);
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc a {
+  display: block;
+  margin-left: -1px;
+  padding: 0.3rem 0 0.3rem var(--space-4);
+  border-left: 2px solid transparent;
+  color: var(--muted);
+}
+
+.toc ol ol a {
+  padding-left: var(--space-8);
+}
+
+.toc a:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.toc a.active {
+  color: var(--text);
+  border-left-color: var(--accent);
+  background: var(--accent-weak);
+}
+
+.toc-panel {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: calc(100dvh - var(--header-height));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-4) var(--page-inset-right) max(var(--space-4), var(--safe-bottom)) var(--page-inset-left);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-small);
+}
+
+.toc-panel-title {
+  max-width: var(--measure);
+  margin: 0 auto var(--space-3);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.toc-panel ol {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  line-height: 1.7;
+}
+
+.toc-panel ol ol {
+  margin: 0;
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--border);
+}
+
+.toc-panel a {
+  display: flex;
+  align-items: center;
+  min-height: var(--control-size);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.toc-panel a:hover {
+  background: var(--bg-soft);
+  text-decoration: none;
+}
+
+.toc-panel a.active {
+  color: var(--accent);
+  background: var(--accent-weak);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .toc a {
+    transition: color var(--motion-fast) var(--ease-ui),
+      background-color var(--motion-fast) var(--ease-ui),
+      border-color var(--motion-fast) var(--ease-ui);
+  }
+
+  .toc-panel a {
+    transition: color var(--motion-fast) var(--ease-ui),
+      background-color var(--motion-fast) var(--ease-ui);
+  }
+
+  .toc-panel:not([hidden]) {
+    animation: vt-rise-in var(--motion-enter) var(--ease-enter) both;
+  }
+}
+
+@media (max-width: 1279px) {
+  .toc-panel:not([hidden]) {
+    display: block;
+  }
+}

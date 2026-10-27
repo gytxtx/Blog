@@ -1,0 +1,38 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { buildToc } from '../lib/toc';
+import TocList from './TocList.astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  /** side：宽屏右侧 sticky；header：窄屏顶栏下拉目录 */
+  variant: 'side' | 'header';
+}
+
+const { headings, variant } = Astro.props;
+const items = buildToc(headings);
+const count = items.reduce((n, item) => n + 1 + item.children.length, 0);
+const chapters = headings.filter((h) => h.depth === 2).length;
+---
+
+{
+  count >= 3 &&
+    (variant === 'side' ? (
+      <nav class="toc" aria-label="目录">
+        <p class="toc-title">目录</p>
+        <TocList items={items} />
+      </nav>
+    ) : (
+      <nav class="toc-panel" id="header-toc" aria-label="目录" hidden>
+        <p class="toc-panel-title">目录（{chapters || items.length} {chapters ? '个主章节' : '项'}）</p>
+        <TocList items={items} />
+      </nav>
+    ))
+}
+
+<script>
+  import { onPageLoad } from '../lib/page-lifecycle';
+  import { mountToc } from '../lib/toc-tracking';
+
+  onPageLoad(mountToc);
+</script>

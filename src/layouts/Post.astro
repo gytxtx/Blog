@@ -3,6 +3,7 @@ import type { MarkdownHeading } from 'astro';
 import Base from './Base.astro';
 import { SITE } from '../consts';
 import Giscus from '../components/Giscus.astro';
+import Toc from '../components/Toc.astro';
 import { Icon } from 'astro-icon/components';
 import { authors } from '../data/authors';
 import { Image } from 'astro:assets';
@@ -19,7 +20,7 @@ interface Props {
   next?: Post | null; // 更新一篇
 }
 
-const { post, readtime, prev, next } = Astro.props;
+const { post, readtime, headings, prev, next } = Astro.props;
 const author = authors[post.data.authors[0]] ?? { name: post.data.authors[0] };
 const { updatedDate, heroImage } = post.data;
 const description = post.data.description ?? excerpt(post, 160);
@@ -47,6 +48,7 @@ const jsonLd = {
   title={`${post.data.title} - ${SITE.title}`}
   description={description}
   ogImage={ogImage}
+  tocHeadings={headings}
   article={{
     publishedTime: post.data.pubDate,
     modifiedTime: updatedDate,
@@ -115,6 +117,9 @@ const jsonLd = {
       {post.data.comments && <Giscus term={legacyPostUrl(post).slice(1)} />}
     </div>
 
+    <aside class="post-side">
+      <Toc headings={headings} variant="side" />
+    </aside>
   </div>
 </Base>
 

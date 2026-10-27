@@ -1,0 +1,16 @@
+---
+import type { TocItem } from '../lib/toc';
+interface Props { items: TocItem[] }
+const { items } = Astro.props;
+---
+
+<ol>
+  {items.map(({ heading, children }) => (
+    <li>
+      <a href={`#${heading.slug}`}>{heading.text}</a>
+      {children.length > 0 && <ol>
+        {children.map((child) => <li><a href={`#${child.slug}`}>{child.text}</a></li>)}
+      </ol>}
+    </li>
+  ))}
+</ol>
