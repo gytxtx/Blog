@@ -1,10 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync, renameSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createContentDates } from '../src/lib/content-dates.mjs';
 import { formatContentDate, shouldShowUpdated } from '../src/lib/content-date-display.mjs';
 
@@ -15,6 +15,7 @@ const IMPORT = '2026-10-25T23:11:27+08:00';
 const CHANGE = '2026-10-26T23:30:00+08:00';
 const LATER = '2026-10-27T01:00:00+08:00';
 const iso = (value) => new Date(value).toISOString();
+const prepareHistory = fileURLToPath(import.meta.resolve('../scripts/ensure-git-history.mjs'));
 const post = (body = '# 正文', extra = '', date = 'pubDate: 2025-03-29') =>
   `---\ntitle: 测试\n${date}\nslug: example\n${extra}---\n${body}\n`;
 
@@ -196,6 +197,46 @@ test('浅克隆拒绝推断残缺历史，回退基线并提示获取完整历�
   assert.equal(dates.all().get(URL).modified.toISOString(), iso(BASELINE));
   assert.equal(warnings.length, 1);
   assert.match(warnings[0], /fetch-depth: 0/);
+});
+
+test('构建前补全浅克隆历史，恢复顶层页更新时间并保留当前提交', (t) => {
+  const about = 'src/pages/about.md';
+  const f = fixture(t, { [POST]: post(), [about]: '---\ntitle: 关于\n---\n# 关于\n旧简介' });
+  f.write(POST, post('更新正文'));
+  f.write(about, '---\ntitle: 关于\n---\n# 关于\n新简介');
+  f.commit(CHANGE);
+  const destination = path.join(f.root, 'shallow');
+  f.git('clone', '--depth', '1', pathToFileURL(f.root).href, destination);
+  const cloneGit = (...args) => execFileSync('git', args, { cwd: destination, encoding: 'utf8', stdio: 'pipe' }).trim();
+  cloneGit('checkout', '--detach', 'HEAD');
+  const head = cloneGit('rev-parse', 'HEAD');
+  const dates = createContentDates(destination, { baselines: {}, warn: () => {} });
+  assert.equal(dates.all().get('/about/').updated, undefined);
+
+  execFileSync(process.execPath, [prepareHistory], { cwd: destination, stdio: 'pipe' });
+
+  assert.equal(cloneGit('rev-parse', '--is-shallow-repository'), 'false');
+  assert.equal(cloneGit('rev-parse', 'HEAD'), head);
+  assert.equal(dates.all().get('/about/').updated.toISOString(), iso(CHANGE));
+  assert.equal(dates.all().get(URL).updated.toISOString(), iso(CHANGE));
+  // 完整历史下不需要远程访问，重复构建和本地离线构建也能运行。
+  cloneGit('remote', 'remove', 'origin');
+  execFileSync(process.execPath, [prepareHistory], { cwd: destination, stdio: 'pipe' });
+});
+
+test('浅克隆无法获取历史时停止构建，避免继续发布缺少日期的页面', (t) => {
+  const f = fixture(t);
+  f.write(POST, post('更新正文'));
+  f.commit(CHANGE);
+  const destination = path.join(f.root, 'shallow');
+  f.git('clone', '--depth', '1', pathToFileURL(f.root).href, destination);
+  execFileSync('git', ['remote', 'remove', 'origin'], { cwd: destination, stdio: 'pipe' });
+  const result = spawnSync(process.execPath, [prepareHistory], { cwd: destination, encoding: 'utf8' });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /已停止构建/);
+  assert.equal(execFileSync('git', ['rev-parse', '--is-shallow-repository'], {
+    cwd: destination, encoding: 'utf8', stdio: 'pipe',
+  }).trim(), 'true');
 });
 
 test('合并提交按第一父链比较，以内容合入时间作为更新日期', (t) => {

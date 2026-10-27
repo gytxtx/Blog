@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/ensure-git-history.mjs",
     "build": "astro build && node scripts/pagefind-index.mjs",
     "preview": "astro preview",
     "preview:worker": "npm run build && wrangler dev",

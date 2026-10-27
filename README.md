@@ -47,6 +47,11 @@ npm run check-urls    # URL 验收门：构建产物 vs 线上基线 diff
 站点以 Workers 静态资源方式托管：`wrangler.toml` 的 `assets.directory` 指向 `dist`，
 `npm run deploy` 会先构建再上传（首次使用先执行 `npx wrangler login`）。
 
+Cloudflare 自动拉取仓库构建时，构建命令使用 `npm run build`，部署命令使用
+`npx wrangler deploy`。`prebuild` 会检查 Git 历史：浅克隆自动执行
+`git fetch --unshallow --no-tags origin`，完整仓库不发起网络请求；获取失败或历史仍不完整时
+停止构建，避免关于/友链的更新日期缺失。该步骤只补全历史，不切换构建提交。
+
 - `blog.gytxtx.top/*` 由 `wrangler.toml` 的 Worker 路由接入 `blog`，所属区域为 `gytxtx.top`。
   DNS 在 Cloudflare 控制台单独维护：`blog` 的 CNAME 指向 `cf.090227.xyz`，设为**仅 DNS（灰云）**，
   让访客使用优选域名的解析结果；该 DNS 记录不由 Wrangler 管理。
@@ -169,8 +174,10 @@ import GitHubRepoCard from '../components/GitHubRepoCard.astro';
   Git 合并以第一父链上的合入提交时间为准，未提交修改不推进日期；页面、JSON-LD、文章 OG 元数据与
   sitemap `lastmod` 使用同一结果。读者可见日期按 UTC+8，文章发布当天的更新隐藏提示，SEO 保留完整时间；
   关于/友链的更新提示位于正文末尾。首页等聚合页及 404 不设置内容更新时间。
-  构建需提供 Git 和完整历史（CI 设置 `fetch-depth: 0`）。无 Git 或浅克隆会警告并回退到已知历史日期，
-  无可信日期则省略，不使用构建时间。URL 和归档分组仍按 `pubDate` 的 UTC 年月保持稳定。
+  标准构建入口 `npm run build` 会先检查 Git，自动补全浅克隆历史，失败则停止；
+  GitHub Actions 也可直接设置 `fetch-depth: 0`。绕过前置步骤直接运行 `astro build` 时，
+  无 Git 或浅克隆仍会警告并回退到已知历史日期，无可信日期则省略，不使用构建时间。
+  URL 和归档分组仍按 `pubDate` 的 UTC 年月保持稳定。
 - **OG 社交卡片**：`src/pages/og/[...slug].png.ts` 用 satori 逐页生成；
   分享图继续保留 `/og/YYYY/MM/DD/{slug}.png`，兼容既有分享记录。
   中文字体为 GB2312 全集子集（`scripts/subset-font.mjs` 预生成、已入库，构建期零网络依赖）。
