@@ -156,7 +156,9 @@ import GitHubRepoCard from '../components/GitHubRepoCard.astro';
   不为大小写变体重复输出 HTML，避免 Windows 文件系统覆盖正文页。
 - **文章元数据**：`title / description / pubDate / updatedDate / heroImage` 与 Astro 官方 blog 模板同名；
   `updatedDate` 保留旧站迁移信息，后续不需要手填。既有文章的历史更新时间固定在
-  `src/data/content-date-baselines.json`；仅修改日期字段不会刷新页面更新时间。
+  `src/data/content-date-baselines.json`：优先取 MkDocs 原文的显式更新时间，缺失时取旧仓库最后一次
+  Git 修订时间（保留完整时间）。17 篇文章的来源见 [历史日期核对记录](CONTENT-DATE-BASELINES.md)；
+  仅修改日期字段不会刷新页面更新时间。
 - **内容更新时间**：文章、关于页和友链页统一由 `src/lib/content-dates.mjs` 比较 Git 已提交快照，
   首次入库只建立基线；文章沿用 `pubDate` 和旧站历史更新日期，顶层页以首次入库作为创建基线。
   正文（包括错字、代码、链接与 Markdown 排版）、标题、摘要、题图、作者字段、分类、标签、阅读时间，
