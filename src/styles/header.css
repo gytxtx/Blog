@@ -212,6 +212,7 @@ html[data-mode='dark'] #theme-btn .i-dark {
     max-height: calc(100dvh - var(--header-height));
     overflow-y: auto;
     overscroll-behavior: contain;
+    scroll-padding-bottom: max(var(--space-4), var(--safe-bottom));
     left: 0;
     right: 0;
     flex-direction: column;

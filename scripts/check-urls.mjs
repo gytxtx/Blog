@@ -20,6 +20,8 @@ const ALLOW_NEW = [
   /^\/pagefind\//,
   // 首页分页（2026-10-25 结构调整：首页即文章列表，分页自 /blog/page/N/ 迁至 /page/N/）
   /^\/page\/\d+\/$/,
+  // 分类总览：复用现有 /category/ 下的分类详情地址。
+  /^\/category\/$/,
 ];
 
 /**

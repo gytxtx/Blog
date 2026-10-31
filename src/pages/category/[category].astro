@@ -22,6 +22,7 @@ const groups = groupPostsByYear(posts);
     <header class="page-head">
       <h1>{display}</h1>
       <p>分类下共 {posts.length} 篇文章</p>
+      <div class="cloud"><a href="/category/">全部分类</a></div>
     </header>
     {
       groups.map(({ year: y, posts: yearPosts }) => {

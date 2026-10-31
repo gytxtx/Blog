@@ -15,6 +15,7 @@ const hasToc = tocHeadings.filter(({ depth }) => depth === 2 || depth === 3).len
 const latestYear = (await getPosts())[0]?.data.pubDate.getUTCFullYear();
 const nav = [
   { href: '/', label: '首页' },
+  { href: '/category/', label: '分类' },
   { href: '/tags/', label: '标签' },
   { href: `/archive/${latestYear}/`, label: '归档', match: '/archive/' },
   { href: '/about/', label: '关于' },

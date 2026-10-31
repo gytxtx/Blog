@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import { getPosts } from '../../lib/posts';
+import { groupPostsByCategory } from '../../lib/post-groups';
+import { SITE } from '../../consts';
+
+// 分类名称和文章标题为主，篇数为辅助；复用 page-head、cloud、group-head 的字号、间距与明暗主题。
+const posts = await getPosts();
+const categories = groupPostsByCategory(posts).sort(
+  (a, b) => b.posts.length - a.posts.length || a.display.localeCompare(b.display, 'zh-CN'),
+);
+---
+
+<Base title={`分类 - ${SITE.title}`} description="按分类浏览所有文章">
+  <div class="content">
+    <header class="page-head">
+      <h1>分类</h1>
+      <p>共 {categories.length} 个分类</p>
+      {categories.length > 0 && (
+        <nav class="cloud" aria-label="文章分类">
+          {categories.map(({ slug, display, posts }) => (
+            <a href={`/category/${slug}/`}>
+              {display}<sup>{posts.length}</sup>
+            </a>
+          ))}
+        </nav>
+      )}
+    </header>
+    {categories.length === 0 && <p>暂无文章分类。</p>}
+    {categories.map(({ slug, display, posts }) => (
+      <section>
+        <h2 class="group-head">
+          <a href={`/category/${slug}/`}>{display}</a>
+          <span>{posts.length} 篇</span>
+        </h2>
+        <PostList posts={posts} fullDate />
+      </section>
+    ))}
+  </div>
+</Base>
