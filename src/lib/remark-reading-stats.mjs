@@ -2,7 +2,7 @@
 /**
  * 字数与阅读时间：写进 remarkPluginFrontmatter 的 words / minutes。
  *
- * 字数 = 汉字个数 + 英文/数字单词数，代码块和 HTML（含 <!-- more -->）不计，行内代码计入。
+ * 字数 = 汉字个数 + 英文/数字单词数，代码块和 HTML 不计，行内代码计入。
  * 阅读时间按汉字 400 字/分、英文 200 词/分估算，至少 1 分钟。
  * @typedef {import('./remark-mdast.mjs').MdFile} MdFile
  * @typedef {import('./remark-mdast.mjs').MdNode} MdNode

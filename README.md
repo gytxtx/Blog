@@ -177,6 +177,8 @@ import GitHubRepoCard from '../components/GitHubRepoCard.astro';
   既有大小写文章地址在开发模式由 middleware 跳转，部署到 Cloudflare Workers 后由 `_redirects` 301 跳转。
   不为大小写变体重复输出 HTML，避免 Windows 文件系统覆盖正文页。
 - **文章元数据**：`title / description / pubDate / updatedDate / heroImage` 与 Astro 官方 blog 模板同名；
+  文章概述写在 front matter 的 `description` 中，使用纯文本；列表、SEO 元信息与 RSS 统一优先使用该字段，
+  缺省或留空时从正文自动生成限长摘要。正文导语可按需保留，无需额外的摘要分隔标记。
   `updatedDate` 保留旧站迁移信息，后续不需要手填。既有文章的历史更新时间固定在
   `src/data/content-date-baselines.json`：优先取 MkDocs 原文的显式更新时间，缺失时取旧仓库最后一次
   Git 修订时间（保留完整时间）。17 篇文章的来源见 [历史日期核对记录](CONTENT-DATE-BASELINES.md)；

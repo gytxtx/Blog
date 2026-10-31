@@ -1,5 +1,6 @@
 ---
 title: "本站的第一篇文章"
+description: "最近萌生了搭建个人博客的想法，但手头没有服务器资源，也不想投入过多运维成本——这让我突然想起之前部署过的 Material for MkDocs 文档框架。这个原本用于技术文档的工具，或许正是我需要的极简博客解决方案。"
 pubDate: "2025-03-29"
 updatedDate: "2025-08-23"
 slug: "First-Article"
@@ -14,8 +15,6 @@ readtime: 5
 comments: true
 ---
 最近萌生了搭建个人博客的想法，但手头没有服务器资源，也不想投入过多运维成本——这让我突然想起之前部署过的 **[Material for MkDocs](https://github.com/squidfunk/mkdocs-material/)** 文档框架。这个原本用于技术文档的工具，或许正是我需要的极简博客解决方案。
-
-<!-- more -->
 
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "记录我的 Android Root 方案"
+description: "最近重置了我的 Pixel 5，顺便将所用的模块 / App 记录下来，以便后续使用和供他人参考。"
 pubDate: "2026-08-13"
 updatedDate: "2026-08-16"
 slug: "Android-Root"
@@ -11,8 +12,6 @@ readtime: 2
 comments: true
 ---
 最近重置了我的 Pixel 5，顺便将所用的模块 / App 记录下来，以便后续使用和供他人参考。
-
-<!-- more -->
 
 ## Root 管理器
 

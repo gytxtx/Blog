@@ -51,9 +51,11 @@ export function formatDate(d: Date, withYear = true): string {
   return formatContentDate(d, withYear);
 }
 
-/** 纯文本摘要：优先 `<!-- more -->` 之前的内容（Material 摘要语义） */
+/** 优先使用 description；缺省时从正文生成限长的纯文本摘要。 */
 export function excerpt(post: Post, max = 100): string {
-  const body = (post.body ?? '').split('<!-- more -->')[0];
+  const description = post.data.description?.trim();
+  if (description) return description;
+  const body = post.body ?? '';
   // 行内代码先换成占位符，剥完记号再放回，代码里的 * # 等字符原样保留
   const codes: string[] = [];
   const text = body

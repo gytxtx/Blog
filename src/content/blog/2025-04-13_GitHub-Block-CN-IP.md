@@ -1,5 +1,6 @@
 ---
 title: "GitHub 屏蔽中国地区访问的解决方案"
+description: "4 月 13 日 13:00 左右，GitHub 屏蔽了中国地区的访问，未登录用户访问时会触发 HTTP 403 Forbidden 错误，提示 “Access to this site has been restricted.” 。已登录用户也可能会受到限制。 以下是我验证的一些解决方案："
 pubDate: "2025-04-13"
 updatedDate: "2025-08-23"
 slug: "GitHub-Block-CN-IP"
@@ -16,8 +17,6 @@ comments: true
 4 月 13 日 13:00 左右，GitHub 屏蔽了中国地区的访问，未登录用户访问时会触发 `HTTP 403 Forbidden` 错误，提示 **“Access to this site has been restricted.”**。已登录用户也可能会受到限制。
 
 以下是我验证的一些解决方案：
-
-<!-- more -->
 
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: "Blue Archive Spine 立绘提取与自定义导出全流程"
+description: "Yostar 公布了 Blue Archive 5 周年的一些新内容，但官方没有放出新角色的立绘。我想尝试根据游戏资源生成立绘，本篇文章记录了整个过程。"
 pubDate: "2026-01-18"
 updatedDate: "2026-05-22"
 slug: "Blue-Srchive-Spine"
@@ -13,8 +14,6 @@ comments: true
 ## 起因
 
 Yostar 公布了 Blue Archive 5 周年的一些新内容，但官方没有放出新角色的立绘。我想尝试根据游戏资源生成立绘，本篇文章记录了整个过程。
-
-<!-- more -->
 
 ## 步骤
 

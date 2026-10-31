@@ -1,5 +1,6 @@
 ---
 title: "Pixel 5 的 VoLTE 又坏了：一次 IMS 故障排查记录"
+description: "去年我写过一篇 Google Pixel 5 开启 VoLTE 实录，记录了自己给 Pixel 5 开启国内 VoLTE 的过程。 最近重置手机之后，我又重新配置了一遍 Root 环境。 本来以为把以前用的模块重新装回去就完事了，结果重启之后却发现： VoLTE 又寄了。 进入 *#*#4636#*#* 查看状态，IMS 一直没有注册。 问题是——我之前同样用过 APatch，同样装这个 VoLTE 模块，当时明明一点问题都没有。 于是就有了这次折腾。"
 pubDate: "2026-08-16"
 slug: "Pixel-5-VoLTE-Troubleshooting"
 authors:
@@ -22,8 +23,6 @@ comments: true
 问题是——我之前同样用过 APatch，同样装这个 VoLTE 模块，当时明明一点问题都没有。
 
 于是就有了这次折腾。
-
-<!-- more -->
 
 ---
 

@@ -29,7 +29,7 @@ const dates = getPageDates(Astro.url.pathname);
 const modifiedDate = dates.modified ?? post.data.pubDate;
 const updatedDate = dates.updated;
 const showUpdated = shouldShowUpdated(post.data.pubDate, updatedDate);
-const description = post.data.description ?? excerpt(post, 160);
+const description = excerpt(post, 160);
 const words = await wordCount(post);
 const ogImage = `/og/${postOgPath(post)}.png`;
 // 结构化数据：搜索引擎识别为博客文章（schema.org BlogPosting）

@@ -35,7 +35,7 @@ export async function GET() {
       return {
         title: post.data.title,
         pubDate: post.data.pubDate,
-        description: post.data.description ?? excerpt(post, 200),
+        description: excerpt(post, 200),
         link: postUrl(post),
         content: absolutize(html, SITE.url),
         categories: [...post.data.categories, ...post.data.tags],
