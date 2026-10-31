@@ -5,7 +5,7 @@ slug: "Monthly-Summary"
 authors:
   - "gytxtx"
 categories:
-  - "日常"
+  - "生活"
 readtime: 6
 comments: true
 ---

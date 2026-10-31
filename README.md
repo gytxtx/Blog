@@ -150,6 +150,21 @@ import GitHubRepoCard from '../components/GitHubRepoCard.astro';
 请求失败、仓库不存在或触发限流时保留原卡片，不显示虚假的零统计，也不影响构建。
 `fetchMetadata={false}` 可关闭自动获取，完全使用手动填写的数据。构建不请求 GitHub API，无需 Token。
 
+## 文章分类
+
+每篇文章按主要内容选择一个分类；具体产品、平台、语言或系列用 `tags` 标记。
+
+| 分类 | 收录内容 | 示例 |
+| --- | --- | --- |
+| 技术 | 软件工具、开发经历、资源处理与技术问题记录 | GitHub 访问问题、易语言项目回顾、Spine 资源提取 |
+| 建站 | 博客建设、域名、网站部署及本站公告 | 建站选型、Cloudflare 重定向、域名变更 |
+| 玩机 | 手机系统、Root、模块与通信功能调试 | Android Root、Pixel 5 VoLTE |
+| 生活 | 日常经历、个人感想、周记和近况总结 | 琐事记、中考、猫、月度近况 |
+
+综合近况文章即使涉及技术，也按主要写作目的归入“生活”；可复用的独立教程按主题分类。
+原“GitHub”“易语言”并入“技术”，原“日常”并入“生活”。旧分类 URL 由
+`src/data/category-redirects.mjs` 和 `public/_redirects` 兼容，URL 验收门检查直接跳转。
+
 ## 迁移要点（面向未来的自己）
 
 - **页面 URL**：标签 `/tags/`、归档 `/archive/YYYY/`、关于 `/about/`、友链 `/links/`、

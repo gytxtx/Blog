@@ -6,7 +6,7 @@ slug: "GitHub-Block-CN-IP"
 authors:
   - "gytxtx"
 categories:
-  - "GitHub"
+  - "技术"
 tags:
   - "GitHub"
   - "技术"

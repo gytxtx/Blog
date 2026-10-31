@@ -7,6 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { categoryRedirects } from '../src/data/category-redirects.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
@@ -71,8 +72,12 @@ const monthlyMoves = articleMoves.map(([from, to]) => [
 ]);
 const pageMoves = [...baseline]
   .filter((u) => u.startsWith('/blog/') && !/^\/blog\/\d{4}\//.test(u) && !EXPLAINED_MISSING.has(u))
-  .map((from) => [from, from.replace(/^\/blog\//, '/')]);
-const moves = [...articleMoves, ...monthlyMoves, ...pageMoves];
+  .map((from) => [from, categoryRedirects[from.replace(/\/$/, '')] ?? from.replace(/^\/blog\//, '/')]);
+// 新站分类入口同样保留跳转，旧站入口须直接抵达最终分类，避免重定向链。
+const categoryMoves = Object.entries(categoryRedirects)
+  .filter(([from]) => from.startsWith('/category/'))
+  .map(([from, to]) => [`${from}/`, to]);
+const moves = [...articleMoves, ...monthlyMoves, ...pageMoves, ...categoryMoves];
 const migratedUrls = new Set(moves.flat());
 const redirectRules = new Set(
   fs.readFileSync(path.join(dist, '_redirects'), 'utf8').split(/\r?\n/).map(decodeURIComponent),

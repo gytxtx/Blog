@@ -14,6 +14,7 @@ import serifSubset from './src/integrations/serif-subset.mjs';
 import { SITE } from './src/consts.ts';
 import { THEMES } from './src/lib/theme.ts';
 import { getPageDates } from './src/lib/content-dates.mjs';
+import { categoryRedirects } from './src/data/category-redirects.mjs';
 
 const site = SITE.url;
 
@@ -31,6 +32,7 @@ export default defineConfig({
     '/blog/category/[category]': '/category/[category]',
     '/blog/archive/[year]': '/archive/[year]',
     '/blog/archive/[year]/page/[page]': '/archive/[year]/page/[page]',
+    ...categoryRedirects,
   },
   integrations: [
     expressiveCode({
@@ -45,7 +47,8 @@ export default defineConfig({
       // 归档页的分页链路串通，抓取不依赖站点地图，收录这些近重复页只会摊薄抓取预算。
       filter: (page) => {
         const pathname = new URL(page).pathname;
-        return !pathname.startsWith('/blog/') && !/\/page\/\d+\/?$/.test(pathname);
+        return !pathname.startsWith('/blog/') && !/\/page\/\d+\/?$/.test(pathname)
+          && !Object.hasOwn(categoryRedirects, decodeURIComponent(pathname).replace(/\/$/, ''));
       },
       serialize(item) {
         const { modified } = getPageDates(new URL(item.url).pathname);

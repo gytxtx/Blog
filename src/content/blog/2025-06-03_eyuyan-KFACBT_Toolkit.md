@@ -6,6 +6,8 @@ slug: "eyuyan"
 authors:
   - "gytxtx"
 categories:
+  - "技术"
+tags:
   - "易语言"
 readtime: 8
 comments: true

@@ -5,7 +5,7 @@ slug: "Weekly-Diary_2"
 authors:
   - "gytxtx"
 categories:
-  - "日常"
+  - "生活"
 readtime: 5
 comments: true
 ---
